@@ -1,8 +1,27 @@
-# React + Vite
+<h1> Projeto Libris</h1>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🚀 Configuração do Projeto Localmente
 
-Currently, two official plugins are available:
+Siga os passos abaixo para rodar o projeto **Libris** em sua máquina local:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 1️⃣ Acesse o diretório do projeto
+Abra o terminal e navegue até a pasta do projeto:
+
+```bash
+cd ./Libris
+```
+
+### 2️⃣ Instale as dependências
+Instale as dependências necessárias com os seguintes comandos:
+
+```bash
+npm install
+npm install react-router-dom
+```
+
+### 3️⃣ Inicie o servidor de desenvolvimento
+Execute o comando abaixo para rodar o projeto:
+
+```bash
+npm run dev
+```
