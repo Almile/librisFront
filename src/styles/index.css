@@ -1,0 +1,43 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #333;
+}
+
+.navbar {
+    background-color: #333;
+    padding: 20px;
+    top: 0;
+    z-index: 100;
+    width: 100vw;
+}
+
+.navbar a {
+    color: #fff;
+    margin: 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar a:hover{
+    color: #ddd;
+}
+
+.page {
+    padding: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #005bff;
+}

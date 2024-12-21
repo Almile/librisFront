@@ -1,0 +1,34 @@
+
+  
+  .message {
+    height: auto;
+    position: absolute;
+    bottom: 2em;
+    right: 0;
+    display: flex;
+    justify-content: right;
+    flex-direction: column;
+    gap: 10px;
+    width: 40%;
+  }
+  
+  .marker { 
+    width: 100%;
+    padding:3%;
+    text-align: center;
+    word-break: break-word; 
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 10% 50%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 10% 50%);
+    color: #fff;
+  box-shadow:  -10px 10px 20px #b3b3b3,
+               10px -10px 20px #ffffff;
+  }
+  
+  .marker.success { 
+    background-color: #6671da;
+  }
+  
+  .marker.error { 
+    background-color: #e45662;
+  }
+  
