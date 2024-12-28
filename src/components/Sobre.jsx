@@ -1,6 +1,6 @@
 function Sobre() {
   return (
-      <div className='page'>
+      <div>
           <h1>Sobre</h1>
       </div>
   )

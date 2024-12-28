@@ -1,0 +1,369 @@
+.commentSection button{
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px; 
+}
+
+.form-comment {
+    display: flex;
+    gap: 1rem;
+    width: 100%;    
+    margin:auto;
+    border: 1px solid;
+    border-top: none;
+    padding-bottom:10px;
+    align-items: flex-end;
+    position: relative;
+    background-color: #ffffff;
+}
+
+.create-comment{
+    margin: 20px 0;
+}
+
+.commentSection ion-icon{color: #000000;}
+
+.commentSection {
+    gap: 1rem;
+    width: 90%;    
+    margin: 10px auto;
+}
+
+.comment-list{
+    position: relative;
+    list-style: none;
+}
+
+.comment{
+    padding: 10px;
+    position: relative;
+    border: 1px solid;
+}
+
+/* Editor de texto quill */
+
+.box-comment {
+    flex: 1;
+}
+
+.custom-quill .ql-container {
+    border: none;
+    max-width: 100%;
+}
+
+.custom-quill .ql-toolbar {
+    width: 100%;
+    border: none; 
+    border-bottom: 1px solid;
+}
+
+.custom-quill .ql-editor {
+    border: none; 
+    border-bottom: 1px solid;
+    max-width:70%;
+    margin: auto;
+    overflow-wrap: break-word;
+    word-break: break-word; 
+    white-space: pre-wrap;
+}
+
+.image-alignment-dropdown {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+.image-alignment-dropdown button {
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.image-alignment-dropdown button:hover {
+    background: #ddd;
+}
+
+img.float-left {
+    float: left;
+    margin: 0 10px 10px 0;
+}
+
+img.float-right {
+    float: right;
+    margin: 0 0 10px 10px; 
+}
+
+.quill-editor-container {
+    overflow: hidden;
+}
+
+p {
+    margin: 0 0 10px; 
+}
+
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 50%;
+    border: 1px solid;
+    position: absolute;
+    left: 10px;
+    bottom:5px
+}
+
+/* Edição do Ícone spoiler */
+
+.spoiler {
+    margin-top: 0.5rem;
+    position: absolute;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.spoiler input[type="checkbox"] {
+    display: none;
+}
+
+.spoiler label span{
+    display: none;
+}
+
+.spoiler label, .spoiler label ion-icon{
+    color: #999999;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+}
+.spoiler label ion-icon {
+    font-size: 24px;
+}
+
+
+.spoiler input[type="checkbox"]:checked + label ion-icon {
+    color: #e74c3c;
+    transform: scale(1.2);
+}
+
+
+.commentSection button.envy-button {
+    margin-top: 1rem;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: transparent;
+    padding: 3px 5px;
+    border-radius: 3px;
+    border: 1px solid;
+}
+
+.comment-header, .comment-user{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.comment-header img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid;
+}
+
+
+.comment-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 20px;
+}
+
+.comment-actions .spoiler-button span{
+    gap: 5px;
+    font-size: 14px;
+    border: none;
+    color: #ff5e5e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.comment-actions .spoiler-button ion-icon{
+    color: #ff0000;
+}
+
+.comment-actions .spoiler-button span:hover {
+    color: #702d2d;
+}
+
+.spoiler-content {
+    position: relative;
+    filter: blur(5px);
+    transition: filter 0.3s ease;
+}
+
+.spoiler-content.visible {
+    transition: filter .5s ease;
+    filter: blur(0);
+
+}
+
+.protection-wrapper {
+    text-align: center;
+    color: #555;
+    font-style: italic;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+
+.inner {
+    margin: 0 10px 10px 60px;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+.comment-text {
+    max-height: 100px;
+    overflow: hidden;
+    position: relative;
+}
+
+.comment-text.expanded {
+    max-height: none;
+}
+
+.show-more-button,
+.show-less-button {
+    background: none;
+    border: none;
+    color: #6f6ff5;
+    cursor: pointer;
+    font-size: 14px;
+    margin: auto;
+    padding: 10px;
+}
+
+.show-more-button:hover,
+.show-less-button:hover {
+    text-decoration: underline;
+}
+
+/* Linha vertical conectando os comentários de resposta */
+
+.has-children::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 35px; 
+    width: 2px;
+    height: 100%;
+    background-color: #ccc;
+    z-index: -1; 
+}
+
+.comment-list.has-children:last-child::before {
+    height: 50%; 
+}
+
+.reply-comment::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 35px; 
+    width: 2px;
+    height: 100%;
+    background-color: #ccc;
+    z-index: -1;
+}
+
+.reply-comment:last-child::before {
+    height: 50%;
+}
+
+/* Estrelas */
+.rating{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid;
+}
+
+.star-rating {
+    display: flex;
+    gap: 5px;
+}
+
+.star-rating input{
+    color: #f39c12;
+    border: 1px thin #f39c12;
+    width: 40px;
+    text-align: center;
+}
+.star-icon ion-icon, .rating ion-icon{
+    font-size: 24px;
+    color: #f39c12;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+.rating ion-icon{
+    font-size: 18px;
+    color: #f39c12;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.star-icon:hover {
+    transform: scale(1.2);
+}
+
+.meta {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-size: 14px;
+}
+
+.comment-rating ion-icon {
+    color: #f39c12;
+    font-size: 16px;
+}
+
+.comment-date{
+    font-size: 12px;
+}
+
+
+/* Responsividade */
+@media (min-width: 768px) {
+    .spoiler label span{
+        display: block;
+    }
+    .comment-actions {
+        justify-content: initial;
+        gap: 60px;
+        margin-left: 60px;
+    }
+}

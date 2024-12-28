@@ -3,13 +3,15 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Navbar from './components/Navbar'
 
 import Home from './pages/Home'
-import About from './pages/About'
-import Services from './pages/Services'
-import Contact from './pages/Contact'
-
 import Login from './components/Login'
+
 import HomePage from './pages/HomePage'
 import Perfil from './pages/Perfil'
+import Catalogo from './pages/Catalogo'
+import Livro from './pages/Livro'
+import Forum from './pages/Forum'
+import Configuracao from './pages/Configuracao'
+import Notificacao from './pages/Notificacao'
 
 import './styles/index.css'
 
@@ -22,14 +24,15 @@ function App() {
 
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/about' element={<About />} />
-          <Route path='/services' element={<Services />} />
-          <Route path='/contact' element={<Contact />} />
           <Route path='/login' element={<Login />} />
-          
+
+          <Route path='/configuracao' element={<ProtectedRoute><Configuracao /></ProtectedRoute>} />
+          <Route path='/forum' element={<ProtectedRoute><Forum /></ProtectedRoute>} />
           <Route path='/homePage' element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
           <Route path='/perfil' element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
-
+          <Route path='/catalogo' element={<ProtectedRoute><Catalogo /></ProtectedRoute>} />
+          <Route path='/notificacao' element={<ProtectedRoute><Notificacao /></ProtectedRoute>} />
+          <Route path='/livro' element={<ProtectedRoute><Livro /></ProtectedRoute>} />  
         </Routes>
       </BrowserRouter>
     </>

@@ -1,6 +1,6 @@
 function Contato() {
     return(
-        <div className="page">
+        <div>
             <h1>Contate-nos</h1>
         </div>
     )

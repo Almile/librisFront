@@ -3,8 +3,7 @@ import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import '../styles/loginCadastro.css';
-import imgLogin from '../../public/imgLogin.jpeg';
-import imgRegister from '../../public/imgRegister.jpeg';
+import imgLogin from '/imgLogin.jpeg';
 
 
 function Login() {
@@ -84,7 +83,7 @@ function Login() {
                 required
               />
 
-              <button type="submit">Cadastrar</button>
+              <button type="submit" className="button-cadastro">Cadastrar</button>
 
               <p className="link">
                 Já tem conta?{' '}
@@ -140,7 +139,7 @@ function Login() {
                   Google
                 </span>
               </p>
-              <button onClick={handleLogin}>Login</button>
+              <button onClick={handleLogin} className="button-login">Login</button>
             </form>
             <p className="link">
               Não tem conta?{' '}

@@ -1,6 +1,6 @@
 function Servicos() {
     return (
-        <div className='page'>
+        <div>
             <h1>Serviços</h1>
         </div>
     )
