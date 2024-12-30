@@ -109,14 +109,6 @@ function Login() {
           <div className="page left">
             <form>
               <h1>Login</h1>
-              <label htmlFor="login-user">Nome de Usuário</label>
-              <input
-                type="text"
-                id="login-user"
-                placeholder="Digite seu nome de usuário"
-                required
-              />
-
               <label htmlFor="login-email">Email</label>
               <input
                 type="email"
