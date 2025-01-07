@@ -1,19 +1,24 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import BookItem from "../components/BookItem";
+import SearchBar from "../components/SearchBar";
+import style from "../styles/Catalogo.module.css";
 
-function Catalogo() {
-  const navigate = useNavigate();
-
-  const navegarParaLivro = () => {
-    navigate('/livro');
-  };
+export default function Catalogo() {
+  const recommended = [
+    "GjgQCwAAQBAJ", 
+    "hjcQCwAAQBAJ", 
+    "-DgQCwAAQBAJ", 
+    "qDYQCwAAQBAJ", 
+    "9TcQCwAAQBAJ", 
+    "yjUQCwAAQBAJ"
+  ];
 
   return (
-    <div>
-      <h1>Catálogo</h1>
-      <button onClick={navegarParaLivro}>Ir para Livro</button>
+    <div className={style.container}>
+      <SearchBar className={`${style.box}`}/>
+      <h2 className={style.box}>Recomendados</h2>
+      <div className={`${style.recommended} ${style.box}`}>
+        {recommended.map((id) => <BookItem key={id} id={id} />)}
+      </div>
     </div>
   );
 }
-
-export default Catalogo;

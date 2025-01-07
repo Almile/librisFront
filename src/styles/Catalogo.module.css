@@ -1,0 +1,14 @@
+.container {
+    min-height: 100dvh - 8vh;
+}
+
+.box {
+    margin: 2rem auto;
+    width: min(1200px, 95%);
+}
+
+.recommended {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 4rem;
+}
