@@ -1,29 +1,22 @@
 .book {
     display: flex;
-    height: 200px;
-    --title-size: 1.5rem;
-    --authors-size: 0.8rem;
-    --description-size: 0.9rem;
-    --description-color: rgba(0, 0, 0, 30%);
+    flex-direction: column;
+    margin: 0 auto 32px auto;
+    max-width: 60vw;
 }
 
 .cover {
+    width: 100%;
     aspect-ratio: 0.66;
     object-fit: cover;
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
     cursor: pointer;
 }
 
-.info {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: 4px 16px;
-}
-
 .title {
-    --line-clamp: 2;
-    font-size: var(--title-size);
+    max-width: 60vw;
+    margin: 16px 0 4px 0;
+    font-size: 1.2rem;
     cursor: pointer;
     font-weight: 500;
 }
@@ -32,32 +25,14 @@
     text-decoration-line: underline;
 }
 
-.authors {
-    --line-clamp: 1;
-    font-size: var(--authors-size);
-}
-
-.rating {
-    margin-left: 8px;
-    font-size: 0.8rem;
-    color: var(--description-color);
-}
-
-.description {
-    --line-height: 1.2rem;
-    --line-clamp: 3;
-    line-height: var(--line-height);
-    height: calc(3 * var(--line-height));
-    font-size: var(--description-size);
-    color: var(--description-color);
-}
-
 .truncate {
-    -webkit-line-clamp: var(--line-clamp);
-    -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
+    white-space: nowrap;
+}
+
+.authors {
+    font-size: 0.8rem;
 }
 
 .loader {
