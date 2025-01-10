@@ -2,6 +2,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import { useContext, useState, useRef, useEffect } from 'react';
 import '../styles/navbar.css';
+import Notificacoes from './Notificacoes';
+import logo from '/logotipo.svg';
+import userPhoto from '/user_padrao.svg';
 
 function Navbar() {
     const { isAuthenticated, logout } = useContext(AuthContext);
@@ -10,15 +13,29 @@ function Navbar() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
     const dropdownRef = useRef(null);
-
+    const notificationsRef = useRef(null);
+    
     const toggleTheme = () => {
         setIsDarkMode((prevMode) => {
             const newMode = !prevMode;
             document.body.classList.toggle('dark-mode', newMode);
+            localStorage.setItem('theme', newMode ? 'dark' : 'light'); // Salva o tema no localStorage
             return newMode;
         });
     };
+
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            setIsDarkMode(true);
+            document.body.classList.add('dark-mode');
+        } else {
+            setIsDarkMode(false);
+            document.body.classList.remove('dark-mode');
+        }
+    }, []);
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen((prev) => !prev);
@@ -30,14 +47,19 @@ function Navbar() {
         setIsDropdownOpen((prevState) => !prevState);
     };
 
-    const handleClickOutside = (event) => {
-        if (isMobileMenuOpen) return;
+    const toggleNotifications = () => {
+        setIsNotificationsOpen((prevState) => !prevState);
+    };
 
+    const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setIsDropdownOpen(false);
         }
-    };
 
+        if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+            setIsNotificationsOpen(false);
+        }
+    };
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
@@ -77,16 +99,22 @@ function Navbar() {
     const handleLinkClick = () => {
         setIsMobileMenuOpen(false);
         setIsDropdownOpen(false);
+        setIsNotificationsOpen(false);
     };
+
+
 
     return (
         <nav className={`navbar ${isLoginPage ? 'navbar-fixed' : 'navbar-relative'}`}>
-            <div className="logo">
-                <Link to={isAuthenticated ? "/homePage" : "/"}>LOGO</Link>
+            <div>
+                <Link to={isAuthenticated ? "/homePage" : "/"} className="logo">
+                    <img src={logo} alt="Logo Libris" />
+                    <h1 className='libris'>LIBRIS</h1>
+                </Link>
             </div>
 
             <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
-                ☰
+                <ion-icon name="menu-outline"></ion-icon>
             </button>
 
             <div className={`navbar-auth ${isMobileMenuOpen ? 'mobile-menu-open' : ''}`}>
@@ -95,16 +123,22 @@ function Navbar() {
                         <Link to="/homePage" onClick={handleLinkClick}>Home</Link>
                         <Link to="/catalogo" onClick={handleLinkClick}>Catálogo</Link>
                         <Link to="/forum" onClick={handleLinkClick}>Fórum</Link>
-                        <Link to="/notificacao" onClick={handleLinkClick}>Notificações</Link>
 
+                        <div className="notifications-button" ref={notificationsRef}>
+                            <button className="notifications-button" onClick={toggleNotifications}>
+                                Notificações
+                            </button>
+
+                            {isNotificationsOpen && <Notificacoes />}
+                        </div>
                         <div className="dropdown" ref={dropdownRef}>
                             <button className="dropdown-toggle" onClick={toggleDropdown}>
-                                <img src="https://via.placeholder.com/60" alt="Perfil" />
+                                <img src={userPhoto} alt="Perfil" />
                             </button>
                             {isDropdownOpen && (
                                 <div className="dropdown-menu open">
                                     <div className="dropdown-user" onClick={toggleDropdown}>
-                                        <img src="https://via.placeholder.com/40" alt="Perfil" />
+                                        <img src={userPhoto} alt="Perfil" />
                                         <div className="user-info">
                                             <span>Nome do usuario</span>
                                             <span>email@email.com</span>
@@ -117,9 +151,9 @@ function Navbar() {
                                         <span></span>
                                         <span className="theme-icon">
                                             {isDarkMode ? (
-                                                <ion-icon name="moon-outline"></ion-icon>
-                                            ) : (
                                                 <ion-icon name="sunny-outline"></ion-icon>
+                                            ) : (
+                                                <ion-icon name="moon-outline"></ion-icon>
                                             )}
                                         </span>
                                     </button>
@@ -131,9 +165,9 @@ function Navbar() {
                     </>
                 ) : (
                     <>
-                        <a href="#sobre" onClick={() => {scrollToSection('sobre'); handleLinkClick();}}>Sobre</a>
-                        <a href="#servicos" onClick={() => {scrollToSection('servicos'); handleLinkClick();}}>Serviços</a>
-                        <a href="#contato" onClick={() => {scrollToSection('contato'); handleLinkClick();}}>Contato</a>
+                        <a href="#sobre" onClick={() => { scrollToSection('sobre'); handleLinkClick(); }}>Sobre</a>
+                        <a href="#servicos" onClick={() => { scrollToSection('servicos'); handleLinkClick(); }}>Serviços</a>
+                        <a href="#contato" onClick={() => { scrollToSection('contato'); handleLinkClick(); }}>Contato</a>
                         <Link to="/login" className="login-button" onClick={handleLinkClick}>Login</Link>
                     </>
                 )}

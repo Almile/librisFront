@@ -1,15 +1,28 @@
 .navbar {
     padding:10px 20px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--borda-suave);
     top: 0;
     z-index: 100;
-    width: 100vw;
-    height: 8vh;
+    width: 100%;
+    height: 6vh;
     display: flex;
+    font-size: 16px;
     justify-content: space-between;
+    background-color: var(--bg-secundario);
     align-items: center;
 }
 
+.logo{
+    display: flex;
+    align-items:baseline;
+}
+
+.libris{
+    font-size: 42px;
+    padding: 0;
+    font-family: "Bebas Neue", 'Roboto', Arial;
+    color: var(--texto-primario);
+}
 .navbar-auth{
     display: flex;
     justify-content: space-around;
@@ -17,21 +30,31 @@
     gap: 3em;
 }
 
+.navbar-auth .notifications-button{
+    border: none;
+    background-color: transparent;
+    text-align: start;
+    font-size: 16px;
+}
+
+.navbar img{
+    height: 30px;
+}
 
 .navbar-auth img, button.dropdown-toggle{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.navbar-auth button.dropdown-toggle{
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    border: 1px solid #888;
-}
-.navbar a , .navbar button{
-    font-size: 16px;
-    text-decoration: none;
-    font-weight: bold;
 }
 
 .navbar a:hover, .navbar button:hover{
-    color: #cf7d20;
+    color: var(--destaque);
     background-color: transparent;
 }
 
@@ -53,14 +76,12 @@
 .navbar-fixed{
     position: fixed;
     border-bottom-color: transparent;
-    background-color: #3131314d; /* Cor de fundo semitransparente */
-    backdrop-filter: blur(4px); /* Aplica o desfoque */
+    background-color: #a0a0a000;
+    backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(10px);
-    color: #ffffff;
 }
-
-.navbar-fixed a , .navbar-fixed button{
-    color: #ffffff;
+.navbar-fixed .navbar-auth a, .navbar-fixed .libris, .navbar-fixed ion-icon{
+    color: #000000;
 }
 
 .navbar-relative {
@@ -68,26 +89,23 @@
 }
 
 .login-button{
-    background-color: #cf7d20;
-    color: #ffffff;
-    padding: 10px 20px;
+    background-color: var(--destaque);
+    color: var(--bg-principal);
+    padding: 8px 15px;
     border-radius: 5px;
-    border: 1px solid #cf7d20;
+    border: 1px solid var(--destaque);
     cursor: pointer;
 }
-
 
 .dropdown-menu{
     position: absolute;
     border-radius: 5px;
-    background: #ffffff;
-    border: 1px solid #ccc;
-    box-shadow:  -5px 5px 10px #e6e6e6,
-                 5px -5px 10px #ffffff00;
+    background-color: var(--bg-principal);
+    border: 1px solid var(--borda-suave);
     display: flex;
     flex-direction: column;
     padding: 16px;
-    min-width: 200px;
+    min-width: 250px;
     border-radius: 10px;
     top: 60px;
     gap: 1.3em;
@@ -116,8 +134,8 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    border: 1px solid #666;
-    color: #666;
+    border: 1px solid var(--texto-secundario);
+    color: var(--texto-secundario);
     position: relative;
     overflow: hidden;
     transition: border-color 0.3s ease, color 0.3s ease;
@@ -125,7 +143,7 @@
 
 .theme-icon ion-icon {
     font-size: 24px;
-    color: #666;
+    color: var(--texto-secundario);
     transition: color 0.3s ease;
 }
 
@@ -133,7 +151,7 @@
     content: '';
     position: absolute;
     height: 1px;
-    background: #ccc;
+    background: var(--texto-secundario);
     width: calc(100% - 60px);
     top: 50%;
     left: 0;
@@ -142,25 +160,34 @@
 }
 
 .theme-toggle:hover .theme-text {
-    color: #2828aa;
+    color: var(--destaque);
 }
 
 .theme-toggle:hover .theme-icon {
-    border-color: #2828aa;
+    border-color:var(--destaque);
     color: white;
 }
 
 .theme-toggle:hover .theme-icon ion-icon {
-    color: #2828aa;
+    color: var(--destaque);
 }
 
 .theme-toggle:hover::before {
-    background-color: #2828aa;
+    background-color: var(--destaque);
+}
+.theme-toggle .theme-icon,
+.theme-toggle .theme-icon ion-icon {
+    border-color: var(--tema);
+    color: var(--tema);
+}
+
+.theme-toggle:before{
+    background-color: var(--tema);
 }
 
 .navbar a:hover,
 .navbar button:hover {
-    color: #cf7d20;
+    color: var(--texto-secundario);
     background-color: transparent;
 }
 
@@ -177,14 +204,14 @@
     align-items: center;
     gap: 10px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--borda-suave);
 }
 
 .dropdown-user img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 1px solid #888;
+    border: 1px solid var(--borda-suave);
 }
 
 .dropdown-user .user-info {
@@ -202,24 +229,28 @@ display: none;
     .navbar-auth {
         display: none;
         flex-direction: column;
-        background-color: #ffffff;
+        background-color: var(--bg-principal);
         border-bottom: 1px solid;
         align-items: start;
         justify-content: unset;
         position: absolute;
-        top: 8vh;
+        top: 6vh;
         right: 0;
-        height: 92vh;
+        height: 94vh;
         width: 100%;
         padding: 20px;
         margin: 0;
         gap: 2em;
     }
 
+    .navbar-auth a , .navbar-auth .notifications-button, .dropdown{
+        width: 100%;
+    }
+
     .navbar-fixed .navbar-auth{
         position: fixed;
         border-bottom-color: transparent;
-        background-color: #3131314d; 
+        background-color: #f4f4f4; 
         backdrop-filter: blur(4px);
         -webkit-backdrop-filter: blur(100px);
     }
@@ -240,7 +271,7 @@ display: none;
         width: 100%;
         gap: 2em;
         border-radius: 0;
-        background: #ffffff;
+        background: var(--bg-principal);
         border: none;
         box-shadow: none;
         display: flex;

@@ -1,4 +1,4 @@
-main {
+.main {
     max-width: 1200px;
     margin: 20px auto;
     width: 90%;
@@ -32,41 +32,33 @@ main {
     bottom: -50%;
     padding:0 20px;
     gap: 20px;
-    height: auto;
+    min-height: 160px;
+    align-items: flex-end;
 }
 
-
-.perfil-data textarea{
-    width: 100%;
-    padding: 0 5px 0;
-    border: none;
-    border-radius: 4px;
-    resize: none;
-    font-size: 16px;
-}
 
 #image-preview-container{
-    width: '100%';
-    height: '150px';
-    overflow: 'hidden';
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
 }
 #image-preview{
-    max-width: '100%';
-     display: 'none';
+    max-width: 100%;
+     display: none;
 }
 
 .foto-perfil {
     position: relative;
-    max-width: 140px;
-    width: 30%;
-    height: 140px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
-    background-color: #ddd;
+    background-color: var(--bg-principal);
+    border: 1px solid var(--bg-secundario);
 }
 
 .foto-perfil img {
-    width: 100%;
-    height: 100%;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
 }
@@ -75,9 +67,8 @@ main {
     position: absolute;
     bottom: 5px;
     right: 5px;
-    background-color: #333;
-    color: #fff;
-    border: none;
+    background-color: var(--bg-secundario);
+    border: 1px solid var(--bg-principal);
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -91,11 +82,9 @@ main {
     position: absolute;
     top: 5px;
     right: 5px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    border: none;
+    background-color: var(--bg-principal);
+    color: var(--bg-principal);
+    border: 1px solid #333;
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -107,31 +96,59 @@ main {
 
 .info-perfil {
     flex-grow: 1;
-}
-
-.info-perfil h1,
-.info-perfil p {
-    color: #fff;
-    -webkit-text-stroke: thin rgb(0, 0, 0);
+    width: 100%;
+    height: auto;
 }
 
 .info-perfil h1 {
+    color: var(--texto-primario);
+    -webkit-text-stroke: thin var(--bg-principal);
     font-size: 24px;
     margin-bottom: 15px;
 }
 
-.info-perfil p {
-    overflow-wrap: break-word;
-    word-break: break-word;
-    white-space: pre-wrap;
-    font-size: 14px;
-    color: rgb(73, 73, 73);
+.textarea-container{
+    width: 100%;
+}
+
+.perfil-data textarea {
+    width: 100%;
+    padding: 5px 0;
+    border: none;
+    border-radius: 4px;
+    resize: none; 
+    overflow-wrap: break-word; 
+    word-break: break-word; 
+    white-space: pre-wrap;  
+    min-height:4.2em;
+    line-height: 1.2em;  
+    overflow: hidden;
+    color: var(--texto-secundario);
+    background-color: transparent;
+}
+
+.textarea-container sub {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+}
+.textarea-container {
+    width: 100%;
+    position: relative;
+}
+
+.edit-desc{
+    border: 1px solid var(--bg-secundario);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: transparent;
 }
 
 .editar-perfil {
     padding: 5px 10px;
-    background-color: #007BFF;
-    color: #fff;
+    background-color: var(--texto-primario);
+    color: var(--bg-principal);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -141,13 +158,14 @@ main {
 .user-description{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 20px;
 }
 
 .estatisticas {
     margin-top: 10px;
     font-size: 14px;
-    color: #666;
+    color: var(--texto-primario);
 }
 
 .conteudo {
@@ -157,7 +175,7 @@ main {
 }
 
 .top-comentarios, .heatmap, .lendo {
-    background-color: #fff;
+    background-color:var(--bg-secundario);
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -166,32 +184,16 @@ main {
 .top-comentarios h2, .heatmap h2, .lendo h2 {
     margin-bottom: 15px;
     font-size: 18px;
-}
-
+}  
 
 .estante {
     grid-column: 1 / -1;
-    background-color: #fff;
+    background-color: var(--bg-secundario);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.editar-foto{
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
 #modal {
     position: fixed;
     top: 0;
@@ -206,7 +208,7 @@ main {
   }
   
   #modal-content {
-    background: white;
+    background: var(--bg-secundario);
     padding: 20px;
     border-radius: 8px;
     width: 90%;
@@ -215,58 +217,116 @@ main {
     text-align: center;
     border: none;
     transition: border 0.3s;
-
   }
 
 #image-preview-container {
-width: 100%;
-height: auto;
-display: flex;
-justify-content: center;
-align-items: center;
-overflow: hidden;
-margin-bottom: 10px;
-}
-
-
-#modal input[type="file"] {
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    max-width: 500px;
+    align-items: center;
+    overflow: hidden;
     margin-bottom: 10px;
 }
 
-#modal button {
-    padding: 10px 15px;
-    background: #007BFF;
-    color: #fff;
+
+#modal #modal-content input[type="file"] {
+    margin-bottom: 10px;
+}
+
+#modal #modal-content button {
+    padding: 5px 20px;
+    width: 40%;
+    margin:10px;
+    color: var(--bg-secundario);
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
+#modal .buttons button{
+    background: var(--texto-secundario);
+}
+
+#modal .buttons button:first-child{
+    background: var(--destaque);
+}
+
+
 @media (max-width: 768px) {
-main {
-grid-template-columns: 1fr;
-gap: 10px;
+    .main {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .react-calendar-heatmap {
+        max-width: 100%;
+      }
+
+    .perfil-data {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 8px;
+    }
+    .perfil-data textarea {
+        min-height: 6em;
+    }
+
+    .perfil {
+        margin-bottom: 150px;
+    }
+
+    .info-perfil h1 {
+        font-size: 18px;
+        margin: 0;
+    }  
+
+    .conteudo {
+        grid-template-columns: 1fr;
+    }
+
+    .heatmap, .lendo, .top-comentarios, .estante {
+        padding: 15px;
+    }
 }
 
-.perfil-data {
-flex-direction: column;
-align-items: flex-start;
-}
+/* HeatMap */
 
-.info-perfil h1 {
-font-size: 18px;
-}
+.calendar-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .weekday-labels {
+    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 10px;
+    gap: 15px;
+  }
+  
+  .weekday-label {
+    width: 10px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    color: #7765c6;
 
-.info-perfil p {
-font-size: 14px;
-}
-
-.conteudo {
-grid-template-columns: 1fr;
-}
-
-.heatmap, .lendo, .top-comentarios, .estante {
-padding: 15px;
-}
-}
-
+  }
+  
+  .react-calendar-heatmap {
+    height: 220px;
+  }
+  .react-calendar-heatmap .react-calendar-heatmap-week {
+    display: flex;
+    justify-content: center;
+  }
+    
+.react-calendar-heatmap .color-scale-1 { fill: #ba85e6;}
+.react-calendar-heatmap .color-scale-2 { fill: #7765c6;}
+.react-calendar-heatmap .color-scale-3 { fill: #4047a3;}
+.react-calendar-heatmap .color-scale-4 { fill: #251e68;}

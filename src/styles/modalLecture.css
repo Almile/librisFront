@@ -1,0 +1,45 @@
+.modal-lecture .star-rating{
+    font-size: 30px;
+    text-align: center;
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+}
+
+
+.modal-lecture .star-rating input{
+    width: 100%;
+    border: none;
+    font-size: 24px;
+}
+
+.modal-lecture{
+    background-color: var(--bg-secundario);
+    border-radius: 5px;
+    position: relative;
+}
+
+.modal-lecture .books-data{
+    padding: 10px;
+}
+
+.modal-lecture button{
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--destaque);
+    background-color: transparent;
+    font-weight: bold;
+    padding: 10px;
+}
+.modal-lecture button:hover{
+    background-color: var(--destaque);
+    color: var(--texto-principal);
+}
+.close-modal ion-icon{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: red;
+    font-weight: bolder;
+    font-size: 24px;
+}

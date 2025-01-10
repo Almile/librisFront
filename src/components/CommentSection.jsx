@@ -26,7 +26,7 @@ const CommentSection = () => {
       isReplying: false,
       user: {
         name: "Nome_usuario",
-        userImage: "https://via.placeholder.com/50",
+        userImage: "/user_padrao.svg",
       },
       date: new Date().toLocaleString(),
       rating: parentId === null ? rating : null,

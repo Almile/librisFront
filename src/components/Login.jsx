@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import '../styles/loginCadastro.css';
 import imgLogin from '/imgLogin.jpeg';
-
+import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 function Login() {
   const { login } = useContext(AuthContext);
@@ -15,16 +16,32 @@ function Login() {
     navigate('/homePage');
   }
 
+  function handleLogout(){
+    googleLogout()
+  }
+
   useEffect(() => {
     document.querySelectorAll('.toggle').forEach((item) => {
       item.addEventListener('click', () => {
         const book = document.querySelector('.book');
         const action = item.getAttribute('data-action');
+        const pageCadastro = document.getElementById('pageCadastro')
+        const pageForgot = document.getElementById('pageForgot')
+
 
         if (action === 'signup') {
+          pageForgot.style.display='none';
           book.classList.add('flipped');
+          pageCadastro.style.display='flex';
+
         } else if (action === 'login') {
           book.classList.remove('flipped');
+          
+        }else if (action === 'forgot') {
+          pageCadastro.style.display='none';
+          book.classList.add('flipped');
+          pageForgot.style.display='flex';
+
         }
       });
    })
@@ -40,7 +57,7 @@ function Login() {
       <div className="animated-background"></div>
 
       <div className="book">
-        <div className="page" id="pageCadastro">
+        <div className="page">
           <header></header>
 
           <div className="page left emptyPage">
@@ -48,7 +65,7 @@ function Login() {
           </div>
 
           <div className="page right cadastro">
-          <form>
+          <form  id="pageCadastro">
               <h1>Cadastro</h1>
 
               <label htmlFor="register-userName">Nome de usuário</label>
@@ -92,16 +109,35 @@ function Login() {
                 </span>
               </p>
             </form>
-          </div>
 
+
+            <form id="pageForgot">
+              <h1>Recuperação de senha</h1>
+
+              <label htmlFor="forgot-email">Email</label>
+              <input type="email" id="forgot-email" placeholder="Digite seu email" required />
+              <button type="submit" className="button-forgot">Enviar Confirmação</button>
+
+              <p className="link">
+                Já tem conta?{' '}
+                <span className="toggle" data-action="login">
+                  Faça login
+                </span>
+              </p>
+            </form>
+          </div>
           <footer></footer>
         </div>
 
+
         <div className="page" id="pageLogin">
           <div className="page right emptyPage">
-              <div className="messageRegister">
-                <h1>Cadastre-se</h1>
-              <h2>Encha as suas estantes com seus livros e personagens favoritos e conte suas histórias</h2>
+          <div className="messageRegister">
+                <h1>Libris</h1>
+                <h2>
+                  Encha as suas estantes com seus livros e personagens favoritos
+                  e compartilhe suas histórias
+                </h2>
               </div>
           </div>
 
@@ -126,12 +162,27 @@ function Login() {
               />
 
               <p className="linkGoogle">
-                Ou entrar com o {' '}
-                <span className="google" data-action="enterGoogle">
-                  Google
-                </span>
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  console.log("Credenciais:", credentialResponse.credential);
+                  handleLogin()
+                }}
+                onError={() => console.log("Falha ao logar")}
+                auto_select={true}
+                shape="circle"
+                theme="outline"
+                size="large"
+              />
               </p>
+             
               <button onClick={handleLogin} className="button-login">Login</button>
+
+              <p className="linkForgot">
+              Esqueceu a senha?{' '}
+              <span className="toggle" data-action="forgot">
+                Recuperar senha
+              </span>
+            </p>
             </form>
             <p className="link">
               Não tem conta?{' '}

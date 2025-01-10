@@ -11,7 +11,7 @@ import Catalogo from './pages/Catalogo'
 import Livro from './pages/Livro'
 import Forum from './pages/Forum'
 import Configuracao from './pages/Configuracao'
-import Notificacao from './pages/Notificacao'
+import Resenha from './pages/Resenha'
 
 import './styles/index.css'
 
@@ -31,8 +31,9 @@ function App() {
           <Route path='/homePage' element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
           <Route path='/perfil' element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
           <Route path='/catalogo' element={<ProtectedRoute><Catalogo /></ProtectedRoute>} />
-          <Route path='/notificacao' element={<ProtectedRoute><Notificacao /></ProtectedRoute>} />
           <Route path='/livro' element={<ProtectedRoute><Livro /></ProtectedRoute>} />  
+          <Route path='/resenha' element={<ProtectedRoute><Resenha /></ProtectedRoute>} />  
+
         </Routes>
       </BrowserRouter>
     </>

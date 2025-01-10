@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import Cropper from 'cropperjs';
 import "cropperjs/dist/cropper.css";
+import userPhoto from '/user_padrao.svg';
 
 const UserProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageTarget, setImageTarget] = useState('');
   const [backgroundImage, setBackgroundImage] = useState('');
-  const [profileImage, setProfileImage] = useState('https://via.placeholder.com/60');
+  const [profileImage, setProfileImage] = useState(userPhoto);
 
     const [editable, setEditable] = useState(false);
     const [description, setDescription] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris in feugiat libero.');
   
-
     let cropper = null;
 
     const openModal = (target) => {
@@ -93,28 +93,33 @@ const UserProfile = () => {
   return (
       <section className="perfil" style={{ backgroundImage: `url(${backgroundImage})` }}>
         <button className="editar-background" onClick={() => openModal('background')}>
-          &#9998;
+          <ion-icon name="camera-outline" className="cam-icon"></ion-icon>
         </button>
         <div className="perfil-data">
             <div className="foto-perfil">
               <img src={profileImage} alt="Foto do Perfil" />
               <button className="editar-foto" onClick={() => openModal('perfil')}>
-                &#9998;
+              <ion-icon name="camera-outline" className="cam-icon"></ion-icon>
               </button>
             </div>
          <div className="info-perfil">
             <h1>Nome do Usuário</h1>
             <div className="user-description">
               {editable ? (
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
+                <div className='textarea-container'>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      maxLength={120}
+                    />
+                    <sub>{description.length}/120 caracteres</sub>
+                  </div>
+
               ) : (
-                <p>{description}</p>
+                <textarea className='textarea' readOnly disabled value={description}/>
               )}
-              <button onClick={editable ? saveDescription : toggleEditable}>
-                {editable ? 'Salvar' : '✎'}
+              <button className="edit-desc" onClick={editable ? saveDescription : toggleEditable}>
+                {editable ? 'Salvar' : <ion-icon name="pencil-outline"></ion-icon>}
               </button>
             </div>
             <div className="estatisticas">
@@ -131,7 +136,7 @@ const UserProfile = () => {
               <img id="image-preview" alt="Pré-visualização" />
             </div>
             <input type="file" onChange={handleFileChange} accept="image/*" />
-            <div style={{ marginTop: '10px' }}>
+            <div className='buttons'>
               <button onClick={saveImage}>Salvar</button>
               <button onClick={closeModal}>Cancelar</button>
             </div>
