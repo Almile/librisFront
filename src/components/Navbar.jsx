@@ -18,24 +18,34 @@ function Navbar() {
     const notificationsRef = useRef(null);
     
     const toggleTheme = () => {
+        if (!isAuthenticated) return;
+    
         setIsDarkMode((prevMode) => {
             const newMode = !prevMode;
             document.body.classList.toggle('dark-mode', newMode);
-            localStorage.setItem('theme', newMode ? 'dark' : 'light'); // Salva o tema no localStorage
+            document.body.classList.toggle('light-mode', !newMode);
+            localStorage.setItem('theme', newMode ? 'dark' : 'light');
             return newMode;
         });
     };
-
+    
     useEffect(() => {
+        const isPublicPage = !isAuthenticated;
         const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            setIsDarkMode(true);
-            document.body.classList.add('dark-mode');
-        } else {
-            setIsDarkMode(false);
+    
+        if (isPublicPage) {
             document.body.classList.remove('dark-mode');
+            document.body.classList.add('light-mode');
+        } else {
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.body.classList.remove('light-mode');
+            } else {
+                document.body.classList.add('light-mode');
+                document.body.classList.remove('dark-mode');
+            }
         }
-    }, []);
+    }, [location.pathname, isAuthenticated]); 
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen((prev) => !prev);

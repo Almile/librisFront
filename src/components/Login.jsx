@@ -54,7 +54,6 @@ function Login() {
 
   return (
     <div className='container'>
-      <div className="animated-background"></div>
 
       <div className="book">
         <div className="page">
@@ -103,6 +102,7 @@ function Login() {
               <button type="submit" className="button-cadastro">Cadastrar</button>
 
               <p className="link">
+                
                 Já tem conta?{' '}
                 <span className="toggle" data-action="login">
                   Faça login
@@ -161,6 +161,20 @@ function Login() {
                 required
               />
 
+
+             
+              <button onClick={handleLogin} className="button-login">Login</button>
+
+              <p className="linkForgot">
+              Esqueceu a senha?{' '}
+              <span className="toggle" data-action="forgot">
+                Recuperar senha
+              </span>
+            </p>
+
+            <p className="linkGoogle">
+              ou 
+            </p>
               <p className="linkGoogle">
               <GoogleLogin
                 onSuccess={(credentialResponse) => {
@@ -174,15 +188,7 @@ function Login() {
                 size="large"
               />
               </p>
-             
-              <button onClick={handleLogin} className="button-login">Login</button>
 
-              <p className="linkForgot">
-              Esqueceu a senha?{' '}
-              <span className="toggle" data-action="forgot">
-                Recuperar senha
-              </span>
-            </p>
             </form>
             <p className="link">
               Não tem conta?{' '}

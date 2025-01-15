@@ -3,6 +3,8 @@ import UserProfile from '../components/UserProfile';
 import HeatMap from '../components/HeatMap';
 import './../styles/perfil.css';
 import ProfilePage from '../components/ProfilePage';
+import BookCard from "../components/BookCard"
+
 
 function Perfil() {
 
@@ -20,7 +22,10 @@ function Perfil() {
                 </div>
                 <div className="lendo">
                     <h2>Lendo</h2>
-                    <button className="adicionar-leitura">Adicionar Leitura</button>
+                    <div className='leituras'>
+                        <BookCard />
+                        <BookCard />
+                    </div>
                 </div>
                 <section className="estante">
                     <h2>Estante de Livros</h2>

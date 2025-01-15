@@ -13,33 +13,6 @@
   color: #333;
 }
 
-@keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes waveEffect {
-  0%, 100% {
-    transform: scale(1) translate(-10%, -10%) rotate(0deg);
-  }
-  50% {
-    transform: scale(1.1) translate(-5%, -5%) rotate(2deg);
-  }
-}
-
-.animated-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 200%;
-      height: 200%;
-      overflow: hidden;
-      background: radial-gradient(circle, #f1fff3, #ffffff, #d8ffd4);
-      background-size: 600% 600%;
-      animation: gradientAnimation 10s ease-in-out infinite, waveEffect 8s ease-in-out infinite;
-      filter: blur(50px);
-    }
 
 .book {
   width: 80%;
@@ -279,7 +252,7 @@
     display: flex;
     max-width: 60%;
     height: 80vh;
-    max-height: 800px;
+    max-height: 700px;
     padding: 10px;
     border-radius: 10px;
   }

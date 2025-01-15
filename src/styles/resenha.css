@@ -108,6 +108,9 @@
     border: none;
     padding: 10px;
     border-radius: 5px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: pre-wrap;
     background-color: transparent;
 }
 
