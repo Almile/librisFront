@@ -3,14 +3,14 @@ import style from '../styles/components/BookItem.module.css';
 import useBookData from '../hooks/useBookData';
 import StarList from './StarList';
 
-export default function BookItem({id}) {
+export default function BookItem({id, innerRef}) {
   const {info, loading, error} = useBookData(id);
 
   if (loading) return <div className={style.loader}></div>;
   if (error) return <p>A network error was encountered</p>;
 
   return (
-    <div className={style.book}>
+    <div className={style.book} ref={innerRef}>
       <img className={style.cover} src={info.coverURL + "&zoom=1"} alt={`Capa do livro ${info.title}`} />
       <div className={style.info}>
         <span className={`${style.title} ${style.truncate}`}>
@@ -35,4 +35,5 @@ export default function BookItem({id}) {
 
 BookItem.propTypes = {
   id: PropTypes.string.isRequired,
+  innerRef: PropTypes.func
 };

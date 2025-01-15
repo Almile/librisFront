@@ -15,7 +15,6 @@
 
 .flex {
     display: flex;
-    display: flex;
     gap: 1rem;
 }
 
@@ -25,7 +24,7 @@
 
 .btn {
     border: none;
-    padding: 0 20px;
+    padding: 16px 20px;
     background-color: #009C9D;
     color: white;
     border-radius: 8px;
