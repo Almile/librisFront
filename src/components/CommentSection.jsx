@@ -3,9 +3,63 @@ import { CommentList } from "./CommentList";
 import { CommentForm } from "./CommentForm";
 import { StarRating } from "./StarRating";
 
+import userPhoto from '/user_padrao.svg';
+
+const commentsData = [
+  {
+    id: 1,
+    text: "Este é um comentário sem spoiler.",
+    user: {
+      name: "João Silva",
+      userImage: userPhoto,
+    },
+    date: "2025-01-15",
+    isSpoiler: false,
+    likedBy: ["Maria Oliveira","Mariana"],
+    likes: 2,
+    rating: 4,
+    parentId: null,
+    isReplying: false,
+    replies: [
+      {
+        id: 2,
+        text: "Uma resposta ao comentário acima.",
+        user: {
+          name: "Maria Oliveira",
+          userImage: userPhoto,
+        },
+        date: "2025-01-16",
+        isSpoiler: false,
+        likedBy: [],
+        likes: 0,
+        rating: null,
+        parentId: 1,
+        isReplying: false,
+        replies: [],
+      },
+      {
+        id: 3,
+        text: "Com tag de Spoiler.",
+        user: {
+          name: "Mariana",
+          userImage: userPhoto,
+        },
+        date: "2025-01-16",
+        isSpoiler: true,
+        likedBy: ["Maria Oliveira","Mariana","João Silva"],
+        likes: 3,
+        rating: null,
+        parentId: 1,
+        isReplying: false,
+        replies: [],
+      },
+    ],
+  },
+];
+
 const CommentSection = () => {
-  const [comments, setComments] = useState([]);
-  const [currentId, setCurrentId] = useState(1);
+  const [comments, setComments] = useState(commentsData);
+  const [currentId, setCurrentId] = useState(4);
   const [rating, setRating] = useState(0);
   const [isSpoiler, setIsSpoiler] = useState(false);
 
@@ -26,7 +80,7 @@ const CommentSection = () => {
       isReplying: false,
       user: {
         name: "Nome_usuario",
-        userImage: "https://via.placeholder.com/50",
+        userImage: "/user_padrao.svg",
       },
       date: new Date().toLocaleString(),
       rating: parentId === null ? rating : null,

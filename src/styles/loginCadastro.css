@@ -8,39 +8,16 @@
   overflow: hidden;
 }
 
-@keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+
+.book p,.book h1, .book label,.book h2{
+  color: #333;
 }
 
-@keyframes waveEffect {
-  0%, 100% {
-    transform: scale(1) translate(-10%, -10%) rotate(0deg);
-  }
-  50% {
-    transform: scale(1.1) translate(-5%, -5%) rotate(2deg);
-  }
-}
-
-.animated-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 200%;
-      height: 200%;
-      overflow: hidden;
-      background: radial-gradient(circle, #666, #555, #111, #333);
-      background-size: 600% 600%;
-      animation: gradientAnimation 10s ease-in-out infinite, waveEffect 8s ease-in-out infinite;
-      filter: blur(50px);
-    }
 
 .book {
   width: 80%;
-  height: 80%;
-  min-height: 700px;
-  border:1px solid #6b6b6b;
+  height: 70vh;
+  border:1px solid var(--borda-suave);
   display: flex;
   position: relative;
   background: #ffffff;
@@ -53,7 +30,7 @@
 .page {
   width:100%;
   height: 100%;
-  transition: transform 1s ease-in-out;
+  transition: transform .8s ease-in-out;
   position: absolute;
   background: rgb(255, 255, 255);
   background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 50%, rgb(219, 219, 219) 100%);  
@@ -81,23 +58,23 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 1.2em;
+  gap: .5em;
 }
 
 .book form input, .book button,
   .book form input:placeholder-shown{
-  padding: 12px 24px;
-  font-size:16px;
+  padding: 10px 16px;
+  font-size:14px;
   border-radius: 50px;
   background-color: transparent;
   color: #333;
-  border: 1px solid black;
+  border: 1px solid ;
 }
 
 .book form button{
   border: none;
   margin-top:1em;
-  background: #a76c00;
+  background:#009c9d;
   color: #fff;
   cursor: pointer;
   transition: background 0.3s ease;
@@ -114,14 +91,13 @@
 }
 
 .link {
-  border-top: 1px solid;
+  border-top: 1px solid var(--borda-suave);
   width: 90%;
   text-align: center;
   padding: 10px 0;
-  font-size: 1.3em;
-  margin: 1em auto 0;
+  font-size: 1em;
   position: absolute;
-  bottom: 5px;
+  bottom: 10px;
 }
 .emptyPage, .emptyPage img{
     width: 100%;
@@ -129,16 +105,24 @@
 }
 
 
-.google{
-  font-size: 1.3em;
-  color: #e0e400;
+.linkForgot{
+  color: #333;
+  font-size: .8;
+
+}
+
+.linkForgot{
+  text-align: center;
+  font-size: 14px;
 }
 
 .linkGoogle{
   text-align: center;
-  font-size: 1.3em;
-  margin: 10px;
-  font-weight: bolder;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-size: 1em;
 }
 
 .book footer,.book header{
@@ -147,7 +131,8 @@
   border-radius: 25%;
   position: absolute;
   background: rgb(255,255,255);
-  background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 50%, rgb(219, 219, 219) 100%);  display: flex;
+  background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 50%, rgb(219, 219, 219) 100%);  
+  display: flex;
   bottom: -1em;
 }
 .book header{
@@ -177,8 +162,8 @@
 @media (min-width: 768px) {
   .book {
     width: 98%;
-    max-height: 70%;
-    background: #865114;
+    height: 70vh;
+    background:#009c9d;
     padding: 10px;
     perspective: 1500px;
     border-radius: 10px;
@@ -257,39 +242,24 @@
     
   .book form input, .book button,
   .book form input:placeholder-shown{
-    font-size:20px;
+    font-size:16px;
   }
 
-  
-.google{
-  font-size: 1.2em;
-  color: #2b2fff;
-}
-
-  .linkGoogle{
-    text-align: center;
-    font-size: 1em;
-    margin:10px 0 10px;
-  }
 }
 
 @media (min-width: 1024px) {
   .book {
     display: flex;
     max-width: 60%;
-    max-height: 80%;
+    height: 80vh;
+    max-height: 700px;
     padding: 10px;
     border-radius: 10px;
   }
 
-  .link,.linkGoogle{
-    font-size: 1.3em;
-  }
-  
   .book form input, .book button,.book form label,
   .book form input:placeholder-shown{
-    font-size:1.5em;
-    margin-top: 5px;
+    font-size:1em;
   }
 }
 
@@ -302,4 +272,12 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+.book .messageRegister h1{
+  color: #009c9d;
+
+}
+
+#pageForgot{
+  display: none;
 }

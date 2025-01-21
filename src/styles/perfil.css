@@ -1,0 +1,415 @@
+.main {
+    max-width: 1200px;
+    margin: 20px auto;
+    width: 90%;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 20px;
+}
+
+.perfil {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border-radius: 8px;
+    grid-column: 1 / -1;
+    background-color: var(--borda-suave);
+    position: relative;
+    margin-bottom: 120px;
+    background-size: cover;
+    background-position: center;
+}
+
+.perfil-data {
+    width: 100%;
+    position: absolute;
+    top: 60%;
+    padding:0 20px;
+    gap: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: transparent;
+}
+
+.foto-perfil {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: var(--borda-suave);
+}
+
+.foto-perfil img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: thin solid var(--bg-principal);
+    object-fit: cover;
+}
+
+.editar-foto {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: var(--bg-secundario);
+    border: thin solid var(--bg-principal);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.editar-background {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--bg-secundario);
+    border: 1px solid var(--bg-principal);
+    color: var(--texto-primario);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.info-perfil {
+    flex-grow: 1;
+    width: 100%;
+    height: auto;
+    margin-top:20px ;
+}
+
+.info-perfil h1 {
+    color: transparent;
+    background-color: #000; /* cor do texto */
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text; 
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.perfil-data .textarea{
+    max-width: 100%;
+    font-size: .9em;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+.textarea-container {
+    margin: 0;
+    position: absolute;
+    width: 100%;
+    background-color:var(--bg-principal);
+    top: -20px;
+}
+
+.quill.profile-quill {
+    width: 100%;
+    /* max-height: 100px; */
+    height: 110px;
+}
+
+.quill.profile-quill .ql-editor{
+    background-color: var(--bg-principal);
+}
+
+.char-counter {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    flex-direction: row;
+    font-size: 12px;
+}
+
+.circle{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--bg-principal);
+    padding: 6px;
+    border: 1px solid var(--link);
+}
+
+.edit-desc{
+    width: auto;
+    position: absolute;
+    right: 10px;
+    top: -5px;
+    background-color: transparent;
+    border: none;
+}
+
+.editar-perfil {
+    padding: 5px 10px;
+    background-color: var(--texto-primario);
+    color: var(--bg-principal);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: none;
+}
+
+.user-description{
+    position: relative;
+}
+
+.top-info-perfil{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+/* Seguindo e seguidores */
+
+.estatisticas {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--texto-primario);
+}
+
+.estatisticas span{
+    margin: 0 2px;
+    border: 1px solid var(--texto-secundario);
+    background-color: var(--bg-principal);
+    color: var(--texto-secundario);
+    padding: 5px 8px;
+}
+.estatisticas span:first-child{
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+.estatisticas span:last-child{
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.conteudo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.top-comentarios h2, .heatmap h2, .lendo h2, .estante h2{
+    font-size: 18px;
+}
+
+.leituras, .heatmap-content{
+    max-height: 330px;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    justify-content: stretch;
+    width: 100%;
+    gap: 10px;
+    margin: 10px 0;
+    overflow: auto;
+}
+
+ul.user-comments-list {
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    width: 100%;
+    overflow: auto;
+}
+
+ul.user-comments-list .meta {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+.comment-data{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.user-comments-list li {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 200px;
+    align-items: flex-start;
+    padding: 10px;
+    border: 1px solid var(--borda-suave);
+    border-radius: 5px;
+    background: var(--bg-secundario);
+}
+
+.paragrafo-limitado{
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .view-history {
+    width: 100%;
+    background-color: var(--bg-secundario);
+    border: 1px solid var(--borda-suave);
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+
+@media (max-width: 1024px) {
+    .main {
+        display: flex;
+        flex-direction: column;
+        grid-template-columns: 1fr;
+        width: 80%;
+        gap: 10px;
+    }
+
+    ul.user-comments-list {
+        flex-direction: row;
+        overflow-x: scroll;
+    }
+
+    .react-calendar-heatmap {
+        max-width: 100%;
+    }
+
+    .info-perfil h1 {
+        color: var(--texto-primario) ;
+        text-shadow: none;
+        font-weight: bolder;
+        -webkit-text-stroke: 0;
+    }
+
+    .perfil-data {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0;
+
+    }
+
+    .perfil {
+        margin-bottom: 200px;
+    }
+
+
+    .foto-perfil{
+        margin-left: 10px;
+    }
+
+    .leituras{
+        grid-template-columns: repeat(auto-fit, 49%);
+        gap: 2%;
+    }
+
+    .conteudo {
+        grid-template-columns: 1fr;
+    }
+
+    .heatmap, .lendo, .top-comentarios, .estante {
+        margin: 10px 0;
+    }
+
+    ul.user-comments-list {
+        flex-direction: row;
+        overflow-x: scroll;
+    }
+    
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+    .perfil-data {
+        height: 400px;
+        top: 30px;
+        gap: 0;
+    }
+}
+@media (max-width: 600px) {
+    .leituras{
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .main {
+        width: 90%;
+    }
+
+    .perfil-data {
+        height: 380px;
+        top: 30px;
+        gap: 0;
+    }
+}
+@media  (max-width: 425px) {
+    .top-info-perfil {
+        flex-direction: column;
+    }
+    .perfil-data {
+        height: 400px;
+        top: 30px;
+    }
+
+    ul.user-comments-list {
+        flex-direction: column;
+    }
+}
+/* HeatMap */
+
+.calendar-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+   
+  .weekday-labels {
+    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 10px;
+    gap: 15px;
+  }
+  
+  .weekday-label {
+    width: 10px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    color: var(--texto-secundario);
+
+  }
+  
+  .react-calendar-heatmap {
+    width: 300px;
+  }
+  .react-calendar-heatmap .react-calendar-heatmap-week {
+    display: flex;
+    justify-content: center;
+  }
+    
+.react-calendar-heatmap .color-scale-1 { fill: #bbb;}
+.react-calendar-heatmap .color-scale-2 { fill: #888;}
+.react-calendar-heatmap .color-scale-3 { fill: #555;}
+.react-calendar-heatmap .color-scale-4 { fill: #3b3b3b;}

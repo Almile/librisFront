@@ -1,0 +1,87 @@
+.book {
+    display: flex;
+    height: 200px;
+    --title-size: 1.5rem;
+    --authors-size: 0.8rem;
+    --description-size: 0.9rem;
+    --description-color: rgba(0, 0, 0, 30%);
+}
+
+.cover {
+    aspect-ratio: 0.66;
+    object-fit: cover;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    cursor: pointer;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 4px 16px;
+}
+
+.title {
+    --line-clamp: 2;
+    font-size: var(--title-size);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.title:hover {
+    text-decoration-line: underline;
+}
+
+.authors {
+    --line-clamp: 1;
+    font-size: var(--authors-size);
+}
+
+.rating {
+    margin-left: 8px;
+    font-size: 0.8rem;
+    color: var(--description-color);
+}
+
+.description {
+    --line-height: 1.2rem;
+    --line-clamp: 3;
+    line-height: var(--line-height);
+    height: calc(3 * var(--line-height));
+    font-size: var(--description-size);
+    color: var(--description-color);
+}
+
+.truncate {
+    -webkit-line-clamp: var(--line-clamp);
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+}
+
+.loader {
+    width: 50px;
+    aspect-ratio: 1;
+    display: grid;
+    border: 4px solid #0000;
+    border-radius: 50%;
+    border-right-color: #25b09b;
+    animation: l15 1s infinite linear;
+  }
+  .loader::before,
+  .loader::after {    
+    content: "";
+    grid-area: 1/1;
+    margin: 2px;
+    border: inherit;
+    border-radius: 50%;
+    animation: l15 2s infinite;
+  }
+  .loader::after {
+    margin: 8px;
+    animation-duration: 3s;
+  }
+  @keyframes l15{ 
+    100%{transform: rotate(1turn)}
+  }
