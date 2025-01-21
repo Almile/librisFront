@@ -16,7 +16,8 @@ function Navbar() {
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
     const dropdownRef = useRef(null);
     const notificationsRef = useRef(null);
-    
+    const savedTheme = localStorage.getItem('theme');
+
     const toggleTheme = () => {
         if (!isAuthenticated) return;
     
@@ -31,7 +32,6 @@ function Navbar() {
     
     useEffect(() => {
         const isPublicPage = !isAuthenticated;
-        const savedTheme = localStorage.getItem('theme');
     
         if (isPublicPage) {
             document.body.classList.remove('dark-mode');
@@ -128,59 +128,126 @@ function Navbar() {
             </button>
 
             <div className={`navbar-auth ${isMobileMenuOpen ? 'mobile-menu-open' : ''}`}>
-                {isAuthenticated ? (
-                    <>
-                        <Link to="/homePage" onClick={handleLinkClick}>Home</Link>
-                        <Link to="/catalogo" onClick={handleLinkClick}>Catálogo</Link>
-                        <Link to="/forum" onClick={handleLinkClick}>Fórum</Link>
+               {isAuthenticated ? (
+    <>
+        <Link
+            to="/homePage"
+            className={location.pathname === '/homePage' ? 'active-link' : ''}
+            onClick={handleLinkClick}
+        >
+            Home
+        </Link>
+        <Link
+            to="/catalogo"
+            className={location.pathname === '/catalogo' ? 'active-link' : ''}
+            onClick={handleLinkClick}
+        >
+            Catálogo
+        </Link>
+        <Link
+            to="/forum"
+            className={location.pathname === '/forum' ? 'active-link' : ''}
+            onClick={handleLinkClick}
+        >
+            Fórum
+        </Link>
 
-                        <div className="notifications-button" ref={notificationsRef}>
-                            <button className="notifications-button" onClick={toggleNotifications}>
-                                Notificações
-                            </button>
+        <div className="notifications-button" ref={notificationsRef}>
+            <button className="notifications-button" onClick={toggleNotifications}>
+                Notificações
+            </button>
 
-                            {isNotificationsOpen && <Notificacoes />}
+            {isNotificationsOpen && <Notificacoes />}
+        </div>
+
+        <div className="dropdown" ref={dropdownRef}>
+            <button className="dropdown-toggle" onClick={toggleDropdown}>
+                <img src={userPhoto} alt="Perfil" />
+            </button>
+            {isDropdownOpen && (
+                <div className="dropdown-menu open">
+                    <div className="dropdown-user" onClick={toggleDropdown}>
+                        <img src={userPhoto} alt="Perfil" />
+                        <div className="user-info">
+                            <span>Nome do usuário</span>
+                            <span>email@email.com</span>
                         </div>
-                        <div className="dropdown" ref={dropdownRef}>
-                            <button className="dropdown-toggle" onClick={toggleDropdown}>
-                                <img src={userPhoto} alt="Perfil" />
-                            </button>
-                            {isDropdownOpen && (
-                                <div className="dropdown-menu open">
-                                    <div className="dropdown-user" onClick={toggleDropdown}>
-                                        <img src={userPhoto} alt="Perfil" />
-                                        <div className="user-info">
-                                            <span>Nome do usuario</span>
-                                            <span>email@email.com</span>
-                                        </div>
-                                    </div>
-                                    <Link to="/perfil" className="dropdown-item" onClick={handleLinkClick}>Meu perfil</Link>
-                                    <Link to="/configuracao" className="dropdown-item" onClick={handleLinkClick}>Configurações</Link>
+                    </div>
+                    <Link
+                        to="/perfil"
+                        className={location.pathname === '/perfil' ? 'active-link' : ''}
+                        onClick={handleLinkClick}
+                    >
+                        Meu perfil
+                    </Link>
+                    <Link
+                        to="/configuracao"
+                        className={location.pathname === '/configuracao' ? 'active-link' : ''}
+                        onClick={handleLinkClick}
+                    >
+                        Configurações
+                    </Link>
 
-                                    <button onClick={toggleTheme} className="theme-toggle">
-                                        <span></span>
-                                        <span className="theme-icon">
-                                            {isDarkMode ? (
-                                                <ion-icon name="sunny-outline"></ion-icon>
-                                            ) : (
-                                                <ion-icon name="moon-outline"></ion-icon>
-                                            )}
-                                        </span>
-                                    </button>
-
-                                    <button onClick={logout} className="dropdown-item">Sair</button>
-                                </div>
+                    <button onClick={toggleTheme} className="theme-toggle">
+                        <span></span>
+                        <span className="theme-icon">
+                            {savedTheme === 'dark' ? (
+                                <ion-icon name="sunny-outline"></ion-icon>
+                            ) : (
+                                <ion-icon name="moon-outline"></ion-icon>
                             )}
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <a href="#sobre" onClick={() => { scrollToSection('sobre'); handleLinkClick(); }}>Sobre</a>
-                        <a href="#servicos" onClick={() => { scrollToSection('servicos'); handleLinkClick(); }}>Serviços</a>
-                        <a href="#contato" onClick={() => { scrollToSection('contato'); handleLinkClick(); }}>Contato</a>
-                        <Link to="/login" className="login-button" onClick={handleLinkClick}>Login</Link>
-                    </>
-                )}
+                        </span>
+                    </button>
+
+                    <button onClick={logout} className="dropdown-item">
+                        Sair
+                    </button>
+                </div>
+            )}
+        </div>
+    </>
+) : (
+    <>
+        <a
+            href="#sobre"
+            className={location.hash === '#sobre' ? 'active-link' : ''}
+            onClick={() => {
+                scrollToSection('sobre');
+                handleLinkClick();
+            }}
+        >
+            Sobre
+        </a>
+        <a
+            href="#servicos"
+            className={location.hash === '#servicos' ? 'active-link' : ''}
+            onClick={() => {
+                scrollToSection('servicos');
+                handleLinkClick();
+            }}
+        >
+            Serviços
+        </a>
+        <a
+            href="#contato"
+            className={location.hash === '#contato' ? 'active-link' : ''}
+            onClick={() => {
+                scrollToSection('contato');
+                handleLinkClick();
+            }}
+        >
+            Contato
+        </a>
+        <Link
+            to="/login"
+            className={`login-button ${location.pathname === '/login' ? 'active-link' : ''}`}
+            onClick={handleLinkClick}
+        >
+            Login
+        </Link>
+    </>
+)}
+
             </div>
         </nav>
     );

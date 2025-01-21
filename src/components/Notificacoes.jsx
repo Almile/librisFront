@@ -73,10 +73,10 @@ const Notificacoes = () => {
           <div key={notificacao.id} className="item">
             <div className="imgPlaceholder"></div>
             <div className="configurar-conteudo">
-              <p>
+              <p className="paragrafo-limitado">
                 <strong>{notificacao.usuario}</strong> {notificacao.mensagem}
               </p>
-              {notificacao.descricao && <p>{notificacao.descricao}</p>}
+              {notificacao.descricao && <p className="paragrafo-limitado">{notificacao.descricao}</p>}
               <span className="data">{notificacao.data}</span>
             </div>
             {!notificacao.lida && <div className="status"></div>}

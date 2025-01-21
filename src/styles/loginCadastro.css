@@ -97,7 +97,7 @@
   padding: 10px 0;
   font-size: 1em;
   position: absolute;
-  bottom: 0;
+  bottom: 10px;
 }
 .emptyPage, .emptyPage img{
     width: 100%;

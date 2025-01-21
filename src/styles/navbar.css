@@ -53,7 +53,7 @@
     border-radius: 50%;
 }
 
-.navbar a:hover, .navbar button:hover{
+.navbar a:hover, .navbar button:hover, .navbar-fixed .navbar-auth a.login-button:hover{
     color: var(--destaque);
     background-color: transparent;
 }
@@ -83,6 +83,9 @@
 .navbar-fixed .navbar-auth a, .navbar-fixed .libris, .navbar-fixed ion-icon{
     color: #000000;
 }
+.navbar-fixed .navbar-auth a.login-button{
+    color: #ffffff;
+}
 
 .navbar-relative {
     position: relative;
@@ -97,17 +100,23 @@
     cursor: pointer;
 }
 
+.active-link {
+    color: var(--destaque);
+    font-weight: bold;
+    text-decoration: none; 
+}
+
 .dropdown-menu{
     position: absolute;
     border-radius: 5px;
-    background-color: var(--bg-principal);
+    background-color: var(--bg-secundario);
     border: 1px solid var(--borda-suave);
     display: flex;
     flex-direction: column;
     padding: 16px;
     min-width: 250px;
     border-radius: 10px;
-    top: 60px;
+    top: 40px;
     gap: 1.3em;
     right: 0;
 }
@@ -175,6 +184,7 @@
 .theme-toggle:hover::before {
     background-color: var(--destaque);
 }
+
 .theme-toggle .theme-icon,
 .theme-toggle .theme-icon ion-icon {
     border-color: var(--tema);
@@ -205,6 +215,10 @@
     gap: 10px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--borda-suave);
+}
+
+.dropdown-item{
+    font-size: 16px;
 }
 
 .dropdown-user img {

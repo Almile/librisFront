@@ -17,7 +17,7 @@ const HeatMap = () => {
   const endDate = today;
 
   return (
-    <div>
+    <div className='heatmap-content'>
         <p>01/11/2024 - 05/01/2025</p>
       <div className="calendar-container">
         <div className="weekday-labels">

@@ -4,7 +4,8 @@
     border-radius: 6px;
     background-color:var(--bg-secundario);
     height: 160px;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
@@ -57,7 +58,7 @@
 .percentage {
     font-size: 0.75rem;
     line-height: 1rem;
-    color: #2563eb;
+    color: var(--destaque);
     font-weight: 700;
 }
 
@@ -66,18 +67,28 @@
     background-color: #e5e7eb;
     border-radius: 8px;
     height: 10px;
+
 }
 
 .progress {
-    background-color: #2563eb;
+    background-color: var(--destaque);
     border-radius: 8px;
     height: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
+.progressNumber{
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 0 10px;
+}
 
 .outlinedButton {
     width: fit-content;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--texto-secundario);
     font-weight: 500;
     border-radius: 8px;
     font-size: 0.75rem;
@@ -88,5 +99,5 @@
 }
 
 .outlinedButton * {
-    color: #4e4e4e;
+    color: var(--texto-secundario);
 }

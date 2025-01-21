@@ -29,7 +29,7 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
   const editorRef = useRef(null);
 
   useEffect(() => {
-    setText(initialText); // Atualiza o texto inicial quando `initialText` muda
+    setText(initialText);
   }, [initialText]);
   
   const uniqueSpoilerId = spoilerId || `spoiler-checkbox-${Math.random().toString(36).substring(7)}`;

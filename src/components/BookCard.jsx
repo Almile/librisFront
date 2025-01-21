@@ -35,7 +35,9 @@ function ProgressBar({currentPage, pageCount}) {
         <div className={style.progressBar}>
             <span className={style.percentage}>{progress}</span>
             <div className={style.bar}>
-                <div className={style.progress} style={{width: progress}}></div>
+                <div className={style.progress} style={{width: progress}}>
+                    <span className={style.progressNumber}>{currentPage}/{pageCount}</span>
+                </div>
             </div>
         </div>
     );

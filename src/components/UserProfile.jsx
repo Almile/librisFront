@@ -1,149 +1,149 @@
-import React, { useState } from 'react';
-import Cropper from 'cropperjs';
-import "cropperjs/dist/cropper.css";
-import userPhoto from '/user_padrao.svg';
+import React, { useState, useRef } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const UserProfile = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [imageTarget, setImageTarget] = useState('');
-  const [backgroundImage, setBackgroundImage] = useState('');
-  const [profileImage, setProfileImage] = useState(userPhoto);
+  const defaultProfileImage =
+    "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
+  const [backgroundImage, setBackgroundImage] = useState("https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737480828/libris_images/hyxilej7wwvmhyiqmlog.jpg");
+  const [profileImage, setProfileImage] = useState(defaultProfileImage);
+  const [editable, setEditable] = useState(false);
+  const [description, setDescription] = useState(
+    '<p>💕 Gosto de _</p><p>📚 Livro Favorito _</p><p><br></p><blockquote><strong>" <em>Antes sofria agora sou fria</em>." - </strong><strong style="color: rgb(0, 71, 178);">Clarisse Lispector                                 </strong> <a href="Instagram.com" rel="noopener noreferrer" target="_blank">Instagram</a> - <a href="Facebook.com" rel="noopener noreferrer" target="_blank">Facebook</a> - <a href="Github.com" rel="noopener noreferrer" target="_blank">Github</a></blockquote>'
+  );
 
-    const [editable, setEditable] = useState(false);
-    const [description, setDescription] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris in feugiat libero.');
-  
-    let cropper = null;
+  const quillRef = useRef(null); 
+  const maxCharacters = 150; 
 
-    const openModal = (target) => {
-      console.log('Abrindo modal para:', target);
-      setImageTarget(target);
-      setIsModalOpen(true);
-    };
-  
-    const closeModal = () => {
-      console.log('Fechando modal');
-      setIsModalOpen(false);
-      if (cropper) {
-        cropper.destroy();
-        cropper = null;
-      }
-    };
-  
-    const handleFileChange = (event) => {
-      console.log('Arquivo selecionado:', event.target.files[0]);
-      const file = event.target.files[0];
-      if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          console.log('Carregando imagem:', e.target.result);
-          const imageElement = document.getElementById('image-preview');
-          imageElement.src = e.target.result;
-          imageElement.style.display = 'block';
-    
-          if (cropper) {
-            cropper.destroy();
-          }
-    
-          cropper = new Cropper(imageElement, {
-            aspectRatio:null,
-            viewMode: 1,
-            movable: true,
-            rotatable: true,
-            scalable: true,
-            dragMode: 'move',
-          });
-        };
-    
-        reader.readAsDataURL(file);
-      } else {
-        alert('Por favor, envie uma imagem válida.');
-      }
-    };
-    
-  
-    const saveImage = () => {
-      if (cropper) {
-        const croppedCanvas = cropper.getCroppedCanvas({
-          width: 1440,
-          height: 800,
-        });
-  
-        const croppedData = croppedCanvas.toDataURL();
-        console.log('Imagem cortada salva:', croppedData);
-  
-        if (imageTarget === 'background') {
-          setBackgroundImage(croppedData);
-        } else if (imageTarget === 'perfil') {
-          setProfileImage(croppedData);
-        }
-      }
-      closeModal();
-    };
-  
-  const toggleEditable = () => {
-    setEditable(!editable);
+  const handleChange = (content, delta, source, editor) => {
+    const currentLength = editor.getText().trim().length;
+
+    if (currentLength > maxCharacters && source === "user") {
+      const quill = quillRef.current.getEditor();
+      quill.deleteText(maxCharacters, currentLength);
+      return;
+    }
+    console.log(content);
+    setDescription(content);
   };
+
+    // Configuração de módulos do ReactQuill
+    const modules = {
+      toolbar: [
+        [{ color: [] }],
+        ["bold", "italic", "underline"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link"],
+        ["blockquote"],
+        ["clean"],
+      ],
+    };
+
+  const toggleEditable = () => setEditable(!editable);
 
   const saveDescription = () => {
     setEditable(false);
-    alert('Alterações salvas com sucesso!');
+    alert("Alterações salvas com sucesso!");
   };
 
 
+
+  // Função para abrir o Cloudinary
+  const handleCloudinaryUpload = (target) => {
+    window.cloudinary.openUploadWidget(
+      {
+        cloudName: "dkmbs6lyk",
+        uploadPreset: "libris_preset",
+        cropping: true,
+        multiple: false,
+        resourceType: "image",
+        folder: "libris_images",
+      },
+      (error, result) => {
+        if (!error && result && result.event === "success") {
+          const imageUrl = result.info.secure_url;
+
+          if (target === "background") {
+            setBackgroundImage(imageUrl);
+          } else if (target === "perfil") {
+            setProfileImage(imageUrl);
+          }
+        } else if (error) {
+          console.error("Erro no upload:", error);
+        }
+      }
+    );
+  };
+
   return (
-      <section className="perfil" style={{ backgroundImage: `url(${backgroundImage})` }}>
-        <button className="editar-background" onClick={() => openModal('background')}>
-          <ion-icon name="camera-outline" className="cam-icon"></ion-icon>
-        </button>
-        <div className="perfil-data">
-            <div className="foto-perfil">
-              <img src={profileImage} alt="Foto do Perfil" />
-              <button className="editar-foto" onClick={() => openModal('perfil')}>
-              <ion-icon name="camera-outline" className="cam-icon"></ion-icon>
-              </button>
-            </div>
-         <div className="info-perfil">
+    <section
+      className="perfil"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
+      <button
+        className="editar-background"
+        onClick={() => handleCloudinaryUpload("background")}
+      >
+        <ion-icon name="camera-outline" className="cam-icon"></ion-icon>
+      </button>
+      <div className="perfil-data">
+        <div className="foto-perfil">
+          <img src={profileImage} alt="Foto do Perfil" />
+          <button
+            className="editar-foto"
+            onClick={() => handleCloudinaryUpload("perfil")}
+          >
+            <ion-icon name="camera-outline" className="cam-icon"></ion-icon>
+          </button>
+        </div>
+        <div className="info-perfil">
+          <div className="top-info-perfil">
             <h1>Nome do Usuário</h1>
-            <div className="user-description">
+            <div className="estatisticas">
+              <span>10 Seguindo</span>
+              <span>10 Seguidores</span>
+            </div>
+          </div>
+          <div className="user-description">
+            {editable ? (
+              <div className="textarea-container">
+                <ReactQuill
+                  ref={quillRef}
+                  onChange={handleChange}
+                  className="profile-quill"
+                  value={description}
+                  modules={modules}
+                />
+               
+              </div>
+            ) : (
+              <div
+                className="textarea"
+                dangerouslySetInnerHTML={{ __html: description }}
+              />
+            )}
+            <button
+              className="edit-desc"
+              onClick={editable ? saveDescription : toggleEditable}
+            >
               {editable ? (
-                <div className='textarea-container'>
-                    <textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      maxLength={120}
-                    />
-                    <sub>{description.length}/120 caracteres</sub>
-                  </div>
+                 <div className="char-counter">
+
+                 {description.replace(/<[^>]+>/g, "").length} / {maxCharacters}{" "}
+                 caracteres
+                 
+                 <span><ion-icon name="save-outline"></ion-icon> {" "} Salvar</span>
+
+               </div>
 
               ) : (
-                <textarea className='textarea' readOnly disabled value={description}/>
+                <span className="circle"><ion-icon name="pencil-outline"></ion-icon></span>
               )}
-              <button className="edit-desc" onClick={editable ? saveDescription : toggleEditable}>
-                {editable ? 'Salvar' : <ion-icon name="pencil-outline"></ion-icon>}
-              </button>
-            </div>
-            <div className="estatisticas">
-              <span>10 Seguindo</span> | <span>10 Seguidores</span>
-            </div>
-          </div>
-      </div>
-
-      {isModalOpen && (
-        <div id="modal">
-          <div id="modal-content">
-            <h2>Editar Imagem</h2>
-            <div id="image-preview-container">
-              <img id="image-preview" alt="Pré-visualização" />
-            </div>
-            <input type="file" onChange={handleFileChange} accept="image/*" />
-            <div className='buttons'>
-              <button onClick={saveImage}>Salvar</button>
-              <button onClick={closeModal}>Cancelar</button>
-            </div>
+            </button>
           </div>
         </div>
-      )}
-      </section>
+      </div>
+    </section>
   );
 };
 

@@ -1,9 +1,10 @@
-
+import  GenreSelector  from "../components/GenreSelector"
 function HomePage() {
 
     return (
       <main>
-       </main>
+        <GenreSelector />
+      </main>
     )
 }
 
