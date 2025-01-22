@@ -1,0 +1,60 @@
+.book {
+    display: flex;
+    height: 200px;
+}
+
+.cover {
+    aspect-ratio: 0.66;
+    object-fit: cover;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    cursor: pointer;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 4px 0px 4px 16px;
+}
+
+.title {
+    --line-clamp: 2;
+    font-size: 1.5rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.title:hover {
+    text-decoration-line: underline;
+}
+
+.authors {
+    --line-clamp: 1;
+    font-size: 0.8rem;
+}
+
+.rating {
+    margin-left: 8px;
+    font-size: 0.8rem;
+    color: var(--texto-secundario);
+}
+
+.description {
+    --line-height: 1.2rem;
+    --line-clamp: 3;
+    font-size: 0.9rem;
+    line-height: var(--line-height);
+    height: calc(3 * var(--line-height));
+    color: var(--texto-secundario);
+}
+
+.description,
+.title,
+.authors {
+    -webkit-line-clamp: var(--line-clamp);
+    line-clamp: var(--line-clamp);
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+}

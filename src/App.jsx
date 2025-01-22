@@ -8,7 +8,6 @@ import Login from './components/Login'
 import HomePage from './pages/HomePage'
 import Perfil from './pages/Perfil'
 import Catalogo from './pages/Catalogo'
-import Busca from './pages/Busca'
 import Livro from './pages/Livro'
 import Forum from './pages/Forum'
 import Configuracao from './pages/Configuracao'
@@ -32,7 +31,6 @@ function App() {
           <Route path='/homePage' element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
           <Route path='/perfil' element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
           <Route path='/catalogo' element={<ProtectedRoute><Catalogo /></ProtectedRoute>} />
-          <Route path='/busca' element={<ProtectedRoute><Busca /></ProtectedRoute>} />
           <Route path='/livro' element={<ProtectedRoute><Livro /></ProtectedRoute>} />  
           <Route path='/resenha' element={<ProtectedRoute><Resenha /></ProtectedRoute>} />  
 

@@ -54,8 +54,8 @@ function Perfil() {
                 <div className="lendo">
                     <h2>Lendo</h2>
                     <div className='leituras'>
-                        <BookCard />
-                        <BookCard />
+                        <BookCard id={"UbKuDwAAQBAJ"}/>
+                        <BookCard id={"_i6bDeoCQzsC"}/>
                     </div>
                 </div>
                 
