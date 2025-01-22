@@ -64,7 +64,6 @@ export default function Catalogo() {
           {popular.map((id) => <SwiperSlide key={id}><BookSlide id={id} /></SwiperSlide>)}
         </Swiper>
       </div>
-      <Footer />
     </div>
   );
 }

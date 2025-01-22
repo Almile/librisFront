@@ -2,7 +2,7 @@
   display:flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height:  calc(100vh - 40px);
   width: 100vw;
   color: #333;
   overflow: hidden;
