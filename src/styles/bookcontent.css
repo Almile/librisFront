@@ -1,5 +1,6 @@
 .pl-grid {
     display: flex;
+    margin-bottom: 75px;
 }
 
 .pl-capa img {

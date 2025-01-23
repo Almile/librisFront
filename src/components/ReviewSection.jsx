@@ -10,7 +10,9 @@ const ReviewSection = () => {
       onSlideChange={() => console.log('Slide mudou')}
       onSwiper={(swiper) => console.log(swiper)}
     >
-      <SwiperSlide>Slide 1</SwiperSlide>
+      <SwiperSlide>
+      <span class="pl-resenhaP">Muito boa leitura, com uma bela mensagem! Recomendo</span>
+      </SwiperSlide>
       <SwiperSlide>Slide 2</SwiperSlide>
       <SwiperSlide>Slide 3</SwiperSlide>
       <SwiperSlide>Slide 4</SwiperSlide>
