@@ -5,6 +5,7 @@ import CommentSection from "../components/CommentSection"
 import "../styles/comments.css"
 
 
+
 const Livro = () => {
   const navigate = useNavigate();
   const params = useParams();

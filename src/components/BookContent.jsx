@@ -1,4 +1,6 @@
 import useBook from '../hooks/useBook'
+import React from "react";
+import { StarRating } from "./StarRating";
 
 export default function BookContent({id}) {
     const {data, error, loading} = useBook(id);
@@ -8,6 +10,7 @@ export default function BookContent({id}) {
 
     return (
         <h1>{data.title}</h1>
+        
     );
 }
 
