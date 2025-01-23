@@ -16,7 +16,7 @@ export default function BookItem({id, innerRef}) {
     <div className={style.book} ref={innerRef}>
       <img className={style.cover} src={info.coverURL + "&zoom=1"} alt={`Capa do livro ${info.title}`} />
       <div className={style.info}>
-        <span onClick={() => {navigate(`/livro/${info.id}`)}} className={`${style.title} ${style.truncate}`}>
+        <span onClick={() => {navigate(`/livro`)}} className={`${style.title} ${style.truncate}`}>
           {info.title}
         </span>
         <span className={`${style.authors} ${style.truncate}`}>
