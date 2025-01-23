@@ -2,10 +2,11 @@ import PropTypes from 'prop-types'
 import style from './Book.module.css'
 import useBook from '../../hooks/useBook'
 import { Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Book({ id, innerRef }) {
 	const { data, loading, error } = useBook(id);
-
+	const navigate = useNavigate();
 	if (loading) return <p>Carregando...</p>;
 	if (error) return <p>A network error was encountered</p>;
 	if (!data.averageRating) data.averageRating = 0;
@@ -21,7 +22,7 @@ export default function Book({ id, innerRef }) {
 				alt={`Capa do livro ${data.title}`}
 			/>
 			<div className={style.info}>
-				<span className={style.title}>
+				<span onClick={() => {navigate(`/livro?q=${id}`);}} className={style.title}>
 					{data.title}
 				</span>
 				<span className={style.authors}>

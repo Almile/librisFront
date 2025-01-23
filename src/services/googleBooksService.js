@@ -9,7 +9,12 @@ export const getBook = (id) => {
         "volumeInfo.description",
         "volumeInfo.imageLinks",
         "volumeInfo.pageCount",
-        "volumeInfo.categories"
+        "volumeInfo.categories",
+        "volumeInfo.industryIdentifiers",
+        "volumeInfo.publisher",
+        "volumeInfo.publishedDate",
+        "volumeInfo.maturityRating",
+        "volumeInfo.language",
     ].join(",");
 
     return googleBooksApi.get(`/${id}?fields=${fields}`);
