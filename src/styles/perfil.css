@@ -181,20 +181,23 @@
     margin-top: 10px;
     font-size: 14px;
     color: var(--texto-primario);
+
 }
 
-.estatisticas span{
+.estatisticas button{
     margin: 0 2px;
     border: 1px solid var(--texto-secundario);
     background-color: var(--bg-principal);
     color: var(--texto-secundario);
     padding: 5px 8px;
+    cursor: pointer;
+
 }
-.estatisticas span:first-child{
+.estatisticas button:first-child{
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
 }
-.estatisticas span:last-child{
+.estatisticas button:last-child{
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
 }
@@ -457,4 +460,90 @@ ul.user-comments-list .meta {
     color: var(--texto-secundario);
     padding-top:5px;
     width: 100%;
+}
+
+/* modal */
+
+#follow{
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 330px;
+    background-color: var(--bg-principal);
+    z-index: 1000;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.header-menu {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    height: 60px;
+    gap: 30px;
+    border-bottom: 1px solid var(--borda-suave);
+}
+
+  .close-modal{
+    background: transparent;
+    border: none;
+    padding: 12px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-bottom-left-radius: 500%;
+    height: 60px;
+}
+
+.close-modal ion-icon{
+   font-size: 24px;
+   color:  var(--terraCota);
+}
+
+.follow-list{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+.follow-item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.follow-image{
+    width: 40px;
+    height: 40px;
+    background-color: var(--bg-secundario);
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+}
+
+.header-menu p {
+    cursor: pointer;
+    padding:0 10px;
+    margin: 0;
+  }
+  
+  .header-menu p.active {
+    font-weight: bold;
+  }
+
+  .search-user{
+  margin: 10px 5%;
+  height: 30px;
+  padding: 10px;
+  width: 90%;
+  border: 1px solid var(--borda-suave);
+  background-color: var(--bg-principal);
+  border-radius: 5px;
 }
