@@ -1,0 +1,67 @@
+.carouselContainer {
+  position: relative;
+  overflow: hidden;
+  width: 100%; 
+}
+
+.carouselList {
+  display: flex; 
+  gap: 20px;
+  padding:10px 20px;
+  margin: 0;
+  list-style: none; 
+  overflow-x: scroll; 
+  scroll-behavior: smooth;
+}
+
+.carouselList::-webkit-scrollbar {
+  display: none;
+}
+
+.carouselItem {
+  max-width: 150px;
+  flex: 0 0 auto; 
+  scroll-snap-align: center;
+}
+
+.carouselItem > div {
+  background:var(--bg-secundario);
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.scrollButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--destaque);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.scrollButton ion-icon{
+  font-size: 24px;
+  color: var(--destaque);
+}
+
+.scrollButton:hover {
+  background: var(--bg-secundario);
+}
+
+.scrollButton:first-of-type {
+  left: 0;
+}
+
+.scrollButton:last-of-type {
+  right: 0;
+}
+

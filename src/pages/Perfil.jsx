@@ -72,41 +72,40 @@ function Perfil() {
   ];
 
     return (
-        <main className='main'>
-            <UserProfile />
-            <section className="top-comentarios">
-            <h2>Seus Comentários</h2>
-              <CommentsProfile allComments={allComments} currentUser={currentUser} />
-              <button className='view-history'>Visualizar historico Completo</button>
-            </section>
-            <section className="conteudo">
-                
-                <div className="lendo">
-                    <h2>Lendo</h2>
-                    <div className='leituras'>
-                        <BookCard />
-                        <BookCard />
-                    </div>
-                </div>
-                
-                <div className="heatmap">
-                    <h2>HeatMap</h2>
-                  <HeatMap />
-                </div>
-                <section className="estante">
-                  <h2 className="section-title">Estante de Livros</h2>        
+      <main className='main'>
+      <UserProfile />
+      <section className="top-comentarios">
+        <h2>Seus Comentários</h2>
+        <CommentsProfile allComments={allComments} currentUser={currentUser} />
+        <button className='view-history'>Visualizar historico Completo</button>
+      </section>
+      <section className="conteudo">
+        <div className="lendo">
+          <h2>Lendo</h2>
+          <div className='leituras'>
+            <BookCard />
+            <BookCard />
+          </div>
+        </div>
 
-                  <h2 className="topico-estante">favoritos</h2>
-                  <EstanteLivros filtro={favoritos} />
+        <div className="heatmap">
+          <h2>HeatMap</h2>
+          <HeatMap />
+        </div>
+        <section className="estante">
+          <h2 className="section-title">Estante de Livros</h2>
 
-                  <h2 className="topico-estante">Lidos</h2>
-                  <EstanteLivros filtro={lidos} /> 
+          <h2 className="topico-estante">Favoritos</h2>
+          <EstanteLivros filtro={favoritos} />
 
-                  <h2 className="topico-estante">Descontinuados</h2>
-                  <EstanteLivros filtro={descontinuados} />           
-                </section>
-            </section>
-        </main>
+          <h2 className="topico-estante">Lidos</h2>
+          <EstanteLivros filtro={lidos} />
+
+          <h2 className="topico-estante">Descontinuados</h2>
+          <EstanteLivros filtro={descontinuados} />
+        </section>
+      </section>
+    </main>
     );
 }
 
