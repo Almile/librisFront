@@ -10,8 +10,9 @@ export default function useBook(id) {
         const fetchData = async () => {
             try {
                 const response = await getBook(id);
-                setData({...response.data.volumeInfo, id});
-                localStorage.setItem(id, JSON.stringify(response.data.volumeInfo));
+                const info = {...response.data.volumeInfo, id};
+                setData(info);
+                localStorage.setItem(id, JSON.stringify(info));
             } catch (error) {
                 setError(error);
             } finally {

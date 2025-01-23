@@ -22,7 +22,7 @@ export default function Book({ id, innerRef }) {
 				alt={`Capa do livro ${data.title}`}
 			/>
 			<div className={style.info}>
-				<span onClick={() => {navigate(`/livro?q=${id}`);}} className={style.title}>
+				<span onClick={() => {navigate(`/livro/${id}`);}} className={style.title}>
 					{data.title}
 				</span>
 				<span className={style.authors}>

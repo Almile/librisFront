@@ -3,10 +3,12 @@ import style from './BookCard.module.css'
 import useBook from '../../hooks/useBook'
 import { useState } from 'react'
 import OutlinedButton from '../OutlinedButton';
+import { useNavigate } from 'react-router-dom';
 
 export default function BookCard({id}) {
     const [currentPage, setCurrentPage] = useState(0);
     const { data, loading, error } = useBook(id);
+    const navigate = useNavigate();
 
     const handleClick = () => {
         const page = window.prompt("Página atual");
@@ -26,7 +28,7 @@ export default function BookCard({id}) {
                 alt={`Capa do livro ${data.title}`}
             />
             <div className={style.content}>
-                <span className={style.title}>
+                <span onClick={() => {navigate(`/livro/${id}`);}} className={style.title}>
                     {data.title}
                 </span>
                 <span className={style.authors}>

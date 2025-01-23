@@ -1,10 +1,12 @@
 import useBook from '../../hooks/useBook'
 import { Star } from 'lucide-react';
 import style from './BookSlide.module.css';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 export default function BookSlide({id}) {
 	const {data, loading, error} = useBook(id);
+	const navigate = useNavigate();
 
 	if (loading) return <p>Carregando...</p>
 	if (error) return <p>A network error was encountered</p>;
@@ -17,7 +19,7 @@ export default function BookSlide({id}) {
 				src={data.imageLinks ? data.imageLinks.thumbnail.slice(0, data.imageLinks.thumbnail.indexOf("&edge")): ""}
 				alt={`Capa do livro ${data.title}`}
 			/>
-			<span className={style.title}>
+			<span onClick={() => {navigate(`/livro/${id}`);}} className={style.title}>
 				{data.title}
 			</span>
 			<span className={style.authors}>
