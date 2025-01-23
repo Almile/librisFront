@@ -1,0 +1,26 @@
+.searchBar {
+    display: flex;
+    gap: 8px;
+}
+
+.bar {
+    display: flex;
+    gap: 16px;
+    padding: 8px;
+    background-color: var(--bg-secundario);
+    width: 100%;
+    border-radius: 8px;
+    height: 48px;
+}
+
+.bar > input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-weight: bolder;
+    background-color: inherit;
+}
+
+.bar:has(input:focus) {
+    outline: 1px solid var(--destaque);
+}

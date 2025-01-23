@@ -1,0 +1,104 @@
+.bookCard {
+    display: flex;
+    padding: 8px;
+    border-radius: 6px;
+    background-color:var(--bg-secundario);
+    height: 160px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.content {
+    padding: 8px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 0;
+    flex: 1 1;
+}
+
+.title {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.title:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.authors {
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.title,
+.authors  {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pageCount {
+    font-size: 0.8rem;
+}
+
+.cover {
+    height: 100%;
+    aspect-ratio: 0.66;
+}
+
+.progressBar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+}
+
+.percentage {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: var(--destaque);
+    font-weight: 700;
+}
+
+.bar {
+    width: 100%;
+    background-color: #e5e7eb;
+    border-radius: 8px;
+    height: 10px;
+
+}
+
+.progress {
+    background-color: var(--destaque);
+    border-radius: 8px;
+    height: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.progressNumber{
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.outlinedButton {
+    width: fit-content;
+    border: 1px solid var(--texto-secundario);
+    font-weight: 500;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    background: none;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.outlinedButton * {
+    color: var(--texto-secundario);
+}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ReplyForm } from "./ReplyForm";
 import { SpoilerProtection } from "./SpoilerProtection";
 
+
 export const CommentList = ({ comments, onAddComment, onToggleReply, onToggleLike }) => {
     const [spoilerVisibility, setSpoilerVisibility] = useState({});
     const [expandedComments, setExpandedComments] = useState({});

@@ -3,7 +3,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
-
+import userPadrao from '/user_padrao.svg'
 Quill.register("modules/imageResize", ImageResize);
 
 const modules = {
@@ -23,11 +23,15 @@ const modules = {
   },
 };
 
-export const CommentForm = ({ onSubmit, spoilerId, isSpoiler, setIsSpoiler }) => {
+export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, setIsSpoiler }) => {
   const [text, setText] = useState("");
   const [focusedImage, setFocusedImage] = useState(null);
   const editorRef = useRef(null);
 
+  useEffect(() => {
+    setText(initialText);
+  }, [initialText]);
+  
   const uniqueSpoilerId = spoilerId || `spoiler-checkbox-${Math.random().toString(36).substring(7)}`;
 
   const handleSubmit = (e) => {
@@ -60,6 +64,8 @@ export const CommentForm = ({ onSubmit, spoilerId, isSpoiler, setIsSpoiler }) =>
     }
   };
 
+
+  
   useEffect(() => {
     const editorElement = editorRef.current.getEditor().root;
     editorElement.addEventListener("click", handleEditorClick);
@@ -72,7 +78,7 @@ export const CommentForm = ({ onSubmit, spoilerId, isSpoiler, setIsSpoiler }) =>
   return (
     <form onSubmit={handleSubmit} className="form-comment">
       <img
-        src="https://via.placeholder.com/60"
+        src={userPadrao}
         alt="Foto de perfil"
         className="profile-picture"
       />

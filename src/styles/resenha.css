@@ -1,0 +1,125 @@
+.content{
+    max-width: 1200;
+    width: 80%;
+    margin:20px auto 0;
+}
+
+.back, 
+.back .back-to-book,
+.back .button-edit, 
+.resenha .autor,
+.review-details{
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+    margin: 15px 0;
+    position: relative;
+}
+
+.resenha .rating{
+    gap: 10px;
+}
+
+.back-to-book{
+   justify-content: flex-start;
+   font-size: 14px;
+}
+
+.edit-review {
+    position: absolute;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: 1px solid var(--borda-suave);
+    border-radius: 10px;
+    height: 30px;
+    width: 120px;
+}
+
+.alert-spoiler-review{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: 1px solid rgb(207, 98, 98);
+    border-radius: 5px;
+    color:  rgb(207, 98, 98);
+    padding: 8px 14px;
+    width: 100%;
+}
+
+.title-review{
+    border: none;
+    padding: 10px;
+    font-size: 24px;
+    width: 100%;
+    background-color: transparent;
+}
+.date-review {
+    font-size: 12px;
+}
+
+.resenha .meta{
+    flex-direction: column-reverse;
+}
+.resenha .profile-picture {
+    display: none;
+}
+
+.resenha .form-comment {
+    padding: 0;
+    border: none;
+}
+
+.resenha .custom-quill .ql-editor {
+    max-width:100%;
+    min-height: 40vh;
+    margin: 0;
+}
+
+.autorImage{
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+}
+
+.resenha .review button.envy-button{    
+    width: 100%;
+    background-color: #333;
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 10px;
+}
+
+.box-comment {
+    border: 1px solid var(--borda-suave);
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.resenha  .inner-review{
+    width: 100%;
+    margin-top: 10px;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: pre-wrap;
+    background-color: transparent;
+}
+
+@media (max-width: 768px) {
+    .content{
+        width: 100%;
+    }
+    .back {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
