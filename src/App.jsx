@@ -33,7 +33,6 @@ function App() {
           <Route path='/perfil' element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
           <Route path='/catalogo' element={<ProtectedRoute><Catalogo /></ProtectedRoute>} />
           <Route path='/busca' element={<ProtectedRoute><Busca /></ProtectedRoute>} />
-          <Route path='/notificacao' element={<ProtectedRoute><Notificacao /></ProtectedRoute>} />
           <Route path='/livro' element={<ProtectedRoute><Livro /></ProtectedRoute>} />  
           <Route path='/resenha' element={<ProtectedRoute><Resenha /></ProtectedRoute>} />  
 
