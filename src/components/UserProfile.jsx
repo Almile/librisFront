@@ -9,11 +9,11 @@ const UserProfile = () => {
   const [profileImage, setProfileImage] = useState(defaultProfileImage);
   const [editable, setEditable] = useState(false);
   const [description, setDescription] = useState(
-    '<p>💕 Gosto de _</p><p>📚 Livro Favorito _</p><p><br></p><blockquote><strong>" <em>Antes sofria agora sou fria</em>." - </strong><strong style="color: rgb(0, 71, 178);">Clarisse Lispector                                 </strong> <a href="Instagram.com" rel="noopener noreferrer" target="_blank">Instagram</a> - <a href="Facebook.com" rel="noopener noreferrer" target="_blank">Facebook</a> - <a href="Github.com" rel="noopener noreferrer" target="_blank">Github</a></blockquote>'
+    '<p>💕 Gosto de _</p><p>📚 Livro Favorito _</p><p><br></p><blockquote><strong>" </strong><strong style="color: rgb(58, 58, 58);">Não perca a esperança. O amanhã é desconhecido. O conselho vem muitas vezes com o nascer do sol.</strong><strong>." - </strong><strong style="color: rgb(0, 71, 178);"> Legolas</strong></blockquote>'
   );
 
   const quillRef = useRef(null); 
-  const maxCharacters = 150; 
+  const maxCharacters = 200; 
 
   const handleChange = (content, delta, source, editor) => {
     const currentLength = editor.getText().trim().length;

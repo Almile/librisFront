@@ -24,6 +24,7 @@ a{
     --link:#666666;
     --borda-suave: #66666640;
     --tema: #3e3eb4;
+    --terraCota: #ED553B;
 }
 
 body.dark-mode{
@@ -35,5 +36,15 @@ body.dark-mode{
     --link:#cccccc;
     --borda-suave: #33333340;
     --tema: #009c9d;
+    --terraCota: #ED553B;
 }
 
+
+footer{
+    width: 100%;
+    background-color: var(--bg-secundario);
+    color: var(--texto-secundario);
+    padding: 10px;
+    text-align: center;
+    font-size: .8em;
+}

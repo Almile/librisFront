@@ -199,12 +199,6 @@
     border-bottom-right-radius: 20px;
 }
 
-.conteudo {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
 .top-comentarios h2, .heatmap h2, .lendo h2, .estante h2{
     font-size: 18px;
 }
@@ -222,13 +216,16 @@
     overflow: auto;
 }
 
-ul.user-comments-list {
-    gap: 10px;
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0;
+ul.user-comments-list{
+    max-height: 1400px;
+    height: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: stretch;
     width: 100%;
-    overflow: auto;
+    gap: 10px;
+    margin: 10px 0;
+    overflow: hidden;
 }
 
 ul.user-comments-list .meta {
@@ -250,12 +247,13 @@ ul.user-comments-list .meta {
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 400px;
     height: 200px;
     align-items: flex-start;
     padding: 10px;
-    border: 1px solid var(--borda-suave);
     border-radius: 5px;
     background: var(--bg-secundario);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
 .paragrafo-limitado{
@@ -276,6 +274,42 @@ ul.user-comments-list .meta {
     cursor: pointer;
 }
 
+.conteudo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Duas colunas iguais */
+    grid-template-rows: auto auto; /* Altura automática */
+    gap: 20px; /* Espaço entre os elementos */
+}
+
+.top-comentarios {
+    background-color: var(--bg-secundario); /* Ajuste opcional */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.lendo {
+    grid-column: 1; /* Primeira coluna */
+    grid-row: 1; /* Primeira linha */
+    background-color: var(--bg-secundario); /* Ajuste opcional */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.heatmap {
+    grid-column: 2; /* Segunda coluna */
+    grid-row: 1; /* Primeira linha */
+    background-color: var(--bg-secundario); /* Ajuste opcional */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.estante {
+    grid-column: 1 / -1; /* Ocupa as duas colunas */
+    grid-row: 2; /* Segunda linha */
+    background-color: var(--bg-secundario);
+    padding: 20px;
+    border-radius: 8px;
+}
 
 
 @media (max-width: 1024px) {
@@ -287,10 +321,11 @@ ul.user-comments-list .meta {
         gap: 10px;
     }
 
-    ul.user-comments-list {
-        flex-direction: row;
-        overflow-x: scroll;
+    ul.user-comments-list{
+        max-height: 210px;
+        grid-template-columns: 1fr 2fr;
     }
+
 
     .react-calendar-heatmap {
         max-width: 100%;
@@ -307,34 +342,33 @@ ul.user-comments-list .meta {
         flex-direction: column;
         align-items: flex-start;
         padding: 0;
-
     }
 
     .perfil {
         margin-bottom: 200px;
     }
 
-
     .foto-perfil{
         margin-left: 10px;
     }
 
-    .leituras{
+    .leituras, ul.user-comments-list{
         grid-template-columns: repeat(auto-fit, 49%);
         gap: 2%;
-    }
-
-    .conteudo {
-        grid-template-columns: 1fr;
     }
 
     .heatmap, .lendo, .top-comentarios, .estante {
         margin: 10px 0;
     }
 
-    ul.user-comments-list {
-        flex-direction: row;
-        overflow-x: scroll;
+    .conteudo {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .lendo, .heatmap, .estante {
+        grid-column: 1; /* Ocupa a única coluna */
+        grid-row: auto; /* Seguem a ordem normal */
     }
     
 }
@@ -347,7 +381,7 @@ ul.user-comments-list .meta {
     }
 }
 @media (max-width: 600px) {
-    .leituras{
+    .leituras, ul.user-comments-list{
         grid-template-columns: 1fr;
         gap: 10px;
     }
@@ -370,9 +404,7 @@ ul.user-comments-list .meta {
         top: 30px;
     }
 
-    ul.user-comments-list {
-        flex-direction: column;
-    }
+
 }
 /* HeatMap */
 
@@ -413,3 +445,16 @@ ul.user-comments-list .meta {
 .react-calendar-heatmap .color-scale-2 { fill: #888;}
 .react-calendar-heatmap .color-scale-3 { fill: #555;}
 .react-calendar-heatmap .color-scale-4 { fill: #3b3b3b;}
+
+/* estante */
+
+.section-title{
+    text-align: center;
+}
+
+.topico-estante{
+    border-bottom: 1px solid var(--texto-secundario);
+    color: var(--texto-secundario);
+    padding-top:5px;
+    width: 100%;
+}

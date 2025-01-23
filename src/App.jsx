@@ -3,6 +3,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Navbar from './components/Navbar'
 
 import Home from './pages/Home'
+import Footer from './components/Footer'
 import Login from './components/Login'
 
 import HomePage from './pages/HomePage'
@@ -38,6 +39,8 @@ function App() {
 
         </Routes>
       </BrowserRouter>
+
+      <Footer/> 
     </>
   )
 }
