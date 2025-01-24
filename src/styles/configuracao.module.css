@@ -1,58 +1,56 @@
-.config-page {
-  font-family: "Bebas Neue", 'Roboto', Arial;
+.configPage {
   max-width: 800px;
   margin: 0 auto;
   padding: 70px;
 }
 
-.config-page h1 {
+.configPage h1 {
   font-size: 24px;
-  color: #333;
-  margin-bottom: 20px;
+  color: var(--texto-secundario);
+  margin: 20px 0;
 }
 
-.config-page label {
+.configPage label {
   display: block;
   margin: 10px 0 5px;
-  color: #555;
-  font-weight: bold;
+  color: var(--texto-secundario);
 }
 
-.config-page input[type="text"],
-.config-page input[type="email"],
-.config-page input[type="password"],
-.config-page select {
+.configPage input[type="text"],
+.configPage input[type="email"],
+.configPage input[type="password"],
+.configPage select {
   width: 100%;
   padding: 10px;
   margin: 5px 0 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--borda-suave);
+  background-color: var(--bg-secundario);
   box-sizing: border-box;
 }
 
-.password-label {
+.passwordLabel {
   display: block;
-  color: #555;
-  font-weight: bold;
+  color: var(--texto-secundario);
 }
 
-.password-container {
+.passwordContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.password-input {
+.passwordInput {
   display: flex;
   align-items: center;
   width: 70%;
 }
 
-.password-input input {
+.passwordInput input {
   width: calc(100% - 50px);
   padding-right: 40px;
 }
 
-.toggle-password {
+.togglePassword {
   background: none;
   border: none;
   font-size: 18px;
@@ -64,13 +62,13 @@
   margin-left: -40px;
 }
 
-.modify-password {
+.modifyPassword {
   width: 30%;
-  height: 48px;
+  height: 40px;
   padding: 10px;
-  font-size: 23px;
-  background-color: #ccc;
-  color: black;
+  font-size: 20px;
+  background-color: var(--destaque);
+  color: var(--bg-principal);
   border: none;
   cursor: pointer;
   margin-left: 10px;
@@ -79,79 +77,80 @@
   justify-content: center;
 }
 
-.modify-password:hover {
-  background-color: #0056b3;
+.modifyPassword:hover {
+  background-color: var(--destaque);
 }
 
-.config-page input[type="checkbox"] {
+.configPage input[type="checkbox"] {
   margin-right: 10px;
+  
 }
 
-.config-page .checkbox-label {
+.configPage .checkboxLabel {
   display: flex;
   align-items: center;
   margin: 10px 0;
 }
 
-.genres-label {
+.genresLabel {
   position: relative;
 }
 
-.genres-header {
+.genresHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid #ccc;
+  border: 1px solid var(--borda-suave);
   padding: 8px;
-  background-color: transparent;
+  background-color: var(--bg-secundario);
   cursor: pointer;
 }
 
-.genres-box {
+.genresBox {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   padding: 10px;
   margin: 5px 0 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--borda-suave);
   border-radius: 4px;
   cursor: pointer;
   background-color: transparent;
 }
 
-.genres-options {
+.genresOptions {
   display: flex;
   flex-direction: column;
   margin-top: 10px;
 }
 
-.genres-options label {
+.genresOptions label {
   margin: 5px 0;
 }
 
-.selected-genres {
+.selectedGenres {
   margin-left: 10px;
-  color: #555;
+  color: var(--texto-secundario);
 }
 
-.edit-icon {
+.editIcon {
   margin-left: 10px;
   font-size: 18px;
-  color: #007bff;
+  color: var(texto-principal);
 }
 
-.fixed-delete-account {
+.fixedDeleteAccount {
   position: fixed;
   bottom: 20px;
   left: 20px;
-  color: black;
+  color: var(--terraCota);
   cursor: pointer;
   text-align: center;
   text-decoration: none;
 }
 
-.fixed-delete-account:hover {
+.fixedDeleteAccount:hover {
   color: red;
   text-decoration: none; 
 }
@@ -172,95 +171,94 @@
   animation: fadeIn 0.3s forwards; 
 }
 
-.modal-content {
-  background: #fff;
+.modalContent {
+  background: var(--bg-secundario);
   padding: 60px;
   border-radius: 20px;
   max-width: 700px;
   width: 100%;
-  border: 1px solid #ccc;
+  border: 1px solid var(--borda-suave);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
   transform: scale(0.7);
   transition: transform 0.3s;
   animation: scaleIn 0.3s forwards;
 }
 
-.modal-content h2 {
+.modalContent h2 {
   margin-top: 0;
 }
 
-.modal-actions {
+.modalActions {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
 
-.modal-actions button {
+.modalActions button {
   padding: 16px 32px;
   font-size: 18px;
   border: none;
   border-radius: 12px;
+  background-color: var(--borda-suave);
   cursor: pointer;
 }
 
-.modal-actions button:first-child {
-  background-color: #ccc;
-}
-
-.modal-actions button:first-child:hover {
+.modalActions button:hover {
   background-color: #b0b0b0;
 }
 
-.modal-actions button:last-child {
-  background-color: #007bff;
-  color: white;
+.modalActions button:last-child {
+  background-color: var(--destaque);
+  color: var(--bg-principal);
 }
 
-.modal-actions button:last-child:hover {
-  background-color: #0056b3;
+.modalActions button:last-child:hover {
+  background-color: var(--destaque);
 }
 
-.modal-content label input[type="password"] {
+.modalContent label input[type="password"] {
   width: 100%;
   padding: 16px;
   font-size: 18px;
   margin-top: 8px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--borda-suave);
+  background-color: var(--bg-principal);
   box-sizing: border-box;
 }
 
-.modal-content .modal-actions .cancel-delete {
-  background-color: #ccc;
+.modalContent .modalActions .cancelDelete {
+  background-color: var(--borda-suave);
 }
 
-.modal-content .modal-actions .cancel-delete:hover {
+.modalContent .modalActions .cancelDelete:hover {
   background-color: #b0b0b0;
 }
 
-.modal-content .modal-actions .confirm-delete {
-  background-color: red;
+.modalContent .modalActions .confirmDelete {
+  background-color: var(--terraCota);
+  color: var(--texto-principal);
+}
+
+.modalContent .modalActions .confirmDelete:hover {
+  background-color: darkred;
   color: white;
 }
 
-.modal-content .modal-actions .confirm-delete:hover {
-  background-color: darkred;
-}
-
-.notification-settings {
+.notificationSettings {
   display: flex;
   flex-direction: column;
 }
 
-.notification-item {
+.notificationItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--borda-suave);
   border-radius: 4px;
   margin-bottom: 10px;
-  background-color: transparent;
+  background-color: var(--bg-secundario);
 }
 
 .switch {
@@ -283,7 +281,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--borda-suave);
   transition: .4s;
   border-radius: 34px;
 }
@@ -301,7 +299,7 @@
 }
 
 input:checked + .slider {
-  background-color: #007bff;
+  background-color: var(--destaque);
 }
 
 input:checked + .slider:before {
@@ -326,3 +324,6 @@ input:checked + .slider:before {
   }
 }
 
+.configPage .modalContentGenres h3, .configPage .modalContentGenres p{
+  display: none;
+}

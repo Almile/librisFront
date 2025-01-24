@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import '../styles/configuracao.css';
+import styles from '../styles/Configuracao.module.css';
+import GenreSelector from '../components/GenreSelector';
 
 function Configuracao() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [genres, setGenres] = useState([]);
-  const [showGenres, setShowGenres] = useState(false);
-  const [notifications, setNotifications] = useState({
+  const [genres, setGenres] = useState(["Romance", "Fantasia"]); // Inicialize com valores padrão
+  const [showGenres, setShowGenres] = useState(false);  const [notifications, setNotifications] = useState({
     mentions: false,
     followers: false,
     newFollowers: false,
@@ -19,6 +19,11 @@ function Configuracao() {
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const [deletePassword, setDeletePassword] = useState('');
 
+  // Callback para receber os gêneros do GenreSelector
+  const handleGenreSelection = (selectedGenres) => {
+    setGenres(selectedGenres);
+    setShowGenres(false); // Fechar o modal após salvar
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === 'genres') {
@@ -53,7 +58,7 @@ function Configuracao() {
   const cancelConfirmDelete = () => setIsConfirmingDelete(false);
 
   return (
-    <div className="config-page">
+    <div className={styles.configPage}>
       <h1>Configurações do Perfil</h1>
       <label>
         <input
@@ -62,6 +67,7 @@ function Configuracao() {
           value={username}
           onChange={handleInputChange}
           placeholder='@nome de usuário'
+          disabled
         />
       </label>
       <label>
@@ -71,108 +77,98 @@ function Configuracao() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder='exemplo@exemplo'
+          disabled
         />
       </label>
-      <label className="password-label">
-        Senha:
-        <div className="password-container">
-          <div className="password-input">
+      <label className={styles.passwordLabel}>
+        <div className={styles.passwordContainer}>
+          <div className={styles.passwordInput}>
             <input
               type={showPassword ? 'text' : 'password'}
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder='Senha'
+              disabled
             />
-            <button type="button" onClick={toggleShowPassword} className="toggle-password">
-              {showPassword ? '🙈' : '👁️'}
+            <button type="button" onClick={toggleShowPassword} className={styles.togglePassword}>
+              {showPassword ? (<ion-icon name="eye-off-outline"></ion-icon>) : (<ion-icon name="eye-outline"></ion-icon>)}
             </button>
           </div>
-          <button onClick={openModal} className="modify-password">Modificar Senha</button>
+          <button onClick={openModal} className={styles.modifyPassword}>Modificar Senha</button>
         </div>
       </label>
-      <div className="genres-label">
-        <div className="genres-header" onClick={toggleGenres}>
+      <div className={styles.genresLabel}>
+        <div className={styles.genresHeader} onClick={toggleGenres}>
           <span>Gêneros Favoritos</span>
-          <span className="selected-genres">{genres.join(', ')}</span>
-          <span className="edit-icon">✎</span>
+          <span className={styles.selectedGenres}>{genres.join(', ')}</span>
+          <span className={styles.editIcon}>✎</span>
         </div>
         {showGenres && (
-          <div className="genres-options">
-            <label>
-              <input type="checkbox" name="genres" value="Ação" onChange={handleInputChange} checked={genres.includes('Ação')} />
-              Ação
-            </label>
-            <label>
-              <input type="checkbox" name="genres" value="Aventura" onChange={handleInputChange} checked={genres.includes('Aventura')} />
-              Aventura
-            </label>
-            <label>
-              <input type="checkbox" name="genres" value="Mistério" onChange={handleInputChange} checked={genres.includes('Mistério')} />
-              Mistério
-            </label>
-            {/* Adicione mais gêneros conforme necessário */}
+          <div className={styles.genresOptions}>
+            <GenreSelector onSave={handleGenreSelection} initialGenres={genres} />
+
           </div>
         )}
       </div>
       <h1>Configurações de Notificação</h1>
-      <div className="notification-settings">
-        <div className="notification-item">
+      <div className={styles.notificationSettings}>
+        <div className={styles.notificationItem}>
           <span>Menções</span>
-          <label className="switch">
+          <label className={styles.switch}>
             <input
               type="checkbox"
               name="mentions"
               checked={notifications.mentions}
               onChange={handleNotificationChange}
             />
-            <span className="slider round"></span>
+            <span className={`${styles.slider} ${styles.round}`}></span>
           </label>
         </div>
-        <div className="notification-item">
+        <div className={styles.notificationItem}>
           <span>Seguidores</span>
-          <label className="switch">
+          <label className={styles.switch}>
             <input
               type="checkbox"
               name="followers"
               checked={notifications.followers}
               onChange={handleNotificationChange}
             />
-            <span className="slider round"></span>
+            <span  className={`${styles.slider} ${styles.round}`}></span>
           </label>
         </div>
-        <div className="notification-item">
+        <div className={styles.notificationItem}>
           <span>Novos Seguidores</span>
-          <label className="switch">
+          <label className={styles.switch}>
             <input
               type="checkbox"
               name="newFollowers"
               checked={notifications.newFollowers}
               onChange={handleNotificationChange}
             />
-            <span className="slider round"></span>
+            <span  className={`${styles.slider} ${styles.round}`}></span>
           </label>
         </div>
-        <div className="notification-item">
+        <div className={styles.notificationItem}>
           <span>Curtidas</span>
-          <label className="switch">
+          <label className={styles.switch}>
             <input
               type="checkbox"
               name="likes"
               checked={notifications.likes}
               onChange={handleNotificationChange}
             />
-            <span className="slider round"></span>
+            <span className={`${styles.slider} ${styles.round}`}></span>
           </label>
         </div>
       </div>
-      <div className="fixed-delete-account" onClick={openDeleteModal}>
+      <div className={styles.fixedDeleteAccount} onClick={openDeleteModal}>
         Excluir conta
       </div>
 
       {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
             <h2>Modificar Senha</h2>
             <label>
               Senha Atual:
@@ -186,7 +182,7 @@ function Configuracao() {
               Confirmar Senha:
               <input type="password" name="confirmPassword" placeholder="Confirmar Senha" />
             </label>
-            <div className="modal-actions">
+            <div className={styles.modalActions}>
               <button onClick={closeModal}>Cancelar</button>
               <button onClick={() => console.log('Modificar senha')}>Confirmar</button>
             </div>
@@ -195,26 +191,26 @@ function Configuracao() {
       )}
 
       {isDeleteModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
             {isConfirmingDelete ? (
               <>
                 <h2>Confirme sua senha para excluir</h2>
                 <label>
                   <input type="password" name="deletePassword" value={deletePassword} onChange={handleInputChange} placeholder="Digite sua senha" />
                 </label>
-                <div className="modal-actions">
-                  <button onClick={cancelConfirmDelete} className="cancel-delete">Cancelar</button>
-                  <button className="confirm-delete" onClick={() => console.log('Conta excluída')}>Confirmar</button>
+                <div className={styles.modalActions}>
+                  <button onClick={cancelConfirmDelete} className={styles.cancelDelete}>Cancelar</button>
+                  <button className={styles.confirmDelete} onClick={() => console.log('Conta excluída')}>Confirmar</button>
                 </div>
               </>
             ) : (
               <>
                 <h2>Deseja realmente excluir sua conta?</h2>
                 <p>Esta ação não pode ser desfeita.</p>
-                <div className="modal-actions">
-                  <button onClick={closeDeleteModal} className="cancel-delete">Cancelar</button>
-                  <button className="confirm-delete" onClick={confirmDelete}>Excluir Conta</button>
+                <div className={styles.modalActions}>
+                  <button onClick={closeDeleteModal} className={styles.cancelDelete}>Cancelar</button>
+                  <button className={styles.confirmDelete} onClick={confirmDelete}>Excluir Conta</button>
                 </div>
               </>
             )}
