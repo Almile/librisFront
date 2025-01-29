@@ -1,26 +1,17 @@
-import BookSlide from '../../components/BookSlide'
-import style from "./Catalogo.module.css"
+import BookSlide from './BookSlide'
+import PropTypes from 'prop-types'
 import { Pagination, Keyboard} from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
 
-export default function Popular() {
-    const popular = [
-        "m3lvDwAAQBAJ",
-        "C3wTEAAAQBAJ",
-        "gIr-DwAAQBAJ",
-        "GaZMDwAAQBAJ",
-        "PM2uCgAAQBAJ",
-        "5BclEAAAQBAJ",
-        "W_tcDwAAQBAJ",
-      ];
+export default function BookSwiper({title, books, className}) {
 
     return (
         <>
-        <h2>Populares</h2>
+        <h2>{title}</h2>
         <Swiper
-            className= {style.swiper}
+            className={className}
             modules={[Pagination, Keyboard]}
             pagination={{clickable: true,}}
             keyboard={{enabled: true,}}
@@ -40,7 +31,7 @@ export default function Popular() {
                 },
             }}
         >
-            {popular.map((id) => 
+            {books.map((id) => 
                 <SwiperSlide key={id}>
                     <BookSlide id={id} />
                 </SwiperSlide>)
@@ -48,4 +39,10 @@ export default function Popular() {
         </Swiper>
         </>
     );
+}
+
+BookSwiper.propTypes = {
+    title: PropTypes.string.isRequired,
+    books: PropTypes.array.isRequired,
+    className: PropTypes.string,
 }

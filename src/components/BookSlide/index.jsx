@@ -16,7 +16,7 @@ export default function BookSlide({id}) {
 		<div className={style.book}>
 			<img 
 				className={style.cover}
-				src={data.imageLinks ? data.imageLinks.thumbnail.slice(0, data.imageLinks.thumbnail.indexOf("&edge")): ""}
+				src={`https://books.google.com/books/publisher/content?id=${data.id}&printsec=frontcover&img=1&zoom=2`}
 				alt={`Capa do livro ${data.title}`}
 			/>
 			<span onClick={() => {navigate(`/livro/${id}`);}} className={style.title}>
