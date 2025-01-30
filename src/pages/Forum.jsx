@@ -46,7 +46,7 @@ function Forum() {
                 <ul className={styles.filter}>
                <h2>Siga também</h2>
               <li className={styles.followItem}>
-                <img src="/public/user_padrao.svg" className={styles.followImage} alt="Foto do Perfil"/>
+                <img src="/user_padrao.svg" className={styles.followImage} alt="Foto do Perfil"/>
                 <span>Nome do usuário</span>
               </li>
                 </ul>
