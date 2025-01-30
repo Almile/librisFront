@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { StarRating } from "./StarRating"
 import { useNavigate } from 'react-router-dom';
+import BookItem from "./BookItem";
+import style from "../styles/modalLecture.module.css"
+import StarList from "./StarList";
 
-import "../styles/modalLecture.css"
 
 const BookLecture = () => {
    const [isModalOpen, setIsModalOpen] = useState(true);
@@ -27,22 +29,26 @@ const BookLecture = () => {
   const navegarParaResenha = () => {
     navigate('/resenha');
   };
+
+  const id = "GjgQCwAAQBAJ";
+  
   return (
     <div> 
     {isModalOpen && (
       <div id="modal">
-        <div className="modal-lecture">
-
-        <div className="books-data">
+        <div className={style.modalLecture}>
+        <div className={style.booksData}>
+          <h2>Finalizar Leitura</h2>
+          <BookItem key={id} id={id} />
         <p>Data de término:<b> 10/Janeiro/2025 </b></p>
         </div>
 
         {stage === false ? (
            
             <div>
-                <div className="books-data">
+                <div className={style.booksData}>
 
-                <span className="text-explication">
+                <span className={style.textExplication}>
                     Dê uma nota para a leitura
                 </span>
                 <StarRating 
@@ -55,29 +61,20 @@ const BookLecture = () => {
                   
         ):(           
             <div>
-            <span className="close-modal" onClick={closeModal}>
+            <span className={style.closeModal} onClick={closeModal}>
                 <ion-icon name="close-circle-outline"></ion-icon>
             </span>
-            <div className="books-data">
+            <div className={style.booksData}>
 
-            {rating !== null && (
-              <div className="star-rating">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                            <ion-icon
-                                key={star}
-                                name={star <= rating ? "star" : "star-outline"}
-                                className="comment-star"
-                            ></ion-icon>
-                        ))}
-                 <input  type="text" value={rating}  min="0"  max="5"  step="0.1"  aria-label="Avaliação" />
-            
+              <div className={style.starRating}>
+                <p>
+                  <StarList average={rating} size={36} />
+                </p>
+                 <span>{rating} </span>
               </div>
-            )}
-           
-
             </div>    
-            <button onClick={navegarParaLivro}>Envie um <b> comentario </b> sobre a obra</button> 
-            <button onClick={navegarParaResenha}>Crie uma <b> resenha </b> sobre a obra</button>  
+            <button onClick={navegarParaLivro}>Envie um comentario sobre a obra</button> 
+            <button onClick={navegarParaResenha}>Crie uma resenha sobre a obra</button>  
           </div>
         )} 
         </div>
@@ -86,4 +83,4 @@ const BookLecture = () => {
       </div>
   );
 };
-export default BookLecture
+export default BookLecture;

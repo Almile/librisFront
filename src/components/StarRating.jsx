@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import style from "../styles/starRating.module.css";
 
 export const StarRating = ({ rating, onRatingChange, required = false }) => {
     const [hover, setHover] = useState(null);
@@ -33,12 +34,12 @@ export const StarRating = ({ rating, onRatingChange, required = false }) => {
     };
 
     return (
-        <div className="star-rating" aria-required>
+        <div className={style.starRating} aria-required>
             {[1, 2, 3, 4, 5].map((star) => (
                 <ion-icon
                     key={star}
                     name={star <= (hover || inputValue) ? "star" : "star-outline"}
-                    className="star-icon"
+                    className={style.starIcon}
                     onClick={() => handleStarClick(star)}
                     onMouseEnter={() => setHover(star)}
                     onMouseLeave={() => setHover(null)}
@@ -53,7 +54,7 @@ export const StarRating = ({ rating, onRatingChange, required = false }) => {
                 step="0.1"
                 aria-label="Avaliação"
             />
-            {error && <span className="error-message">A nota é obrigatória! Dê uma nota para o livro</span>}
+            {error && <span className={style.errorMessage}>A nota é obrigatória! Dê uma nota para o livro</span>}
         </div>
     );
 };

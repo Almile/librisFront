@@ -3,7 +3,9 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
-import userPadrao from '/user_padrao.svg'
+import userPadrao from '/user_padrao.svg';
+import styles from "../styles/comments.module.css";
+
 Quill.register("modules/imageResize", ImageResize);
 
 const modules = {
@@ -49,9 +51,9 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
       focusedImage.style.float = "";
       focusedImage.className = "";
       if (alignment === "left") {
-        focusedImage.classList.add("float-left");
+        focusedImage.classList.add(styles.floatLeft);
       } else if (alignment === "right") {
-        focusedImage.classList.add("float-right");
+        focusedImage.classList.add(styles.floatRight);
       }
     }
   };
@@ -64,8 +66,6 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
     }
   };
 
-
-  
   useEffect(() => {
     const editorElement = editorRef.current.getEditor().root;
     editorElement.addEventListener("click", handleEditorClick);
@@ -76,15 +76,15 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
   }, []);
 
   return (
-    <form onSubmit={handleSubmit} className="form-comment">
+    <form onSubmit={handleSubmit} className={styles.formComment}>
       <img
         src={userPadrao}
         alt="Foto de perfil"
-        className="profile-picture"
+        className={styles.profilePicture}
       />
 
-      <div className="box-comment">
-        <div className="spoiler">
+      <div className={styles.boxComment}>
+        <div className={styles.spoiler}>
           <input
             id={uniqueSpoilerId} 
             type="checkbox"
@@ -98,36 +98,35 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
         </div>
 
         <ReactQuill
-          theme="snow"
-          value={text}
-          onChange={setText}
-          className="custom-quill"
-          modules={modules}
-          ref={editorRef} 
+            theme="snow"
+            value={text}
+            onChange={setText}
+            className="customQuill" // Importante: deve ser a classe correta do CSS Module
+            modules={modules}
+            ref={editorRef} 
         />
 
+
         {focusedImage && (
-          <div className="image-alignment-dropdown">
+          <div className={styles.imageAlignmentDropdown}>
             <button
               type="button"
               onClick={() => handleImageAlignment("left")}
-              className="align-left-button"
+              className={styles.alignLeftButton}
             >
               Alinhar à Esquerda
             </button>
             <button
               type="button"
               onClick={() => handleImageAlignment("right")}
-              className="align-right-button"
+              className={styles.alignRightButton}
             >
               Alinhar à Direita
             </button>
           </div>
         )}
 
-        <button type="submit" className="envy-button">
-          Enviar
-        </button>
+        <button type="submit" className={styles.envyButton}> Enviar </button>
       </div>
     </form>
   );

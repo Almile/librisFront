@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ReplyForm } from "./ReplyForm";
 import { SpoilerProtection } from "./SpoilerProtection";
-
+import styles from "../styles/comments.module.css";
 
 export const CommentList = ({ comments, onAddComment, onToggleReply, onToggleLike }) => {
     const [spoilerVisibility, setSpoilerVisibility] = useState({});
@@ -22,33 +22,33 @@ export const CommentList = ({ comments, onAddComment, onToggleReply, onToggleLik
     };
 
     return (
-        <ul className="comments">
+        <ul className={styles.comments}>
             {comments.map((comment) => (
                 <li
                     key={comment.id}
-                    className={`comment-list ${comment.parentId ? "reply-comment" : ""} ${
-                        comment.replies.length > 0 ? "has-children" : ""
+                    className={`${styles.commentList} ${comment.parentId ? styles.replyComment : ""} ${
+                        comment.replies.length > 0 ? styles.hasChildren : ""
                     }`}
                 >
-                    <div className="comment">
-                        <div className="comment-header">
-                            <div className="comment-user">
+                    <div className={styles.comment}>
+                        <div className={styles.commentHeader}>
+                            <div className={styles.commentUser}>
                                 <img
                                     src={comment.user.userImage}
                                     alt={`${comment.user.name} userImage`}
-                                    className="userImage"
+                                    className={styles.userImage}
                                 />
                                 <strong>{comment.user.name}</strong>
-                                <span className="comment-date">{comment.date}</span>
+                                <span className={styles.commentDate}>{comment.date}</span>
                             </div>
-                            <div className="meta">
+                            <div className={styles.meta}>
                                 {comment.rating !== null && (
-                                    <div className="comment-rating">
+                                    <div className={styles.commentRating}>
                                         {[1, 2, 3, 4, 5].map((star) => (
                                             <ion-icon
                                                 key={star}
                                                 name={star <= comment.rating ? "star" : "star-outline"}
-                                                className="comment-star"
+                                                className={styles.commentStar}
                                             ></ion-icon>
                                         ))}
                                     </div>
@@ -56,7 +56,7 @@ export const CommentList = ({ comments, onAddComment, onToggleReply, onToggleLik
                                 {comment.rating}
                             </div>
                         </div>
-                        <div className="inner">
+                        <div className={styles.inner}>
                             {comment.isSpoiler ? (
                                 <SpoilerProtection
                                     isSpoilerVisible={spoilerVisibility[comment.id]}
@@ -64,34 +64,30 @@ export const CommentList = ({ comments, onAddComment, onToggleReply, onToggleLik
                                 />
                             ) : (
                                 <div
-                                    className={`comment-text ${expandedComments[comment.id] ? "expanded" : ""}`}
+                                    className={`${styles.commentText} ${expandedComments[comment.id] ? styles.expanded : ""}`}
                                     dangerouslySetInnerHTML={{ __html: comment.text }}
                                 />
                             )}
-                                 {!expandedComments[comment.id] && comment.text.length > 300 && (
-                            <button
-                                className="show-more-button"
-                                onClick={() => toggleExpanded(comment.id)}
-                            >
-                                Ver mais
-                            </button>
-                        )}
-
-                        {expandedComments[comment.id] && comment.text.length > 300 && (
-                            <button
-                                className="show-less-button"
-                                onClick={() => toggleExpanded(comment.id)}
-                            >
-                                Ver menos
-                            </button>
-                        )}
-
+                            {!expandedComments[comment.id] && comment.text.length > 300 && (
+                                <button
+                                    className={styles.showMoreButton}
+                                    onClick={() => toggleExpanded(comment.id)}
+                                >
+                                    Ver mais
+                                </button>
+                            )}
+                            {expandedComments[comment.id] && comment.text.length > 300 && (
+                                <button
+                                    className={styles.showLessButton}
+                                    onClick={() => toggleExpanded(comment.id)}
+                                >
+                                    Ver menos
+                                </button>
+                            )}
                         </div>
-
-                   
-                        <div className="comment-actions">
+                        <div className={styles.commentActions}>
                             <button
-                                className="comment-button"
+                                className={styles.commentButton}
                                 onClick={() => onToggleLike(comment.id)}
                             >
                                 {comment.likedBy.includes("currentUser") ? (
@@ -101,7 +97,7 @@ export const CommentList = ({ comments, onAddComment, onToggleReply, onToggleLik
                                 )}
                                 {comment.likes}
                             </button>
-                            <button className="reply-button" onClick={() => onToggleReply(comment.id)}>
+                            <button className={styles.replyButton} onClick={() => onToggleReply(comment.id)}>
                                 {comment.isReplying ? (
                                     <span>
                                         <ion-icon name="close-circle-outline"></ion-icon> Cancelar
@@ -114,7 +110,7 @@ export const CommentList = ({ comments, onAddComment, onToggleReply, onToggleLik
                             </button>
                             {comment.isSpoiler && (
                                 <button
-                                    className="spoiler-button"
+                                    className={styles.spoilerButton}
                                     onClick={() => toggleSpoiler(comment.id)}
                                 >
                                     {spoilerVisibility[comment.id] ? (
@@ -129,9 +125,8 @@ export const CommentList = ({ comments, onAddComment, onToggleReply, onToggleLik
                                 </button>
                             )}
                         </div>
-
                         {comment.isReplying && (
-                            <div className="reply-comment-editor">
+                            <div className={styles.replyCommentEditor}>
                                 <ReplyForm
                                     onSubmit={(text, isSpoiler) =>
                                         onAddComment(text, isSpoiler, comment.id)

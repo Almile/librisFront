@@ -1,0 +1,54 @@
+.modalLecture{
+    background-color: var(--bg-secundario);
+    border-radius: 5px;
+    position: relative;
+    width: 80%;
+    max-width: 700px;
+}
+
+.modalLecture .booksData{
+    padding: 30px;
+}
+
+.booksData{
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    flex-direction: column;
+}
+
+.closeModal ion-icon{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: var(--terraCota);
+    font-weight: bolder;
+    font-size: 24px;
+}
+
+.starRating{
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    font-size: 24px;
+}
+
+.modalLecture button{
+    width: 100%;
+    border-bottom: 1px solid var(--bg-secundario);
+    background-color: var(--destaque);
+    color: var(--bg-principal);
+    font-size: 20px;
+    padding: 20px 10px;
+}
+
+.modalLecture button:last-child{
+    border-bottom:none;
+}
+
+.modalLecture button:hover{
+    cursor: pointer;
+    background-color: var(--bg-secundario);
+    color: var(--destaque);
+}

@@ -1,0 +1,97 @@
+.forum {
+    max-width: 1200px;
+    margin: 20px auto;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    min-height: 85vh;
+}
+
+.forumContent, .forumSidebar {
+    background-color: var(--bg-secundario);
+    padding: 20px;
+    border-radius: 5px;
+    width: 70%;
+}
+
+.forumSidebar {
+    width: 30%;
+}
+ 
+.filter{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.searchInput{
+    height: 40px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid var(--borda-suave);
+    background-color: var(--bg-principal);
+    border-radius: 5px;
+  }
+
+  .searchButton{
+    height: 40px;
+    padding: 10px;
+    width: 40px;
+    background-color: var(--destaque);
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .searchButton ion-icon{
+    color: var(--bg-principal);
+    font-size: 20px;
+  }
+
+  .loadPosts{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 20px;
+    font-size: 14px;
+    margin: 20px 0;
+    background-color: var(--borda-suave);
+  }
+
+.followItem{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.followImage{
+    width: 20px;
+    height: 20px;
+    background-color: var(--bg-secundario);
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+}
+
+@media (max-width: 1024px) {
+    .forum {
+        flex-direction: column;
+        justify-content:unset;
+        gap: 0;
+    }
+
+    .forumContent, .forumSidebar {
+        width: 100%;
+    }
+}

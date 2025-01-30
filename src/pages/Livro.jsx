@@ -1,6 +1,5 @@
 import React from "react";
 import CommentSection from "../components/CommentSection";
-import "../styles/comments.css"
 import BookContent from "../components/BookContent";
 import "../styles/bookcontent.css"
 import ReviewSection from "../components/ReviewSection";

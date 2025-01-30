@@ -1,10 +1,11 @@
 import React from "react";
+import styles from "../styles/comments.module.css";
 
 export const SpoilerProtection = ({ isSpoilerVisible, text }) => {
     return (
-        <div className={`spoiler-content ${isSpoilerVisible ? "visible" : ""}`}>
+        <div className={`spoilerContent ${isSpoilerVisible ? "visible" : ""}`}>
             {!isSpoilerVisible ? (
-                <div className="protection-wrapper">
+                <div className={styles.protectionWrapper}>
                     <p>Este comentário contém spoiler.</p>
                 </div>
             ) : (

@@ -7,7 +7,7 @@
     gap: 5px; 
 }
 
-.form-comment {
+.formComment {
     display: flex;
     gap: 1rem;
     width: 100%;    
@@ -19,11 +19,11 @@
     background-color: var(--bg-principal);
 }
 
-.create-comment{
+.createComment{
     margin: 20px 0;
 }
 
-.commentSection ion-icon{color: var(--texto-primario);}
+ion-icon{color: var(--texto-primario);}
 
 .commentSection {
     gap: 1rem;
@@ -31,7 +31,7 @@
     margin: 10px auto;
 }
 
-.comment-list{
+.commentList{
     position: relative;
     list-style: none;
 }
@@ -42,34 +42,12 @@
     border: 1px solid var(--borda-suave);
 }
 
-/* Editor de texto quill */
-
-.box-comment {
+.boxComment {
     flex: 1;
+    border: 1px solid var(--borda-suave);
 }
 
-.custom-quill .ql-container {
-    border: none;
-    max-width: 100%;
-}
-
-.custom-quill .ql-toolbar {
-    width: 100%;
-    border: none; 
-    border-bottom: 1px solid var(--borda-suave);
-}
-
-.custom-quill .ql-editor {
-    border: none; 
-    border-bottom: 1px solid var(--borda-suave);
-    max-width:70%;
-    margin:10px auto;
-    overflow-wrap: break-word;
-    word-break: break-word; 
-    white-space: pre-wrap;
-}
-
-.image-alignment-dropdown {
+.imageAlignmentDropdown {
     position: absolute;
     background: var(--bg-principal);
     border: 1px solid var(--borda-suave);
@@ -80,7 +58,7 @@
     gap: 10px;
 }
 
-.image-alignment-dropdown button {
+.imageAlignmentDropdown button {
     background: var(--borda-suave);
     border: 1px solid var(--borda-suave);
     border-radius: 3px;
@@ -88,7 +66,7 @@
     cursor: pointer;
 }
 
-.image-alignment-dropdown button:hover {
+.imageAlignmentDropdown button:hover {
     background: var(--borda-suave);
 }
 
@@ -103,11 +81,11 @@ img.float-right {
     margin: 0 0 10px 10px; 
 }
 
-.quill-editor-container {
+.quillEditorContainer {
     overflow: hidden;
 }
 
-.profile-picture {
+.profilePicture {
     width: 40px;
     height: 40px;
     max-width: 50px;
@@ -150,14 +128,12 @@ img.float-right {
     font-size: 24px;
 }
 
-
 .spoiler input[type="checkbox"]:checked + label ion-icon {
     color: #e74c3c;
     transform: scale(1.2);
 }
 
-
-.commentSection button.envy-button {
+button.envyButton {
     margin-top: 1rem;
     position: absolute;
     bottom: 20px;
@@ -169,14 +145,14 @@ img.float-right {
     padding:4px 10px;
 }
 
-.comment-header, .comment-user{
+.commentHeader, .commentUser{
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
 }
 
-.comment-header img{
+.commentHeader img{
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -184,14 +160,14 @@ img.float-right {
 }
 
 
-.comment-actions {
+.commentActions {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     gap: 20px;
 }
 
-.comment-actions .spoiler-button span{
+.commentActions .spoilerButton span{
     gap: 5px;
     font-size: 14px;
     border: none;
@@ -203,27 +179,27 @@ img.float-right {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-.comment-actions .spoiler-button ion-icon{
+.commentActions .spoilerButton ion-icon{
     color: #ff0000;
 }
 
-.comment-actions .spoiler-button span:hover {
+.commentActions .spoilerButton span:hover {
     color: #702d2d;
 }
 
-.spoiler-content {
+.spoilerContent {
     position: relative;
     filter: blur(5px);
     transition: filter 0.3s ease;
 }
 
-.spoiler-content.visible {
+.spoilerContent.visible {
     transition: filter .5s ease;
     filter: blur(0);
 
 }
 
-.protection-wrapper {
+.protectionWrapper {
     text-align: center;
     color: var(--borda-suave);
     font-style: italic;
@@ -241,18 +217,18 @@ img.float-right {
     white-space: pre-wrap;
 }
 
-.comment-text {
+.commentText {
     max-height: 100px;
     overflow: hidden;
     position: relative;
 }
 
-.comment-text.expanded {
+.commentText.expanded {
     max-height: none;
 }
 
-.show-more-button,
-.show-less-button {
+.showMoreButton,
+.showLessButton {
     background: none;
     border: none;
     color: var(--destaque);
@@ -262,14 +238,14 @@ img.float-right {
     padding: 10px;
 }
 
-.show-more-button:hover,
-.show-less-button:hover {
+.showMoreButton:hover,
+.showLessButton:hover {
     text-decoration: underline;
 }
 
 /* Linha vertical conectando os comentários de resposta */
 
-.has-children::before {
+.hasChildren::before {
     content: "";
     position: absolute;
     top: 12px;
@@ -280,11 +256,11 @@ img.float-right {
     z-index: -1; 
 }
 
-.comment-list.has-children:last-child::before {
+.commentList.hasChildren:last-child::before {
     height: 50%; 
 }
 
-.reply-comment::before {
+.replyComment::before {
     content: "";
     position: absolute;
     top: 0;
@@ -295,7 +271,7 @@ img.float-right {
     z-index: -1;
 }
 
-.reply-comment:last-child::before {
+.replyComment:last-child::before {
     height: 50%;
 }
 
@@ -307,13 +283,13 @@ img.float-right {
     margin-bottom: 5px;
 }
 
-.star-rating {
+.starRating {
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-.star-rating input{
+.starRating input{
     color:var(--destaque);
     border: 1px solid var(--borda-suave);
     background-color: transparent;
@@ -322,7 +298,7 @@ img.float-right {
     width: 40px;
     text-align: center;
 }
-.star-icon ion-icon, .rating ion-icon{
+.starIcon ion-icon, .rating ion-icon{
     font-size: 24px;
     color: var(--destaque);
     cursor: pointer;
@@ -335,7 +311,7 @@ img.float-right {
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.star-icon:hover {
+.starIcon:hover {
     transform: scale(1.2);
 }
 
@@ -346,12 +322,12 @@ img.float-right {
     font-size: 14px;
 }
 
-.comment-rating ion-icon {
+.commentRating ion-icon {
     color: var(--destaque);
     font-size: 16px;
 }
 
-.comment-date{
+.commentDate{
     font-size: 12px;
 }
 
@@ -360,7 +336,7 @@ img.float-right {
     .spoiler label span{
         display: block;
     }
-    .comment-actions {
+    .commentActions {
         justify-content: initial;
         gap: 60px;
         margin-left: 60px;

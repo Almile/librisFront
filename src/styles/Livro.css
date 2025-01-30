@@ -5,3 +5,24 @@
     margin: 30px auto;
     height: auto;
 }
+
+.customQuill .ql-container {
+    border: none;
+    max-width: 100%;
+}
+
+.customQuill .ql-toolbar {
+    width: 100%;
+    border: none; 
+    border-bottom: 1px solid var(--borda-suave);
+}
+
+.customQuill .ql-editor {
+    border: none; 
+    border-bottom: 1px solid var(--borda-suave);
+    max-width:70%;
+    margin:10px auto;
+    overflow-wrap: break-word;
+    word-break: break-word; 
+    white-space: pre-wrap;
+}
