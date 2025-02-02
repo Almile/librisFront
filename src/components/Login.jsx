@@ -1,200 +1,140 @@
-import { useContext } from "react";
-import AuthContext from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from 'react';
-import '../styles/loginCadastro.css';
-import imgLogin from '/imgLogin.jpeg';
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import { useContext, useEffect } from "react"; // Importa hooks do React para gerenciar estados e efeitos colaterais
+import AuthContext from "../context/AuthContext"; // Importa o contexto de autenticação
+import { useNavigate } from "react-router-dom"; // Hook para navegação entre páginas
+import { GoogleLogin, googleLogout } from "@react-oauth/google"; // Importa componentes para login e logout com Google OAuth
+import styles from "../styles/login.module.css"; // Importa estilos CSS do módulo de login
+import imgLogin from "/imgLogin.jpeg"; // Importa imagem utilizada na página de login que se encontra na pasta public
 
 function Login() {
+  // Obtém a função de login do contexto de autenticação
   const { login } = useContext(AuthContext);
-  const navigate = useNavigate();
+  // Hook para redirecionamento de páginas
+  const navigate = useNavigate(); 
 
+  // Função para login do usuário e redirecionamento para a página inicial caso o login seja bem-sucedido
   const handleLogin = () => {
     login();
-    navigate('/homePage');
-  }
+    navigate("/homePage");
+  };
 
-  function handleLogout(){
-    googleLogout()
+  // Função para logout do Google OAuth
+  function handleLogout() {
+    googleLogout();
   }
 
   useEffect(() => {
-    document.querySelectorAll('.toggle').forEach((item) => {
-      item.addEventListener('click', () => {
-        const book = document.querySelector('.book');
-        const action = item.getAttribute('data-action');
-        const pageCadastro = document.getElementById('pageCadastro')
-        const pageForgot = document.getElementById('pageForgot')
+    // Adiciona eventos de clique para criar efeito de livro ao alternar entre as páginas de login, cadastro e recuperação de senha
+    document.querySelectorAll(".toggle").forEach((item) => {
+      item.addEventListener("click", () => {
+        const book = document.querySelector("." + styles.book);
+        const action = item.getAttribute("data-action");
+        const pageCadastro = document.getElementById("pageCadastro");
+        const pageForgot = document.getElementById("pageForgot");
 
-
-        if (action === 'signup') {
-          pageForgot.style.display='none';
-          book.classList.add('flipped');
-          pageCadastro.style.display='flex';
-
-        } else if (action === 'login') {
-          book.classList.remove('flipped');
-          
-        }else if (action === 'forgot') {
-          pageCadastro.style.display='none';
-          book.classList.add('flipped');
-          pageForgot.style.display='flex';
-
+        if (action === "signup") {
+          pageForgot.style.display = "none";
+          book.classList.add(styles.flipped);
+          pageCadastro.style.display = "flex";
+        } else if (action === "login") {
+          book.classList.remove(styles.flipped);
+        } else if (action === "forgot") {
+          pageCadastro.style.display = "none";
+          book.classList.add(styles.flipped);
+          pageForgot.style.display = "flex";
         }
       });
-   })
+    });
+    
+    // Remove os eventos ao desmontar o componente
     return () => {
-      document.querySelectorAll('.toggle').forEach((item) => {
-        item.removeEventListener('click', () => {});
+      document.querySelectorAll(styles.toggle).forEach((item) => {
+        item.removeEventListener("click", () => {});
       });
     };
   }, []);
 
   return (
-    <div className='container'>
-
-      <div className="book">
-        <div className="page">
+    <div className={styles.container}>
+      <div className={styles.book}>
+        
+        {/* Página de Cadastro */}
+        <div className={styles.page}>
           <header></header>
-
-          <div className="page left emptyPage">
-            <img src={imgLogin} alt="Imagem de Login" className="imgEffect"/>
+          <div className={`${styles.page} ${styles.left} ${styles.emptyPage}`}>
+            <img src={imgLogin} alt="Imagem de Login" className={styles.imgEffect} />
           </div>
 
-          <div className="page right cadastro">
-          <form  id="pageCadastro">
+          <div className={`${styles.page} ${styles.right} ${styles.cadastro}`}>
+            <form id="pageCadastro">
               <h1>Cadastro</h1>
-
               <label htmlFor="register-userName">Nome de usuário</label>
-              <input
-                type="text"
-                id="register-userName"
-                placeholder="Digite seu nome de usuário"
-                required
-              />
-
+              <input type="text" id="register-userName" placeholder="Digite seu nome de usuário" required />
               <label htmlFor="register-email">Email</label>
-              <input
-                type="email"
-                id="register-email"
-                placeholder="Digite seu email"
-                required
-              />
-
+              <input type="email" id="register-email" placeholder="Digite seu email" required />
               <label htmlFor="register-password">Senha</label>
-              <input
-                type="password"
-                id="register-password"
-                placeholder="Crie uma senha"
-                required
-              />
-
+              <input type="password" id="register-password" placeholder="Crie uma senha" required />
               <label htmlFor="confirm-password">Confirmar senha</label>
-              <input
-                type="password"
-                id="confirm-password"
-                placeholder="Confirme sua senha"
-                required
-              />
-
-              <button type="submit" className="button-cadastro">Cadastrar</button>
-
-              <p className="link">
-                
-                Já tem conta?{' '}
-                <span className="toggle" data-action="login">
-                  Faça login
-                </span>
+              <input type="password" id="confirm-password" placeholder="Confirme sua senha" required />
+              <button type="submit" className={styles.buttonCadastro}>Cadastrar</button>
+              <p className={styles.link}>
+                Já tem conta? <span className={styles.toggle} data-action="login">Faça login</span>
               </p>
             </form>
-
-
+            
+            {/* Página de Recuperação de Senha */}
             <form id="pageForgot">
               <h1>Recuperação de senha</h1>
-
               <label htmlFor="forgot-email">Email</label>
               <input type="email" id="forgot-email" placeholder="Digite seu email" required />
-              <button type="submit" className="button-forgot">Enviar Confirmação</button>
-
-              <p className="link">
-                Já tem conta?{' '}
-                <span className="toggle" data-action="login">
-                  Faça login
-                </span>
+              <button type="submit" className={styles.buttonForgot}>Enviar Confirmação</button>
+              <p className={styles.link}>
+                Já tem conta? <span className={styles.toggle} data-action="login">Faça login</span>
               </p>
             </form>
           </div>
           <footer></footer>
         </div>
 
-
-        <div className="page" id="pageLogin">
-          <div className="page right emptyPage">
-          <div className="messageRegister">
-                <h1>Libris</h1>
-                <h2>
-                  Encha as suas estantes com seus livros e personagens favoritos
-                  e compartilhe suas histórias
-                </h2>
-              </div>
+        {/* Página de Login */}
+        <div className={styles.page} id="pageLogin">
+          <div className={`${styles.page} ${styles.right} ${styles.emptyPage}`}>
+            <div className={styles.messageRegister}>
+              <h1>Libris</h1>
+              <h2>Encha as suas estantes com seus livros e personagens favoritos e compartilhe suas histórias</h2>
+            </div>
           </div>
-
           <header></header>
-          <div className="page left">
+          <div className={`${styles.page} ${styles.left}`}>
             <form>
               <h1>Login</h1>
               <label htmlFor="login-email">Email</label>
-              <input
-                type="email"
-                id="login-email"
-                placeholder="Digite seu email"
-                required
-              />
-
+              <input type="email" id="login-email" placeholder="Digite seu email" required />
               <label htmlFor="login-password">Senha</label>
-              <input
-                type="password"
-                id="login-password"
-                placeholder="Digite sua senha"
-                required
-              />
-
-
-             
-              <button onClick={handleLogin} className="button-login">Login</button>
-
-              <p className="linkForgot">
-              Esqueceu a senha?{' '}
-              <span className="toggle" data-action="forgot">
-                Recuperar senha
-              </span>
-            </p>
-
-            <p className="linkGoogle">
-              ou 
-            </p>
-              <p className="linkGoogle">
-              <GoogleLogin
-                onSuccess={(credentialResponse) => {
-                  console.log("Credenciais:", credentialResponse.credential);
-                  handleLogin()
-                }}
-                onError={() => console.log("Falha ao logar")}
-                auto_select={true}
-                shape="circle"
-                theme="outline"
-                size="large"
-              />
+              <input type="password" id="login-password" placeholder="Digite sua senha" required />
+              <button onClick={handleLogin} className={styles.buttonLogin}>Login</button>
+              <p className={styles.linkForgot}>
+                Esqueceu a senha? <span className={styles.toggle} data-action="forgot">Recuperar senha</span>
               </p>
+              <p className={styles.linkGoogle}>ou</p>
+              
+              {/* Elemento para login com o google */}
 
+              <p className={styles.linkGoogle}>
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => {
+                    console.log("Credenciais:", credentialResponse.credential);
+                    handleLogin();
+                  }}
+                  onError={() => console.log("Falha ao logar")}
+                  auto_select={true}
+                  shape="circle"
+                  theme="outline"
+                  size="large"
+                />
+              </p>
             </form>
-            <p className="link">
-              Não tem conta?{' '}
-              <span className="toggle" data-action="signup">
-                Cadastre-se
-              </span>
+            <p className={styles.link}>
+              Não tem conta? <span className={styles.toggle} data-action="signup">Cadastre-se</span>
             </p>
           </div>
           <footer></footer>
@@ -202,6 +142,6 @@ function Login() {
       </div>
     </div>
   );
-};
+}
 
 export default Login;
