@@ -1,16 +1,16 @@
 import React from "react";
 import styles from "../styles/feed.module.css";
 
-const PostCard = ({ user, time, tags, text, image, stats }) => {
+
+const PostCard = ({ user, time, tags, text, image, stats, onPostClick }) => {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={onPostClick}> {/* Chama a função ao clicar */}
       <div className={styles.cardContent}>
         <div className={styles.header}>
           <img className={styles.avatar} src={user.avatar} alt={user.name} />
           <div className={styles.headerContent}>
             <p className={styles.topic}>{user.name} · {time}</p>
-            <p className={styles.userHandle}>{tags}</p>
-
+            <p className={styles.userHandle}>{tags.join(" ")}</p>
             <ion-icon name="chevron-down-outline"></ion-icon>
           </div>
         </div>
@@ -29,13 +29,11 @@ const PostCard = ({ user, time, tags, text, image, stats }) => {
   );
 };
 
-const Feed = () => {
+const Feed = ({ onPostClick }) => {
   const posts = [
     {
-      user: {
-        name: "Maria",
-        avatar: "/user_padrao.svg",
-      },
+      id: 1,
+      user: { name: "Maria", avatar: "/user_padrao.svg" },
       time: "2h",
       tags: ["#livros", "#2024"],
       text: "Meus top 10 livros de 2024...",
@@ -46,8 +44,8 @@ const Feed = () => {
 
   return (
     <div className={styles.feed}>
-      {posts.map((post, index) => (
-        <PostCard key={index} {...post} />
+      {posts.map((post) => (
+        <PostCard key={post.id} {...post} onPostClick={() => onPostClick(post)} />
       ))}
     </div>
   );
