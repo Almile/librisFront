@@ -14,7 +14,7 @@ function Login() {
   // Função para login do usuário e redirecionamento para a página inicial caso o login seja bem-sucedido
   const handleLogin = () => {
     login();
-    navigate("/homePage");
+    navigate("/home");
   };
 
   // Função para logout do Google OAuth

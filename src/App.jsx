@@ -6,7 +6,7 @@ import Home from './pages/Home'
 import Footer from './components/Footer'
 import Login from './components/Login'
 
-import HomePage from './pages/HomePage'
+import LandingPage from './pages/LandingPage'
 import Perfil from './pages/Perfil'
 import Catalogo from './pages/Catalogo'
 import Livro from './pages/Livro'
@@ -24,12 +24,12 @@ function App() {
         <Navbar />
 
         <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path='/' element={<LandingPage />} />
           <Route path='/login' element={<Login />} />
 
           <Route path='/configuracao' element={<ProtectedRoute><Configuracao /></ProtectedRoute>} />
           <Route path='/forum' element={<ProtectedRoute><Forum /></ProtectedRoute>} />
-          <Route path='/homePage' element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+          <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path='/perfil' element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
           <Route path='/catalogo' element={<ProtectedRoute><Catalogo /></ProtectedRoute>} />
           <Route path='/livro/:id' element={<ProtectedRoute><Livro /></ProtectedRoute>} />  

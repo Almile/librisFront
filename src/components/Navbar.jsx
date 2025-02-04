@@ -112,12 +112,10 @@ function Navbar() {
         setIsNotificationsOpen(false);
     };
 
-
-
     return (
         <nav className={`navbar ${isLoginPage ? 'navbar-fixed' : 'navbar-relative'}`}>
             <div>
-                <Link to={isAuthenticated ? "/homePage" : "/"} className="logo">
+                <Link to={isAuthenticated ? "/home" : "/"} className="logo">
                     <img src={logo} alt="Logo Libris" />
                     <h1 className='libris'>LIBRIS</h1>
                 </Link>
@@ -131,8 +129,8 @@ function Navbar() {
                {isAuthenticated ? (
     <>
         <Link
-            to="/homePage"
-            className={location.pathname === '/homePage' ? 'active-link' : ''}
+            to="/home"
+            className={location.pathname === '/home' ? 'active-link' : ''}
             onClick={handleLinkClick}
         >
             Home
