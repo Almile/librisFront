@@ -1,0 +1,96 @@
+.genresContainer {
+  display: grid;
+  gap: 3px;
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 10px;
+}
+
+#modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalPreferences {
+  max-width: 500px;
+  width: 90%;
+  min-height: 60vh;
+  background-color: var(--bg-secundario);
+  border-radius: 5px;
+  padding: 20px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.alertMessage {
+  font-size: 12px;
+  color: var(--terraCota);
+}
+
+.genreBtn,
+.selectedItem {
+  background-color: transparent;
+  border: 1px solid var(--borda-suave);
+  color: var(--texto-primario);
+  font-size: 12px;
+  border-radius: 5px;
+  padding: 6px;
+}
+
+.selectedItems,
+.selectedItem,
+.savePreferences {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.selectedItem {
+  width: fit-content;
+}
+
+.selectedItem ion-icon {
+  color: var(--terraCota);
+}
+
+.genreBtn.selected {
+  color: var(--destaque);
+  border-color: var(--destaque);
+}
+
+.savePreferences {
+  border: 1px solid;
+  padding: 5px;
+  color: var(--destaque);
+  border-radius: 5px;
+  width: 50%;
+  margin: 10px auto;
+  cursor: pointer;
+}
+
+.savePreferences.enabled {
+  background-color: var(--destaque);
+  color: var(--bg-principal);
+  border-color: var(--bg-principal);
+}
+
+.savePreferences:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.textExplication {
+  font-size: 14px;
+  margin: 20px auto;
+}

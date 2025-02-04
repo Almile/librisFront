@@ -1,10 +1,15 @@
 import React from "react";
 import { StarRating } from "./StarRating";
-import { Link, useLocation } from 'react-router-dom';
-import useBookData from '../hooks/useBookData';
+import "../styles/bookcontent.css"
+import useBook from '../hooks/useBook'
 
-function BookContent() {
-return(
+export default function BookContent({id}) {    
+    const {data, error, loading} = useBook(id);
+
+	if (loading) return <p>Carregando...</p>;
+	if (error) return <p>A network error was encountered</p>;
+    
+    return(
         <body>
             <div className="pl-grid">
                 <div className="pl-capa">
@@ -58,5 +63,3 @@ return(
         </body>
     )
 }
-
-export default BookContent

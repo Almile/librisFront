@@ -12,11 +12,10 @@
     gap: 1rem;
     width: 100%;    
     margin:auto;
-    border: 1px solid var(borda-suave);
+    border: 1px solid var(--borda-suave);
     padding-bottom:10px;
     align-items: flex-end;
     position: relative;
-    background-color: var(--bg-principal);
 }
 
 .createComment{
@@ -39,12 +38,10 @@ ion-icon{color: var(--texto-primario);}
 .comment{
     padding: 10px;
     position: relative;
-    border: 1px solid var(--borda-suave);
 }
 
 .boxComment {
     flex: 1;
-    border: 1px solid var(--borda-suave);
 }
 
 .imageAlignmentDropdown {
@@ -140,6 +137,7 @@ button.envyButton {
     right: 8px;
     background-color: var(--destaque);
     color: var(--bg-principal);
+    border: none;
     padding: 3px 5px;
     border-radius: 3px;
     padding:4px 10px;

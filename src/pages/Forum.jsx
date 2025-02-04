@@ -4,7 +4,7 @@ import { CommentForm } from "../components/CommentForm";
 import Feed from "../components/Feed";
 
 function Forum() {    
-  const [post, setPost] = useState('Escreva seu post aqui...');
+  const [post, setPost] = useState("");
   const [selectedPost, setSelectedPost] = useState(null); // Guarda o post clicado
 
   const publish = (text) => {

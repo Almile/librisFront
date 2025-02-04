@@ -5,6 +5,7 @@ import { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import userPadrao from '/user_padrao.svg';
 import styles from "../styles/comments.module.css";
+import "../styles/quill.css"
 
 Quill.register("modules/imageResize", ImageResize);
 
@@ -101,7 +102,7 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
             theme="snow"
             value={text}
             onChange={setText}
-            className="customQuill" // Importante: deve ser a classe correta do CSS Module
+            className="customQuill"
             modules={modules}
             ref={editorRef} 
         />

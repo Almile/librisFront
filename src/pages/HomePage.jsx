@@ -1,10 +1,13 @@
 import  GenreSelector  from "../components/GenreSelector"
 
 function HomePage() {
-
+  const handleGenreSelection = (selectedGenres) => {
+    console.log(selectedGenres)
+  }
     return (
       <main>
-        <GenreSelector />
+        <GenreSelector onSave={handleGenreSelection} />
+
       </main>
     )
 }

@@ -7,6 +7,7 @@
   
   .cardContent {
     padding: 16px;
+    border-left: 1px solid var(--borda-suave);
   }
   
   .header {

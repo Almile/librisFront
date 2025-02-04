@@ -33,7 +33,8 @@
     font-style: italic;
 }
 
-.truncate {
+.title,
+.authors  {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

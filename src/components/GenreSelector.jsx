@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/genreSelector.css";
+import styles from "../styles/GenreSelector.module.css";
 
 const genres = [
   "Infantil",
@@ -16,9 +16,9 @@ const genres = [
   "Saude e Hábitos",
 ];
 
-const GenreSelector = () => {
-   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [selectedGenres, setSelectedGenres] = useState([]);
+const GenreSelector = ({ onSave, initialGenres = [] }) => {
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [selectedGenres, setSelectedGenres] = useState(initialGenres);
 
   const toggleGenre = (genre) => {
     if (selectedGenres.includes(genre)) {
@@ -28,8 +28,13 @@ const GenreSelector = () => {
     }
   };
 
-   const removeGenre = (index) => {
+  const removeGenre = (index) => {
     setSelectedGenres(selectedGenres.filter((_, i) => i !== index));
+  };
+
+  const savePreferences = () => {
+    onSave(selectedGenres);
+    closeModal();
   };
 
   const closeModal = () => {
@@ -37,58 +42,65 @@ const GenreSelector = () => {
   };
 
   return (
-    <div> 
-    {isModalOpen && (
-      <div id="modal">
-
-    <div className="modal-preferences">
-        <div>
-            <h3>Seja bem-vindo à sua rede social de livros</h3>
-            <p className="text-explication">
+    <div>
+      {isModalOpen && (
+        <div id={styles.modal}>
+          <div className={styles.modalPreferences}>
+            <div className={styles.modalContentGenres}>
+              <h3>Seja bem-vindo à sua rede social de livros</h3>
+              <p className={styles.textExplication}>
                 Para melhorarmos sua experiência na plataforma, selecione seus gêneros
                 de leitura favoritos:
-            </p>
-            <div className="genres-container">
-        {genres.map((genre) => (
-          <button
-            key={genre}
-            className={`genre-btn ${
-              selectedGenres.includes(genre) ? "selected" : ""
-            }`}
-            onClick={() => toggleGenre(genre)}
-            disabled={
-              selectedGenres.length >= 3 && !selectedGenres.includes(genre)
-            }
-          >
-            {genre}
-          </button>
-        ))}
-        </div>
-        </div>      
+              </p>
+              <div className={styles.genresContainer}>
+                {genres.map((genre) => (
+                  <button
+                    key={genre}
+                    className={`${styles.genreBtn} ${
+                      selectedGenres.includes(genre) ? styles.selected : ""
+                    }`}
+                    onClick={() => toggleGenre(genre)}
+                    disabled={
+                      selectedGenres.length >= 3 && !selectedGenres.includes(genre)
+                    }
+                  >
+                    {genre}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-      <div className="selected-genres">
-        <span className="alert-message">Selecione no máximo 3 gêneros</span>
-        <div className="selected-items">
-          {selectedGenres.map((genre, index) => (
-            <button key={genre} className="selected-item" onClick={() => removeGenre(index)}>
-              {genre}
-                <ion-icon name="close-circle"></ion-icon>
-            </button>
-          ))}
+            <div className={styles.selectedGenres}>
+              <span className={styles.alertMessage}>
+                Selecione no máximo 3 gêneros
+              </span>
+              <div className={styles.selectedItems}>
+                {selectedGenres.map((genre, index) => (
+                  <button
+                    key={genre}
+                    className={styles.selectedItem}
+                    onClick={() => removeGenre(index)}
+                  >
+                    {genre}
+                    <ion-icon name="close-circle"></ion-icon>
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={savePreferences}
+                className={`${styles.savePreferences} ${
+                  selectedGenres.length > 0 ? styles.enabled : ""
+                }`}
+                disabled={selectedGenres.length === 0}
+              >
+                Salvar preferências
+              </button>
+            </div>
+          </div>
         </div>
-        <button  onClick={closeModal}
-        className={`save-preferences ${
-          selectedGenres.length > 0 ? "enabled" : ""
-        }`}
-        disabled={selectedGenres.length === 0}
-      >
-        Salvar preferências
-      </button>
-      </div>      
-    </div>
-    </div>
       )}
-      </div>
+    </div>
   );
 };
-export default GenreSelector
+
+export default GenreSelector;

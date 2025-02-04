@@ -23,35 +23,34 @@ function Login() {
   }
 
   useEffect(() => {
-    // Adiciona eventos de clique para criar efeito de livro ao alternar entre as páginas de login, cadastro e recuperação de senha
-    document.querySelectorAll(".toggle").forEach((item) => {
-      item.addEventListener("click", () => {
-        const book = document.querySelector("." + styles.book);
-        const action = item.getAttribute("data-action");
-        const pageCadastro = document.getElementById("pageCadastro");
-        const pageForgot = document.getElementById("pageForgot");
-
-        if (action === "signup") {
-          pageForgot.style.display = "none";
-          book.classList.add(styles.flipped);
-          pageCadastro.style.display = "flex";
-        } else if (action === "login") {
-          book.classList.remove(styles.flipped);
-        } else if (action === "forgot") {
-          pageCadastro.style.display = "none";
-          book.classList.add(styles.flipped);
-          pageForgot.style.display = "flex";
-        }
-      });
-    });
-    
-    // Remove os eventos ao desmontar o componente
+    const toggleElements = document.querySelectorAll(`.${styles.toggle}`);
+  
+    const handleToggleClick = (event) => {
+      const book = document.querySelector(`.${styles.book}`);
+      const action = event.target.getAttribute("data-action");
+      const pageCadastro = document.getElementById("pageCadastro");
+      const pageForgot = document.getElementById("pageForgot");
+  
+      if (action === "signup") {
+        pageForgot.style.display = "none";
+        book.classList.add(styles.flipped);
+        pageCadastro.style.display = "flex";
+      } else if (action === "login") {
+        book.classList.remove(styles.flipped);
+      } else if (action === "forgot") {
+        pageCadastro.style.display = "none";
+        book.classList.add(styles.flipped);
+        pageForgot.style.display = "flex";
+      }
+    };
+  
+    toggleElements.forEach((item) => item.addEventListener("click", handleToggleClick));
+  
     return () => {
-      document.querySelectorAll(styles.toggle).forEach((item) => {
-        item.removeEventListener("click", () => {});
-      });
+      toggleElements.forEach((item) => item.removeEventListener("click", handleToggleClick));
     };
   }, []);
+  
 
   return (
     <div className={styles.container}>

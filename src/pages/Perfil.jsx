@@ -72,22 +72,22 @@ function Perfil() {
   ];
 
     return (
-      <main className='main'>
-      <UserProfile />
-      <section className="top-comentarios">
-        <h2>Seus Comentários</h2>
-        <CommentsProfile allComments={allComments} currentUser={currentUser} />
-        <button className='view-history'>Visualizar historico Completo</button>
-      </section>
-      <section className="conteudo">
-        <div className="lendo">
-          <h2>Lendo</h2>
-          <div className='leituras'>
-            <BookCard />
-            <BookCard />
-          </div>
-        </div>
-
+        <main className='main'>
+            <UserProfile />
+            <section className="top-comentarios">
+            <h2>Seus Comentários</h2>
+              <CommentsProfile allComments={allComments} currentUser={currentUser} />
+              <button className='view-history'>Visualizar historico Completo</button>
+            </section>
+            <section className="conteudo">
+                
+                <div className="lendo">
+                    <h2>Lendo</h2>
+                    <div className='leituras'>
+                        <BookCard id={"UbKuDwAAQBAJ"}/>
+                        <BookCard id={"_i6bDeoCQzsC"}/>
+                    </div>
+                </div>               
         <div className="heatmap">
           <h2>HeatMap</h2>
           <HeatMap />

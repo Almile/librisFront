@@ -76,7 +76,7 @@
     border: none;
 }
 
-.resenha .custom-quill .ql-editor {
+.resenha .customQuill .ql-editor {
     max-width:100%;
     min-height: 40vh;
     margin: 0;

@@ -49,6 +49,7 @@
     height: 40px;
     padding: 10px;
     width: 40px;
+    border: none;
     background-color: var(--destaque);
     border-radius: 5px;
     cursor: pointer;
@@ -64,6 +65,7 @@
     align-items: center;
     gap: 10px;
     width: 100%;
+    border: none;
     padding: 20px;
     font-size: 14px;
     margin: 20px 0;

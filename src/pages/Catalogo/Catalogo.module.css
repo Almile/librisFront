@@ -1,0 +1,20 @@
+.container {
+    margin: 2rem auto;
+    width: min(1200px, 95%);
+    display: flex;
+    gap: 48px;
+    flex-direction: column;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 4rem;
+}
+
+.swiper {
+    width: 100%;
+    height: fit-content;
+    --swiper-pagination-color: var(--texto-primario);
+    --swiper-pagination-bullet-inactive-color: var(--texto-secundario);
+}

@@ -40,6 +40,15 @@ const Feed = ({ onPostClick }) => {
       image: null,
       stats: { likes: "4", comments: "1" },
     },
+    {
+      id: 2,
+      user: { name: "João", avatar: "/user_padrao.svg" },
+      time: "2h",
+      tags: ["#livros", "#2024"],
+      text: "Meus top 10 livros de 2024...",
+      image: null,
+      stats: { likes: "1", comments: "1" },
+    },
   ];
 
   return (
