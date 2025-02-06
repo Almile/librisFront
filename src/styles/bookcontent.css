@@ -1,0 +1,103 @@
+.pl-grid {
+    display: flex;
+    margin-bottom: 75px;
+}
+
+.pl-capa img {
+    height: 600px;
+    width: 400px;
+    border-radius: 10px;
+}
+
+.pl-descriptionLivro {
+    flex: 1;
+    margin-left: 50px;
+}
+
+.pl-titulo {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.pl-autor {
+    margin-bottom: 15px;
+}
+
+.pl-rating {
+    margin-bottom: 25px;
+}
+
+.pl-genres {
+    margin-bottom: 25px;
+}
+
+.pl-genres button {
+    border: 1px solid;
+    background-color: white;
+    color: grey;
+    padding: 6px;
+    cursor: pointer;
+    padding: 8px 20px;
+}
+
+.pl-bg {
+    border-radius: 20px;
+}
+
+.pl-sinopse {
+    margin-bottom: 50px;
+}
+
+.pl-buttons {
+    margin-bottom: 25px;
+}
+
+.pl-buttonAddEstante {
+    background-color: #009C9D;
+    color: white;
+    border: none;
+    width: 300px;
+    height: 40px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-right: 30px;
+}
+
+.pl-buttonFavoritar {
+    background-color: white;
+    color: #009C9D;
+    border: 1px solid #009C9D;
+    width: 300px;
+    height: 40px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-left: 30px;
+}
+
+.pl-styleLinha {
+    border: 1px solid #E6A796;
+    margin-bottom: 15px;
+}
+
+.pl-infoGrid .pl-infoCat {
+    color: #ED553B;
+}
+
+.pl-infoGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.pl-infoItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+@media (max-width: 600px) {
+    .pl-infoGrid {
+      grid-template-columns: 1fr;
+    }
+  }
