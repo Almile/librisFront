@@ -18,7 +18,7 @@ export default function Book({ id, innerRef }) {
 		>
 			<img
 				className={style.cover}
-				src={data.imageLinks ? data.imageLinks.thumbnail.slice(0, data.imageLinks.thumbnail.indexOf("&edge")) : ""}
+				src={`https://books.google.com/books/publisher/content?id=${data.id}&printsec=frontcover&img=1&zoom=1`}
 				alt={`Capa do livro ${data.title}`}
 			/>
 			<div className={style.info}>

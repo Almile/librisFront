@@ -1,0 +1,329 @@
+.configPage {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 70px;
+}
+
+.configPage h1 {
+  font-size: 24px;
+  color: var(--texto-secundario);
+  margin: 20px 0;
+}
+
+.configPage label {
+  display: block;
+  margin: 10px 0 5px;
+  color: var(--texto-secundario);
+}
+
+.configPage input[type="text"],
+.configPage input[type="email"],
+.configPage input[type="password"],
+.configPage select {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 10px;
+  border: 1px solid var(--borda-suave);
+  background-color: var(--bg-secundario);
+  box-sizing: border-box;
+}
+
+.passwordLabel {
+  display: block;
+  color: var(--texto-secundario);
+}
+
+.passwordContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.passwordInput {
+  display: flex;
+  align-items: center;
+  width: 70%;
+}
+
+.passwordInput input {
+  width: calc(100% - 50px);
+  padding-right: 40px;
+}
+
+.togglePassword {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-left: -40px;
+}
+
+.modifyPassword {
+  width: 30%;
+  height: 40px;
+  padding: 10px;
+  font-size: 20px;
+  background-color: var(--destaque);
+  color: var(--bg-principal);
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modifyPassword:hover {
+  background-color: var(--destaque);
+}
+
+.configPage input[type="checkbox"] {
+  margin-right: 10px;
+  
+}
+
+.configPage .checkboxLabel {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.genresLabel {
+  position: relative;
+}
+
+.genresHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--borda-suave);
+  padding: 8px;
+  background-color: var(--bg-secundario);
+  cursor: pointer;
+}
+
+.genresBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 10px;
+  border: 1px solid var(--borda-suave);
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.genresOptions {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.genresOptions label {
+  margin: 5px 0;
+}
+
+.selectedGenres {
+  margin-left: 10px;
+  color: var(--texto-secundario);
+}
+
+.editIcon {
+  margin-left: 10px;
+  font-size: 18px;
+  color: var(texto-principal);
+}
+
+.fixedDeleteAccount {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  color: var(--terraCota);
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.fixedDeleteAccount:hover {
+  color: red;
+  text-decoration: none; 
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards; 
+}
+
+.modalContent {
+  background: var(--bg-secundario);
+  padding: 60px;
+  border-radius: 20px;
+  max-width: 700px;
+  width: 100%;
+  border: 1px solid var(--borda-suave);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+  transform: scale(0.7);
+  transition: transform 0.3s;
+  animation: scaleIn 0.3s forwards;
+}
+
+.modalContent h2 {
+  margin-top: 0;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.modalActions button {
+  padding: 16px 32px;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--borda-suave);
+  cursor: pointer;
+}
+
+.modalActions button:hover {
+  background-color: #b0b0b0;
+}
+
+.modalActions button:last-child {
+  background-color: var(--destaque);
+  color: var(--bg-principal);
+}
+
+.modalActions button:last-child:hover {
+  background-color: var(--destaque);
+}
+
+.modalContent label input[type="password"] {
+  width: 100%;
+  padding: 16px;
+  font-size: 18px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--borda-suave);
+  background-color: var(--bg-principal);
+  box-sizing: border-box;
+}
+
+.modalContent .modalActions .cancelDelete {
+  background-color: var(--borda-suave);
+}
+
+.modalContent .modalActions .cancelDelete:hover {
+  background-color: #b0b0b0;
+}
+
+.modalContent .modalActions .confirmDelete {
+  background-color: var(--terraCota);
+  color: var(--texto-principal);
+}
+
+.modalContent .modalActions .confirmDelete:hover {
+  background-color: darkred;
+  color: white;
+}
+
+.notificationSettings {
+  display: flex;
+  flex-direction: column;
+}
+
+.notificationItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px;
+  border: 1px solid var(--borda-suave);
+  border-radius: 4px;
+  margin-bottom: 10px;
+  background-color: var(--bg-secundario);
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--borda-suave);
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--destaque);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.7);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.configPage .modalContentGenres h3, .configPage .modalContentGenres p{
+  display: none;
+}
