@@ -142,7 +142,7 @@
 
 .fixedDeleteAccount {
   position: fixed;
-  bottom: 20px;
+  bottom: 50px;
   left: 20px;
   color: var(--terraCota);
   cursor: pointer;

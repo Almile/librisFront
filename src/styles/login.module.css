@@ -278,3 +278,9 @@
 
 }
 
+#pageForgot{
+  display: none;
+}
+#pageCadastro , .cadastro{
+  display: none;
+}

@@ -8,6 +8,8 @@
 
 body{
     background-color: var(--bg-principal);
+    position: relative;
+    min-height: 100vh;
 }
 
 a{
@@ -50,4 +52,6 @@ footer{
     padding: 10px;
     text-align: center;
     font-size: .8em;
+    position: absolute;
+    bottom: 0;
 }

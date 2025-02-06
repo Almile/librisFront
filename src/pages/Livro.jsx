@@ -18,7 +18,7 @@ const Livro = () => {
       <button onClick={navegarParaResenha}>Ir para Resenha</button>
       <ReviewSection/>
 
-      <CommentSection />
+      <CommentSection context="book" />
     </div>
   )
 }

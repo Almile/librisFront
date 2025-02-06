@@ -12,21 +12,21 @@
     gap: 1rem;
     width: 100%;    
     margin:auto;
-    border: 1px solid var(--borda-suave);
     padding-bottom:10px;
     align-items: flex-end;
     position: relative;
 }
 
 .createComment{
-    margin: 20px 0;
+    border: 1px solid var(--borda-suave);
+    border-radius: 5px;
+    padding: 10px;
 }
 
 ion-icon{color: var(--texto-primario);}
 
 .commentSection {
     gap: 1rem;
-    width: 90%;    
     margin: 10px auto;
 }
 

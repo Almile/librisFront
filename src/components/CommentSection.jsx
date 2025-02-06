@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CommentList } from "./CommentList";
 import { CommentForm } from "./CommentForm";
 import { StarRating } from "./StarRating";
@@ -6,67 +6,15 @@ import styles from "../styles/comments.module.css";
 
 import userPhoto from '/user_padrao.svg';
 
-const commentsData = [
-  {
-    id: 1,
-    text: "Este é um comentário sem spoiler.",
-    user: {
-      name: "João Silva",
-      userImage: userPhoto,
-    },
-    date: "2025-01-15",
-    isSpoiler: false,
-    likedBy: ["Maria Oliveira","Mariana"],
-    likes: 2,
-    rating: 4,
-    parentId: null,
-    isReplying: false,
-    replies: [
-      {
-        id: 2,
-        text: "Uma resposta ao comentário acima.",
-        user: {
-          name: "Maria Oliveira",
-          userImage: userPhoto,
-        },
-        date: "2025-01-16",
-        isSpoiler: false,
-        likedBy: [],
-        likes: 0,
-        rating: null,
-        parentId: 1,
-        isReplying: false,
-        replies: [],
-      },
-      {
-        id: 3,
-        text: "Com tag de Spoiler.",
-        user: {
-          name: "Mariana",
-          userImage: userPhoto,
-        },
-        date: "2025-01-16",
-        isSpoiler: true,
-        likedBy: ["Maria Oliveira","Mariana","João Silva"],
-        likes: 3,
-        rating: null,
-        parentId: 1,
-        isReplying: false,
-        replies: [],
-      },
-    ],
-  },
-];
-
-const CommentSection = () => {
-  const [comments, setComments] = useState(commentsData);
+const CommentSection = ({ context }) => {
+  const [comments, setComments] = useState([]);
   const [currentId, setCurrentId] = useState(4);
   const [rating, setRating] = useState(0);
   const [isSpoiler, setIsSpoiler] = useState(false);
 
   const addComment = (text, isSpoiler, parentId = null) => {
-    if (rating === 0 && parentId === null) {
-      alert("A nota é obrigatória!");
+    if (context === "book" && rating === 0 && parentId === null) {
+      alert("A nota é obrigatória para comentários de livros!");
       return;
     }
 
@@ -81,20 +29,19 @@ const CommentSection = () => {
       isReplying: false,
       user: {
         name: "Nome_usuario",
-        userImage: "/user_padrao.svg",
+        userImage: userPhoto,
       },
       date: new Date().toLocaleString(),
-      rating: parentId === null ? rating : null,
+      rating: context === "book" && parentId === null ? rating : null,
     };
 
     setCurrentId((prevId) => prevId + 1);
-    if (parentId === null) {
-      setComments([...comments, newComment]);
-    } else {
-      setComments((prevComments) =>
-        addReplyToComments(prevComments, parentId, newComment)
-      );
-    }
+    setComments((prevComments) =>
+      parentId === null
+        ? [...prevComments, newComment]
+        : addReplyToComments(prevComments, parentId, newComment)
+    );
+
     setRating(0);
   };
 
@@ -156,16 +103,18 @@ const CommentSection = () => {
 
   return (
     <div className={styles.commentSection}>
-      <h1>Comentários</h1>
+      <h1>{context === "book" ? "Comentários" : ""}</h1>
       <div className={styles.createComment}>
-        <span className={styles.rating}>
-          Comente o que achou do livro: {" "}
-          <StarRating 
-            rating={rating} 
-            onRatingChange={(star) => setRating(star)} 
-            required={true}
-          />
-        </span>
+        {context === "book" && (
+          <span className={styles.rating}>
+            Comente o que achou do livro: {" "}
+            <StarRating 
+              rating={rating} 
+              onRatingChange={(star) => setRating(star)} 
+              required={true}
+            />
+          </span>
+        )}
         <CommentForm
           onSubmit={addComment}
           isSpoiler={isSpoiler}

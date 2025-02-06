@@ -1,60 +1,102 @@
-import React from "react";
+import React, {useState} from "react";
+import { SpoilerProtection } from "./SpoilerProtection";
 import styles from "../styles/feed.module.css";
 
+const PostCard = ({key, user, date, text, tags, book,isSpoiler, stats, onPostClick }) => {
+    const [spoilerVisibility, setSpoilerVisibility] = useState({});
+  
+    const toggleSpoiler = (commentId) => {
+      setSpoilerVisibility((prev) => ({
+          ...prev,
+          [commentId]: !prev[commentId],
+      }));
+  };
+  const handleClick = (e) => {
+    if (e.target.tagName !== "BUTTON") {
+      onPostClick();
+    }
+  };
 
-const PostCard = ({ user, time, tags, text, image, stats, onPostClick }) => {
   return (
-    <div className={styles.card} onClick={onPostClick}> {/* Chama a função ao clicar */}
+    <div className={styles.card} onClick={handleClick}>
       <div className={styles.cardContent}>
         <div className={styles.header}>
-          <img className={styles.avatar} src={user.avatar} alt={user.name} />
+          <img className={styles.avatar} src={user.userImage} alt={user.name} />
           <div className={styles.headerContent}>
-            <p className={styles.topic}>{user.name} · {time}</p>
-            <p className={styles.userHandle}>{tags.join(" ")}</p>
-            <ion-icon name="chevron-down-outline"></ion-icon>
+            <p className={styles.topic}>
+              {user.name} · <sub className={styles.tag}> {date} </sub>
+            </p>
+            <div className={styles.tags}>
+            <span className={styles.bookSelected}> {book} </span>
+
+
+              {tags && tags.length > 0 ? (
+                tags.map((tag, index) => (
+                  <span key={index} className={styles.tag}>
+                    #{tag}
+                  </span>
+                ))
+              ) : (
+                <span className={styles.noTags}></span>
+              )}
+
+            </div>
+            {isSpoiler ? (
+                <SpoilerProtection
+                    isSpoilerVisible={spoilerVisibility[key]}
+                    text={text}
+                />
+            ) : (
+              <p className={styles.text} dangerouslySetInnerHTML={{ __html: text }}></p>
+            )}
+             
           </div>
         </div>
-        <p className={styles.text}>{text}</p>
-        {image && <img src={image} alt="Post content" className={styles.image} />}
         <div className={styles.actions}>
           <button className={styles.actionButton}>
-            👍 {stats.likes}
+            👍 {stats?.likes || 0} Likes
           </button>
-          <button className={styles.actionButton}>
-            💬 {stats.comments}
-          </button>
+          <span className={styles.actionButton}>
+            💬 {stats?.comments || 0} Respostas
+          </span>
+           {isSpoiler && (
+            <button
+                className={styles.spoilerButton}
+                onClick={() => toggleSpoiler(key)}
+            >
+                {spoilerVisibility[key] ? (
+                    <span>
+                        <ion-icon name="eye-off-outline"></ion-icon> Esconder Spoiler
+                    </span>
+                ) : (
+                    <span>
+                        <ion-icon name="eye-outline"></ion-icon> Visualizar Spoiler
+                    </span>
+                )}
+            </button>
+        )}
         </div>
       </div>
     </div>
   );
 };
 
-const Feed = ({ onPostClick }) => {
-  const posts = [
-    {
-      id: 1,
-      user: { name: "Maria", avatar: "/user_padrao.svg" },
-      time: "2h",
-      tags: ["#livros", "#2024"],
-      text: "Meus top 10 livros de 2024...",
-      image: null,
-      stats: { likes: "4", comments: "1" },
-    },
-    {
-      id: 2,
-      user: { name: "João", avatar: "/user_padrao.svg" },
-      time: "2h",
-      tags: ["#livros", "#2024"],
-      text: "Meus top 10 livros de 2024...",
-      image: null,
-      stats: { likes: "1", comments: "1" },
-    },
-  ];
 
+const Feed = ({ posts, onPostClick }) => {
   return (
     <div className={styles.feed}>
       {posts.map((post) => (
-        <PostCard key={post.id} {...post} onPostClick={() => onPostClick(post)} />
+        <PostCard 
+          key={post.id} 
+          user={post.user} 
+          date={post.date} 
+          text={post.text} 
+          book={post.selectedBook}
+          isSpoiler={post.isSpoiler}
+          tags={post.tags} 
+          stats={{ likes: 0, comments: post.comments.length }}
+          onPostClick={() => onPostClick(post)} 
+        />
       ))}
     </div>
   );
