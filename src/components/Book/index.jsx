@@ -17,6 +17,7 @@ export default function Book({ id, innerRef }) {
 			className={style.book}
 		>
 			<img
+				onClick={() => {navigate(`/livro/${id}`);}}
 				className={style.cover}
 				src={`https://books.google.com/books/publisher/content?id=${data.id}&printsec=frontcover&img=1&zoom=1`}
 				alt={`Capa do livro ${data.title}`}
