@@ -3,17 +3,22 @@ import style from './BookCard.module.css'
 import useBook from '../../hooks/useBook'
 import { useState } from 'react'
 import OutlinedButton from '../OutlinedButton';
+import BookLecture from "../BookLecture";
 import { useNavigate } from 'react-router-dom';
 
 export default function BookCard({id}) {
     const [currentPage, setCurrentPage] = useState(0);
     const { data, loading, error } = useBook(id);
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
 
     const handleClick = () => {
         const page = window.prompt("Página atual");
         if (page >= 0 && page <= data.pageCount) {
             setCurrentPage(+page);
+        }
+        if(page == data.pageCount){
+            setShowModal(true);
         }
     }
 
@@ -45,6 +50,8 @@ export default function BookCard({id}) {
                 </>
                 }
             </div>
+            {showModal && <BookLecture bookId={data.id} onClose={() => setShowModal(false)} />}
+
         </div>
     );
 }

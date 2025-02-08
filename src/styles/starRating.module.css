@@ -16,16 +16,10 @@
     border: 1px solid var(--borda-suave);
     background-color: transparent;
     padding: 2px;
+    min-width: 40px;
     border-radius: 10px;
-    width: 40px;
     text-align: center;
-}
-
-.starRating ion-icon{
-    font-size: 24px;
-    color: var(--destaque);
-    cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
+    margin-left: 8px;
 }
 
 .starIcon:hover {

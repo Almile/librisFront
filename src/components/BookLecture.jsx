@@ -1,86 +1,77 @@
 import React, { useState } from "react";
-import { StarRating } from "./StarRating"
+import { StarRating } from "./StarRating";
 import { useNavigate } from 'react-router-dom';
-import BookItem from "./BookItem";
-import style from "../styles/modalLecture.module.css"
-import StarList from "./StarList";
+import Book from "./Book";
+import { Star } from "lucide-react";
+import style from "../styles/modalLecture.module.css";
 
+const BookLecture = ({ bookId, onClose }) => {
+    const [stage, setStage] = useState(false);
+    const [rating, setRating] = useState(0);
+    const navigate = useNavigate();
 
-const BookLecture = () => {
-   const [isModalOpen, setIsModalOpen] = useState(true);
-   const [stage, setStage] = useState(false);
-  const [rating, setRating] = useState(0);
-
-
-  const closeModal = () => {
-    setIsModalOpen(false);
+    const ratingLecture = () => {
+      if (rating === 0) return; // Impede de avançar sem avaliação
+      setStage(true);
   };
 
-  const ratingLecture = () =>{
-    setStage(true)
-  }
+    const navegarParaLivro = () => {
+        navigate(`/livro/${bookId}`);
+        onClose();
+    };
 
-  const navigate = useNavigate();
+    const navegarParaResenha = () => {
+        navigate(`/resenha`);
+        onClose();
+    };
 
-  const navegarParaLivro = () => {
-    navigate('/livro');
-  };
+    return (
+        <div className={style.modalOverlay}>
+            <div className={style.modalLecture}>
+            <h2 className={style.final}>Finalizar Leitura</h2>
 
-  const navegarParaResenha = () => {
-    navigate('/resenha');
-  };
-
-  const id = "GjgQCwAAQBAJ";
-  
-  return (
-    <div> 
-    {isModalOpen && (
-      <div id="modal">
-        <div className={style.modalLecture}>
-        <div className={style.booksData}>
-          <h2>Finalizar Leitura</h2>
-          <BookItem key={id} id={id} />
-        <p>Data de término:<b> 10/Janeiro/2025 </b></p>
-        </div>
-
-        {stage === false ? (
-           
-            <div>
-                <div className={style.booksData}>
-
-                <span className={style.textExplication}>
-                    Dê uma nota para a leitura
+                <span className={style.closeModal} onClick={onClose}>
+                    ✖
                 </span>
-                <StarRating 
-                onRatingChange={(star) => setRating(star)}
-                />
-
+                <div  className={style.booksData}>
+                <Book key={bookId} id={bookId} />
+                <p>Data de término: <b>10/Janeiro/2025</b></p>
                 </div>
-                <button onClick={ratingLecture}>Enviar nota</button> 
-            </div>    
-                  
-        ):(           
-            <div>
-            <span className={style.closeModal} onClick={closeModal}>
-                <ion-icon name="close-circle-outline"></ion-icon>
-            </span>
-            <div className={style.booksData}>
+                {!stage ? (
+                    <div className={style.dataContent}>
+                        <span className={style.textExplication}>
+                            Dê uma nota para a leitura
+                        </span>
 
-              <div className={style.starRating}>
-                <p>
-                  <StarList average={rating} size={36} />
-                </p>
-                 <span>{rating} </span>
-              </div>
-            </div>    
-            <button onClick={navegarParaLivro}>Envie um comentario sobre a obra</button> 
-            <button onClick={navegarParaResenha}>Crie uma resenha sobre a obra</button>  
-          </div>
-        )} 
+                          <StarRating 
+                            rating={rating} 
+                            onRatingChange={(star) => setRating(star)} 
+                            size={36}
+                            required={true}
+                          />
+
+                        <button onClick={ratingLecture} className={style.actionButton}>Enviar nota</button>
+                    </div>
+                ) : (
+                    <div>
+                        <div className={style.starRating}>
+                        <span>
+                            {Array.from({ length: Math.ceil(rating || 0) }).map((_, index) => (
+                                <Star size={28} key={index} fill='var(--destaque)' stroke="null" />
+                            ))}
+                            {Array.from({ length: 5 - Math.ceil(rating || 0) }).map((_, index) => (
+                                <Star size={28} key={index + 10} fill='var(--texto-secundario)' stroke="null"/>
+                            ))}
+                        </span>
+                        {rating}
+                        </div>
+                        <button onClick={navegarParaLivro} className={style.actionButton}>Envie um comentário sobre a obra</button>
+                        <button onClick={navegarParaResenha} className={style.actionButton}>Crie uma  resenha  sobre a obra</button>
+                    </div>
+                )}
+            </div>
         </div>
-    </div>
-      )}
-      </div>
-  );
+    );
 };
+
 export default BookLecture;

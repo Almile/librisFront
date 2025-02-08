@@ -44,7 +44,6 @@ body.dark-mode{
     --terraCota: #ED553B;
 }
 
-
 footer{
     width: 100%;
     background-color: var(--bg-secundario);
@@ -52,6 +51,4 @@ footer{
     padding: 10px;
     text-align: center;
     font-size: .8em;
-    position: absolute;
-    bottom: 0;
 }

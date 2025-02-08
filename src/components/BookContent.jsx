@@ -1,65 +1,135 @@
-import React from "react";
-import { StarRating } from "./StarRating";
-import "../styles/bookcontent.css"
-import useBook from '../hooks/useBook'
+import React, { useState } from "react";
+import { Star } from 'lucide-react';
+import useBook from '../hooks/useBook';
+import AddToShelfButton from "./AddToShelfButton";
+import style from "../styles/bookcontent.module.css";
 
-export default function BookContent({id}) {    
-    const {data, error, loading} = useBook(id);
+export default function BookContent({ id }) {    
+    const { data, error, loading } = useBook(id);
+    const [authorsData, setAuthorsData] = useState(false); //modal para livros do mesmo autor
+    const [authorBooks, setAuthorBooks] = useState([]); // armazena livros do autor
 
-	if (loading) return <p>Carregando...</p>;
-	if (error) return <p>A network error was encountered</p>;
+    if (loading) return <p>Carregando...</p>;
+    if (error) return <p>Ocorreu um erro de rede</p>;
     
-    return(
-        <body>
-            <div className="pl-grid">
-                <div className="pl-capa">
-                    <img src="/capa-APM.jpg" alt="Capa Livro"/>
+    if (!data) return <p>Livro não encontrado</p>;
+
+    const handleClickAuthors = async () => {
+        if (!data.authors || data.authors.length === 0) return;
+    
+        try {
+            const authorName = encodeURIComponent(data.authors[0]); // Pegando o primeiro autor
+            const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${authorName}`);
+            const result = await response.json();
+    
+            setAuthorBooks(result.items || []);
+        } catch (error) {
+            console.error("Erro ao buscar livros do autor:", error);
+        }
+        setAuthorsData(true);
+    };
+    
+    return (
+        <div className={style.plGrid}>
+            <div className={style.plCapa}>
+                <img 
+                    src={`https://books.google.com/books/publisher/content?id=${data.id}&printsec=frontcover&img=1&zoom=1`}
+                    alt={`Capa do livro ${data.title}`} 
+                />
+            </div>
+            <div className={style.plDescriptionLivro}>
+                <p className={style.plTitulo}><strong>{data.title}</strong></p>
+                <p onClick={handleClickAuthors} className={style.plAutor}>{data.authors?.join(", ") || "Autor desconhecido"}</p>
+                
+                <div className={style.plRating}>
+                    <div className={style.rating}>
+                        <span>
+                            {Array.from({ length: Math.ceil(data.averageRating || 0) }).map((_, index) => (
+                                <Star size={20} key={index} fill='var(--destaque)' stroke="null" />
+                            ))}
+                            {Array.from({ length: 5 - Math.ceil(data.averageRating || 0) }).map((_, index) => (
+                                <Star size={20} key={index + 10} fill='var(--texto-secundario)' stroke="null"/>
+                            ))}
+                        </span>
+                    </div>
                 </div>
-                <div className="pl-descriptionLivro">
-                    <p className="pl-titulo"><strong>Alice no País das Maravilhas</strong></p>
-                    <p className="pl-autor">Lewis Carrol</p>
-                    <div className="pl-rating">
-                        <div className="rating">
-                            <StarRating/>
-                        </div>
-                    </div>
-                    <div className="pl-genres">
-                        <button class="pl-bg1">Gênero 1</button>
-                        <button class="pl-bg2">Gênero 2</button>
-                        <button class="pl-bg3">Gênero 3</button>
-                    </div>
-                    <p className="pl-sinopse">Uma menina, um coelho e uma história capazes de fazer qualquer um de nós voltar a sonhar. Alice é despertada de um leve sono ao pé de uma 
-                        árvore por um coelho peculiar. Uma criatura alva e falante com roupas engraçadas, que consulta seu relógio e reclama do próprio atraso. 
-                        Curiosa como toda criança, Alice segue o animal até cair em um buraco sem fim que mudou para sempre a literatura infantil. 
-                        Mais de 150 anos depois, Alice no País das Maravilhas continua repleto de ensinamentos para aqueles que ousaram seguir o 
-                        Coelho Branco até sua toca.</p>
-                    <div className="pl-buttons">
-                        <button className="pl-buttonAddEstante">Adicionar à estante</button>
-                        <button className="pl-buttonFavoritar">Favoritar</button>
-                    </div>
-                    <div className="pl-styleLinha" />
-                    <div className="pl-infoGrid">
-                        <div className="pl-infoItem">
-                            <p className="pl-infoCat">ISBN:</p><p className="pl-infoInfo">9788594541758</p>
-                        </div>
-                        <div className="pl-infoItem">
-                            <p className="pl-infoCat">Data de publicação:</p><p className="pl-infoInfo">04/jun/1865</p>
-                        </div>
-                        <div className="pl-infoItem">
-                            <p className="pl-infoCat">Idioma:</p><p className="pl-infoInfo">Português</p>
-                        </div>
-                        <div className="pl-infoItem">
-                            <p className="pl-infoCat">Editora:</p><p className="pl-infoInfo">Darkside</p>
-                        </div>
-                        <div className="pl-infoItem">
-                            <p className="pl-infoCat">Páginas:</p><p className="pl-infoInfo">208</p>
-                        </div>
-                        <div className="pl-infoItem">
-                            <p className="pl-infoCat">Faixa etária:</p><p className="pl-infoInfo">12+</p>
-                        </div>
-                    </div>
+                
+                <div className={style.plGenres}>
+                    {data.categories && data.categories.length > 0 ? (
+                        [...new Set(data.categories.map(cat => cat.split("/")[1]))].map((category, index) => (
+                            <button key={index} className={style.plBg1}>{category}</button>
+                        ))
+                    ) : (
+                        <p>Gênero não informado</p>
+                    )}
+                </div>
+                <p className={style.plSinopse} dangerouslySetInnerHTML={{ __html: data.description }} ></p>
+                 
+                <div className={style.plButtons}>
+                    <AddToShelfButton  bookId={id}/>
+
+                    <button className={style.plButtonFavoritar}>Favoritar</button>
+                </div>
+               
+            </div>
+
+            <div className={style.plInfoGrid}>
+                <div className={style.plStyleLinha} />
+                <div className={style.plInfoItem}>
+                    <p className={style.plInfoCat}>ISBN:</p>
+                    <p className={style.plInfoInfo}>
+                        {data.industryIdentifiers?.[0]?.identifier || "Não disponível"}
+                    </p>
+                </div>
+                <div className={style.plInfoItem}>
+                    <p className={style.plInfoCat}>Data de publicação:</p>
+                    <p className={style.plInfoInfo}>{data.publishedDate || "Não informado"}</p>
+                </div>
+                <div className={style.plInfoItem}>
+                    <p className={style.plInfoCat}>Idioma:</p>
+                    <p className={style.plInfoInfo}>{data.language || "Não informado"}</p>
+                </div>
+                <div className={style.plInfoItem}>
+                    <p className={style.plInfoCat}>Editora:</p>
+                    <p className={style.plInfoInfo}>{data.publisher || "Não disponível"}</p>
+                </div>
+                <div className={style.plInfoItem}>
+                    <p className={style.plInfoCat}>Páginas:</p>
+                    <p className={style.plInfoInfo}>{data.pageCount || "Não informado"}</p>
+                </div>
+                <div className={style.plInfoItem}>
+                    <p className={style.plInfoCat}>Faixa etária:</p>
+                    <p className={style.plInfoInfo}>{data.maturityRating || "Não disponível"}</p>
                 </div>
             </div>
-        </body>
-    )
+
+            {authorsData && (
+            <div className={style.authorsData}>
+                <button className={style.closeModal} onClick={() => setAuthorsData(false)}>
+                    <ion-icon name="close"></ion-icon>
+                </button>
+                <div className={style.headerMenu}>
+                    <h2 className={style.plAutor}>{data.authors?.join(", ") || "Autor desconhecido"}</h2>
+                </div>
+                {authorBooks.length > 0 ? (
+                    <div className={style.bookList}>
+                        {authorBooks.map((book) => (
+                            <div key={book.id} className={style.bookItem}>
+                                <img 
+                                    src={book.volumeInfo.imageLinks?.thumbnail || "https://via.placeholder.com/128x200"}
+                                    alt={`Capa do livro ${book.volumeInfo.title}`}
+                                />
+                                <p>{book.volumeInfo.title}</p>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p>Nenhum outro livro encontrado para este autor.</p>
+                )}
+            </div>
+            )}
+
+
+        </div>
+    );
 }

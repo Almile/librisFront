@@ -5,18 +5,15 @@ import { StarRating } from "./StarRating";
 import styles from "../styles/comments.module.css";
 
 import userPhoto from '/user_padrao.svg';
+import { h3 } from "motion/react-client";
 
 const CommentSection = ({ context }) => {
   const [comments, setComments] = useState([]);
   const [currentId, setCurrentId] = useState(4);
   const [rating, setRating] = useState(0);
   const [isSpoiler, setIsSpoiler] = useState(false);
-
+const [Lido, setLido] = useState(false) ;
   const addComment = (text, isSpoiler, parentId = null) => {
-    if (context === "book" && rating === 0 && parentId === null) {
-      alert("A nota é obrigatória para comentários de livros!");
-      return;
-    }
 
     const newComment = {
       id: currentId,
@@ -105,21 +102,25 @@ const CommentSection = ({ context }) => {
     <div className={styles.commentSection}>
       <h1>{context === "book" ? "Comentários" : ""}</h1>
       <div className={styles.createComment}>
-        {context === "book" && (
-          <span className={styles.rating}>
-            Comente o que achou do livro: {" "}
-            <StarRating 
-              rating={rating} 
-              onRatingChange={(star) => setRating(star)} 
-              required={true}
-            />
-          </span>
-        )}
-        <CommentForm
+        
+      {context === "book" && (
+  <>
+    {Lido ? (
+      <>
+      <div className={styles.rating}>
+      </div>
+      <CommentForm
           onSubmit={addComment}
           isSpoiler={isSpoiler}
           setIsSpoiler={setIsSpoiler}
         />
+      </>
+    ) : (
+      <p>Finalize a leitura para criar um comentário. <button onClick={setLido}>Marcar como lido</button></p>
+    )}
+  </>
+)}
+       
       </div>
       <CommentList
         comments={comments}
