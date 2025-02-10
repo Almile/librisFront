@@ -36,6 +36,10 @@ export default function BookContent({ id }) {
                     src={`https://books.google.com/books/publisher/content?id=${data.id}&printsec=frontcover&img=1&zoom=1`}
                     alt={`Capa do livro ${data.title}`} 
                 />
+                <button className={style.plCapaButton}>
+                <ion-icon name="cart-outline"></ion-icon>
+                    Comprar livro</button>
+                    
             </div>
             <div className={style.plDescriptionLivro}>
                 <p className={style.plTitulo}><strong>{data.title}</strong></p>

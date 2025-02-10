@@ -1,14 +1,17 @@
-.customQuill .ql-container {
+.customQuill .ql-container, 
+.reviewQuill .ql-container {
     border: none;
     max-width: 100%;
 }
 
-.customQuill .ql-toolbar {
+.customQuill .ql-toolbar, 
+.reviewQuill .ql-toolbar {
     width: 100%;
     border: none; 
 }
 
-.customQuill .ql-editor {
+.customQuill .ql-editor,
+.reviewQuill .ql-editor  {
     border: none; 
     border-bottom: 1px solid var(--borda-suave);
     max-width:70%;
@@ -16,4 +19,10 @@
     overflow-wrap: break-word;
     word-break: break-word; 
     white-space: pre-wrap;
+}
+
+.reviewQuill .ql-editor {
+    border: none; 
+    max-width:98%;
+    min-height: 40vh;
 }

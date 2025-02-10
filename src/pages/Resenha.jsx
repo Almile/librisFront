@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { StarRating } from "../components/StarRating";
-import { CommentForm } from "../components/CommentForm";
-import "../styles/resenha.css";
+import { Star } from 'lucide-react';
+import { ReviewQuill } from "../components/ReviewQuill"
+import styles from "../styles/resenha.module.css";
 import userPhoto from '/user_padrao.svg';
 
 
@@ -23,9 +23,9 @@ const Resenha = () => {
   };
 
   return (
-    <main className='content'>
-      <div className="back">
-        <button className="back-to-book">
+    <main className={styles.content}>
+      <div className={styles.back}>
+        <button className={styles.backToBook}>
           <span><ion-icon name="arrow-back-sharp"></ion-icon></span>
           <span>Nome do livro</span>
         </button>
@@ -34,14 +34,14 @@ const Resenha = () => {
           <span>O que achou da resenha: </span> <StarRating />
         </span>
         */}
-        <button className="edit-review" onClick={toggleEditable}>
+        <button className={styles.editReview} onClick={toggleEditable}>
             {editable ? (
-              <button className="button-edit">
+              <button className={styles.buttonEdit}>
                 <ion-icon name="close-circle-outline"></ion-icon>
                 <span>Cancelar</span>
               </button>
             ) : (
-              <button className="button-edit">
+              <button className={styles.buttonEdit}>
                 <ion-icon name="pencil-outline"></ion-icon>
                 <span>Editar</span>
               </button>
@@ -50,53 +50,54 @@ const Resenha = () => {
       </div>
       <input
             type="text"
-            className="title-review"
+            className={styles.titleReview}
             placeholder="Título da resenha"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             readOnly={!editable} 
           />
-      <div className="resenha">
-        <div className="review-details">
-          <div className="autor">
+      <div className={styles.resenha}>
+        <div className={styles.reviewDetails}>
+          <div className={styles.autor}>
             <img
               src={userPhoto}
               alt="Foto de perfil"
-              className="autorImage"
+              className={styles.autorImage}
             />
             <div>
               <p>Autor: Nome do Usuário</p>
-              <span className="date-review">Data de publicação: DD/MM/AAAA</span>
+              <span className={styles.dateReview}>Data de publicação: DD/MM/AAAA</span>
             </div>
           </div>
-          <div className="meta">
+          <div className={styles.meta}>
             <span>1000 reviews</span>
-            {5 !== null && (
-              <div className="comment-rating">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <ion-icon
-                    key={star}
-                    name={star <= 4.5 ? "star" : "star-outline"}
-                    className="comment-star"
-                  ></ion-icon>
-                ))}
-              </div>
-            )}
+            <div className={styles.rating}>
+                <span>
+                    {Array.from({ length: Math.ceil(4 || 0) }).map((_, index) => (
+                        <Star size={20} key={index} fill='var(--destaque)' stroke="null" />
+                    ))}
+                    {Array.from({ length: 5 - Math.ceil(4 || 0) }).map((_, index) => (
+                        <Star size={20} key={index + 10} fill='var(--texto-secundario)' stroke="null"/>
+                    ))}
+                </span>
+            </div>
             {4.5}
           </div>
         </div>
 
-        <button className='alert-spoiler-review'>Possui Spoiler</button>
+        <button className={styles.alertSpoilerReview}>Possui Spoiler</button>
 
-        <div className="review">
+        <div className={styles.review}>
           {editable ? (
-            <CommentForm
+            <div className={styles.boxComment}>
+            <ReviewQuill
               onSubmit={(text) => saveReview(text)}
               initialText={review}
             />
+            </div>
           ) : (
             <div
-              className="inner-review"
+              className={styles.innerReview}
               dangerouslySetInnerHTML={{ __html: review }}
             />
           )}
