@@ -24,14 +24,14 @@
     height: 1000px;
 }
 
-.logo {
+.logolp {
     display: flex;
     justify-content: center;
     margin-top: 80px;
     margin-bottom: 60px
 }
 
-.logo img{
+.logolp img{
     height: 80px;
 }
 
@@ -61,9 +61,17 @@
 .cta button {
     background-color: #009C9D;
     color: white;
+    border: none;
     border-radius: 40px;
     padding: 20px 55px;
     font-size: 23px;
+}
+
+.cta button:hover {
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid #009C9D;
+    color: grey;
 }
 
 .authors {
@@ -85,6 +93,7 @@
     height: 90px;
     width: 90px;
     background-color: lightgrey;
+    object-fit: cover;
 }
 
 .funcionalidades {

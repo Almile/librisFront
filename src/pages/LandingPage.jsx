@@ -1,5 +1,6 @@
 import  GenreSelector  from "../../src/components/GenreSelector";
-
+import { Link } from "react-router-dom";
+import "../styles/landingpage.css"
 
 function LandingPage() {
   const handleGenreSelection = (selectedGenres) => {
@@ -12,7 +13,7 @@ function LandingPage() {
                 <img src="../landing/Shelf1.png" alt="Estante 1" height="800px"/>
             </div>
             <div className="description">
-                <div className="logo">
+                <div className="logolp">
                     <img src="../landing/Logo_tema claro.png" alt="Logo Libris"/>
                 </div>
                 <div className="subtitulo">
@@ -25,9 +26,7 @@ function LandingPage() {
                     leituras e compartilhamento de experiências literárias.</p>
                 </div>
                 <div className="cta">
-                    <button>
-                        Acesse aqui
-                    </button>
+                    <Link to="/home"><button>Acesse aqui</button></Link>
                 </div>
                 <div className="authors">
                     <div className="info">
