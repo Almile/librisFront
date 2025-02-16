@@ -1,15 +1,62 @@
-import { useContext, useEffect } from "react"; // Importa hooks do React para gerenciar estados e efeitos colaterais
+import { useState, useContext, useEffect } from "react"; // Importa hooks do React para gerenciar estados e efeitos colaterais
 import AuthContext from "../context/AuthContext"; // Importa o contexto de autenticação
 import { useNavigate } from "react-router-dom"; // Hook para navegação entre páginas
 import { GoogleLogin, googleLogout } from "@react-oauth/google"; // Importa componentes para login e logout com Google OAuth
 import styles from "../styles/login.module.css"; // Importa estilos CSS do módulo de login
 import imgLogin from "/imgLogin.jpeg"; // Importa imagem utilizada na página de login que se encontra na pasta public
+import backendApi from "../services/backendApi"; // Importe a instância do Axios
 
 function Login() {
-  // Obtém a função de login do contexto de autenticação
   const { login } = useContext(AuthContext);
-  // Hook para redirecionamento de páginas
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  
+  // Estado para os dados do formulário de cadastro
+  const [cadastroData, setCadastroData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  
+  // Estado para mensagens de erro/sucesso
+  const [cadastroError, setCadastroError] = useState("");
+  const [cadastroSuccess, setCadastroSuccess] = useState("");
+  
+  // Função para atualizar os dados do formulário de cadastro
+  const handleCadastroChange = (e) => {
+    const { id, value } = e.target;
+    setCadastroData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+  const handleCadastroSubmit = async (e) => {
+    e.preventDefault();
+
+    if (cadastroData.password !== cadastroData.confirmPassword) {
+        setCadastroError("As senhas não coincidem.");
+        return;
+    }
+
+    try {
+        const response = await backendApi.post("auth/register", {
+            email: cadastroData.email,
+            username: cadastroData.username,
+            senha: cadastroData.password,
+        });
+
+        setCadastroSuccess("Cadastro realizado com sucesso!");
+        setCadastroError("");
+        console.log("Cadastro realizado:", response.data);
+
+        setTimeout(() => {
+            navigate("/login");
+        }, 2000);
+    } catch (err) {
+        setCadastroError("Erro ao cadastrar. Tente novamente.");
+        console.error("Erro no cadastro:", err);
+    }
+};
 
   // Função para login do usuário e redirecionamento para a página inicial caso o login seja bem-sucedido
   const handleLogin = () => {
@@ -60,25 +107,42 @@ function Login() {
         <div className={styles.page}>
           <header></header>
           <div className={`${styles.page} ${styles.left} ${styles.emptyPage}`}>
-            <img src={imgLogin} alt="Imagem de Login" className={styles.imgEffect} />
+            <img  src={imgLogin} alt="Imagem de Login" className={styles.imgEffect} />
           </div>
 
           <div className={`${styles.page} ${styles.right} ${styles.cadastro}`}>
-            <form id="pageCadastro">
-              <h1>Cadastro</h1>
-              <label htmlFor="register-userName">Nome de usuário</label>
-              <input type="text" id="register-userName" placeholder="Digite seu nome de usuário" required />
-              <label htmlFor="register-email">Email</label>
-              <input type="email" id="register-email" placeholder="Digite seu email" required />
-              <label htmlFor="register-password">Senha</label>
-              <input type="password" id="register-password" placeholder="Crie uma senha" required />
-              <label htmlFor="confirm-password">Confirmar senha</label>
-              <input type="password" id="confirm-password" placeholder="Confirme sua senha" required />
-              <button type="submit" className={styles.buttonCadastro}>Cadastrar</button>
-              <p className={styles.link}>
-                Já tem conta? <span className={styles.toggle} data-action="login">Faça login</span>
-              </p>
-            </form>
+          <form id="pageCadastro" onSubmit={handleCadastroSubmit} method="POST">
+    <h1>Cadastro</h1>
+
+    <label htmlFor="username">Nome de usuário</label>
+    <input type="text" id="username" placeholder="Digite seu nome de usuário" onChange={handleCadastroChange} required />
+
+
+    <label htmlFor="email">Email</label>
+    <input type="email" id="email" placeholder="Digite seu email" onChange={handleCadastroChange} required />
+
+
+    <label htmlFor="password">Senha</label>
+    <input type="password" id="password" placeholder="Crie uma senha" onChange={handleCadastroChange} required />
+
+
+    <label htmlFor="confirmPassword">Confirmar senha</label>
+    <input type="password" id="confirmPassword" placeholder="Confirme sua senha" onChange={handleCadastroChange} required />
+
+
+    <button type="submit" className={styles.buttonCadastro}>
+      Cadastrar
+    </button>
+
+    {cadastroError && <p style={{ color: "red" }}>{cadastroError}</p>}
+    {cadastroSuccess && <p style={{ color: "green" }}>{cadastroSuccess}</p>}
+    <p className={styles.link}>
+      Já tem conta?{" "}
+      <span className={styles.toggle} data-action="login">
+        Faça login
+      </span>
+    </p>
+  </form>
             
             {/* Página de Recuperação de Senha */}
             <form id="pageForgot">
