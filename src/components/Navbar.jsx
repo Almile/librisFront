@@ -208,7 +208,6 @@ function Navbar() {
     <>
         <a
             href="#sobre"
-            className={location.hash === '#sobre' ? 'active-link' : ''}
             onClick={() => {
                 scrollToSection('sobre');
                 handleLinkClick();
@@ -217,28 +216,26 @@ function Navbar() {
             Sobre
         </a>
         <a
-            href="#servicos"
-            className={location.hash === '#servicos' ? 'active-link' : ''}
+            href="#desenvolvedores"
             onClick={() => {
-                scrollToSection('servicos');
+                scrollToSection('desenvolvedores');
                 handleLinkClick();
             }}
         >
-            Serviços
+            Desenvolvedores
         </a>
         <a
-            href="#contato"
-            className={location.hash === '#contato' ? 'active-link' : ''}
+            href="#funcionalidades"
             onClick={() => {
-                scrollToSection('contato');
+                scrollToSection('funcionalidades');
                 handleLinkClick();
             }}
         >
-            Contato
+            Funcionalidades
         </a>
         <Link
             to="/login"
-            className={`login-button ${location.pathname === '/login' ? 'active-link' : ''}`}
+            className={`login-button`}
             onClick={handleLinkClick}
         >
             Login
