@@ -111,7 +111,7 @@ function LandingPage() {
 
                     <div className="info">
                         <div className="picture">
-                            <img src="../landing/perfil_joao.jpeg" alt="" />
+                            <img src="../landing/perfil_joao.jpg" alt="" />
                         </div>
                         <div className="name">
                             <p><strong>João H. R. Fontes</strong></p>
