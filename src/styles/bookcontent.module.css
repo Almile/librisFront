@@ -62,7 +62,8 @@
     margin-bottom: 20px;
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 5px;
 }
 
 .plGenres button {
@@ -76,12 +77,10 @@
 .plGenres button:first-child{
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
-    margin-right: 5px;
 }
 .plGenres button:last-child{
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
-    margin-left: 5px;
 }
 
 .plSinopse {
