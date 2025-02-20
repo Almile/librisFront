@@ -3,7 +3,6 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
-import userPadrao from '/user_padrao.svg';
 import styles from "../styles/comments.module.css";
 import "../styles/quill.css"
 
@@ -30,6 +29,8 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
   const [text, setText] = useState("");
   const [focusedImage, setFocusedImage] = useState(null);
   const editorRef = useRef(null);
+   const userPadrao =
+    "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
 
   useEffect(() => {
     setText(initialText);

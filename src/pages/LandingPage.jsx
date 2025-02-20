@@ -1,11 +1,7 @@
-import  GenreSelector  from "../../src/components/GenreSelector";
 import { Link } from "react-router-dom";
 import "../styles/landingpage.css"
 
 function LandingPage() {
-  const handleGenreSelection = (selectedGenres) => {
-    console.log(selectedGenres)
-  }
     return (
       <>
         <div className="pt1">
@@ -171,7 +167,7 @@ function LandingPage() {
 
                     <div className="info">
                         <div className="picture">
-                            <img src="../landing/perfil_tainara.jpeg" alt="" />
+                            <img src="../landing/perfil_tainara.jpg" alt="" />
                         </div>
                         <div className="name">
                             <p><strong>Tainara A. Pereira</strong></p>

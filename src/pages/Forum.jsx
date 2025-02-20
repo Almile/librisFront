@@ -3,6 +3,7 @@ import styles from '../styles/forum.module.css';
 import { CommentForm } from "../components/CommentForm";
 import Feed from "../components/Feed";
 import CommentDetail from "../components/CommentDetail";
+import User from "../components/User";
 
 function Forum() {    
   const [posts, setPosts] = useState([]); // Armazena os posts
@@ -14,9 +15,19 @@ function Forum() {
   const [selectedBook, setSelectedBook] = useState(""); // Livro selecionado
   const [showDropdown, setShowDropdown] = useState(false); // Controle da exibição da lista
   const [selectedFilter, setSelectedFilter] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); // Para o filtro de pesquisa
+  
+  const [seguindo, setSeguindo] = useState([]); // Lista de usuários que o usuário segue
+  const [seguidores, setSeguidores] = useState([]); // Lista de seguidores do usuário
 
   const [isSpoiler, setIsSpoiler] = useState(false);
-
+  const defaultProfileImage =
+    "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
+  const seguirRecomendados = [
+    { id: 1, name: "João", image: defaultProfileImage },
+    { id: 2, name: "Mariana", image: defaultProfileImage },
+    { id: 3, name: "Anna", image: defaultProfileImage },
+  ];
   // Carregar livros do localStorage quando o componente monta
   useEffect(() => {
     const storedBooks = [];
@@ -84,7 +95,7 @@ function Forum() {
       isSpoiler,
       user: {
         name: "Nome_usuario",
-        userImage: "/user_padrao.svg",
+        userImage: "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg",
       },
       date: new Date().toLocaleString(),
       comments: [],
@@ -97,11 +108,27 @@ function Forum() {
     setSelectedBook("")
   };
 
-  const filteredPosts = selectedFilter
-  ? posts.filter(post => 
-      post.selectedBook === selectedFilter || post.tags.includes(selectedFilter)
-    )
-  : posts;
+  const filteredPosts = posts.filter(post => {
+    if (!selectedFilter && !searchQuery) return true; // Se não há filtro, retorna todos
+  
+    if (selectedFilter === "seguindo") {
+      return seguindo.includes(post.user.name); // Retorna posts de quem o usuário segue
+    }
+    
+    if (selectedFilter === "seguidores") {
+      return seguidores.includes(post.user.name); // Retorna posts de quem segue o usuário
+    }
+  
+    if (searchQuery) {
+      return post.user.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+             post.text.toLowerCase().includes(searchQuery.toLowerCase()) || 
+             post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())) || 
+             post.selectedBook.toLowerCase().includes(searchQuery.toLowerCase());
+    }
+  
+    return post.selectedBook === selectedFilter || post.tags.includes(selectedFilter);
+  });
+  
 
   const booksHype = ["One-Punch Man, Vol. 21", "O Senhor dos Anéis: As duas torres"]
   const tagsHype = ["end","e"]
@@ -177,16 +204,24 @@ function Forum() {
       </section>
       <aside className={styles.forumSidebar}>
       <div className={styles.search}>
-              <input type="text" placeholder="Pesquisar" className={styles.searchInput} />
-              <button className={styles.searchButton}>
-                <ion-icon name="search-outline"></ion-icon>
-              </button>
-            </div>
+        <input 
+          type="text" 
+          placeholder="Pesquisar" 
+          className={styles.searchInput} 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button className={styles.searchButton}>
+          <ion-icon name="search-outline"></ion-icon>
+        </button>
+        </div>
+
         <div className={styles.filter}> 
           <h2>Filtrar</h2>  
-          <p>Pessoas que sigo</p>
-          <p>Pessoas que me seguem</p>
+          <p onClick={() => setSelectedFilter("seguindo")}>Pessoas que sigo</p>
+          <p onClick={() => setSelectedFilter("seguidores")}>Pessoas que me seguem</p>
         </div>
+
       <div className={styles.filter}>
       <h2>Em alta</h2>  
       {booksHype.map((book) => (
@@ -202,13 +237,12 @@ function Forum() {
       </div>
 
 
-        <ul className={styles.filter}>
+        <div className={styles.filter}>
           <h2>Sugestões</h2>
-          <li className={styles.followItem}>
-            <img src="/user_padrao.svg" className={styles.followImage} alt="Foto do Perfil"/>
-            <span>Nome do usuário</span>
-          </li>
-        </ul>
+          {seguirRecomendados.map((user) => (
+              <User nome={user.name} imagem={user.image} />
+          ))}       
+        </div>
       </aside>
     </main>
   );

@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from "react"; // Importa hooks do React para gerenciar estados e efeitos colaterais
 import AuthContext from "../context/AuthContext"; // Importa o contexto de autenticação
 import { useNavigate } from "react-router-dom"; // Hook para navegação entre páginas
-import { GoogleLogin, googleLogout } from "@react-oauth/google"; // Importa componentes para login e logout com Google OAuth
 import styles from "../styles/login.module.css"; // Importa estilos CSS do módulo de login
 import imgLogin from "/imgLogin.jpeg"; // Importa imagem utilizada na página de login que se encontra na pasta public
 import backendApi from "../services/backendApi"; // Importe a instância do Axios
@@ -11,6 +10,10 @@ function Login() {
   const navigate = useNavigate();
   
   // Estado para os dados do formulário de cadastro
+  const [loginData, setLoginData] = useState({
+    emailLogin: "",
+    passwordLogin: "",
+  });
   const [cadastroData, setCadastroData] = useState({
     username: "",
     email: "",
@@ -21,7 +24,8 @@ function Login() {
   // Estado para mensagens de erro/sucesso
   const [cadastroError, setCadastroError] = useState("");
   const [cadastroSuccess, setCadastroSuccess] = useState("");
-  
+  const [loginError, setLoginError] = useState("");
+  const [loginSuccess, setLoginSuccess] = useState("");
   // Função para atualizar os dados do formulário de cadastro
   const handleCadastroChange = (e) => {
     const { id, value } = e.target;
@@ -30,6 +34,15 @@ function Login() {
       [id]: value,
     }));
   };
+
+  const handleLoginChange = (e) => {
+    const { id, value } = e.target;
+    setLoginData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
   const handleCadastroSubmit = async (e) => {
     e.preventDefault();
 
@@ -47,27 +60,53 @@ function Login() {
 
         setCadastroSuccess("Cadastro realizado com sucesso!");
         setCadastroError("");
-        console.log("Cadastro realizado:", response.data);
 
         setTimeout(() => {
             navigate("/login");
         }, 2000);
     } catch (err) {
         setCadastroError("Erro ao cadastrar. Tente novamente.");
-        console.error("Erro no cadastro:", err);
     }
 };
 
   // Função para login do usuário e redirecionamento para a página inicial caso o login seja bem-sucedido
-  const handleLogin = () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
     login();
     navigate("/home");
-  };
+/*
+    try {
+        const response = await backendApi.post("auth/login", {
+          login: loginData.emailLogin,
+          senha: loginData.passwordLogin,
+        });
+    
+        setLoginSuccess("Login realizado com sucesso.   Redirecionando");
+        setLoginError("");
+        login();
+        navigate("/home");
+    } catch (err) {
+        setLoginError("Erro ao logar. Tente novamente.");
+    }
+        */
+};
 
-  // Função para logout do Google OAuth
-  function handleLogout() {
-    googleLogout();
+const loginGoogle = async (e) => {
+  e.preventDefault();
+/*
+  try {
+      window.location.href = "http://localhost:8080/oauth2/authorization/google"
+  
+      setLoginSuccess("Login realizado com sucesso.   Redirecionando");
+      setLoginError("");
+      login();
+      navigate("/home");
+  } catch (err) {
+      setLoginError("Erro ao logar. Tente novamente.");
   }
+      */
+};
 
   useEffect(() => {
     const toggleElements = document.querySelectorAll(`.${styles.toggle}`);
@@ -136,6 +175,7 @@ function Login() {
 
     {cadastroError && <p style={{ color: "red" }}>{cadastroError}</p>}
     {cadastroSuccess && <p style={{ color: "green" }}>{cadastroSuccess}</p>}
+    
     <p className={styles.link}>
       Já tem conta?{" "}
       <span className={styles.toggle} data-action="login">
@@ -168,13 +208,16 @@ function Login() {
           </div>
           <header></header>
           <div className={`${styles.page} ${styles.left}`}>
-            <form>
+            <form method="POST" onSubmit={handleLogin}>
               <h1>Login</h1>
-              <label htmlFor="login-email">Email</label>
-              <input type="email" id="login-email" placeholder="Digite seu email" required />
-              <label htmlFor="login-password">Senha</label>
-              <input type="password" id="login-password" placeholder="Digite sua senha" required />
-              <button onClick={handleLogin} className={styles.buttonLogin}>Login</button>
+              <label htmlFor="emailLogin">Email</label>
+              <input type="email" id="emailLogin" placeholder="Digite seu email" onChange={handleLoginChange} required />
+
+              <label htmlFor="passwordLogin">Senha</label>
+              <input type="password" id="passwordLogin" placeholder="Crie uma senha" onChange={handleLoginChange} required />
+
+              <button className={styles.buttonLogin}>Login</button>
+
               <p className={styles.linkForgot}>
                 Esqueceu a senha? <span className={styles.toggle} data-action="forgot">Recuperar senha</span>
               </p>
@@ -183,18 +226,15 @@ function Login() {
               {/* Elemento para login com o google */}
 
               <p className={styles.linkGoogle}>
-                <GoogleLogin
-                  onSuccess={(credentialResponse) => {
-                    console.log("Credenciais:", credentialResponse.credential);
-                    handleLogin();
-                  }}
-                  onError={() => console.log("Falha ao logar")}
-                  auto_select={true}
-                  shape="circle"
-                  theme="outline"
-                  size="large"
-                />
+              <p 
+                className={styles.buttonGoogle}
+                onClick={loginGoogle}
+              >
+                Login com Google
               </p>
+              </p>
+              {loginError && <p style={{ color: "red", textAlign:"center" }}>{loginError}</p>}
+    {loginSuccess && <p style={{ color: "green" ,textAlign:"center"}}>{loginSuccess}</p>}
             </form>
             <p className={styles.link}>
               Não tem conta? <span className={styles.toggle} data-action="signup">Cadastre-se</span>
