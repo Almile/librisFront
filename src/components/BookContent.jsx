@@ -3,11 +3,19 @@ import { Star } from 'lucide-react';
 import useBook from '../hooks/useBook';
 import AddToShelfButton from "./AddToShelfButton";
 import style from "../styles/bookcontent.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function BookContent({ id }) {    
     const { data, error, loading } = useBook(id);
     const [authorsData, setAuthorsData] = useState(false); //modal para livros do mesmo autor
     const [authorBooks, setAuthorBooks] = useState([]); // armazena livros do autor
+    const navigate = useNavigate();
+
+    const handleClickCategory = (category) => {
+        const query = new URLSearchParams();
+        query.set("q", category);
+        navigate(`/catalogo?${query.toString()}`);
+    }
 
     if (loading) return <p>Carregando...</p>;
     if (error) return <p>Ocorreu um erro de rede</p>;
@@ -33,7 +41,7 @@ export default function BookContent({ id }) {
         <div className={style.plGrid}>
             <div className={style.plCapa}>
                 <img 
-                    src={`https://books.google.com/books/publisher/content?id=${data.id}&printsec=frontcover&img=1&zoom=1`}
+                    src={`https://books.google.com/books/publisher/content?id=${data.id}&printsec=frontcover&img=1`}
                     alt={`Capa do livro ${data.title}`} 
                 />
                 <button className={style.plCapaButton}>
@@ -61,7 +69,7 @@ export default function BookContent({ id }) {
                 <div className={style.plGenres}>
                     {data.categories && data.categories.length > 0 ? (
                         [...new Set(data.categories.map(cat => cat.split("/")[1]))].map((category, index) => (
-                            <button key={index} className={style.plBg1}>{category}</button>
+                            <button key={index} className={style.plBg1} onClick={() => handleClickCategory(category)}>{category}</button>
                         ))
                     ) : (
                         <p>Gênero não informado</p>
