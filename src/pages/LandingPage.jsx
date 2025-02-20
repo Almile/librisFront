@@ -1,15 +1,11 @@
-import  GenreSelector  from "../../src/components/GenreSelector";
 import { Link } from "react-router-dom";
 import "../styles/landingpage.css"
 
 function LandingPage() {
-  const handleGenreSelection = (selectedGenres) => {
-    console.log(selectedGenres)
-  }
     return (
       <>
         <div className="pt1">
-            <div className="shelf1">
+            <div id="sobre" className="shelf1">
                 <img src="../landing/Shelf1.png" alt="Estante 1" height="800px"/>
             </div>
             <div className="description">
@@ -28,7 +24,7 @@ function LandingPage() {
                 <div className="cta">
                     <Link to="/home"><button>Acesse aqui</button></Link>
                 </div>
-                <div className="authors">
+                <div id="desenvolvedores" className="authors">
                     <div className="info">
                         <div className="picture">
                             <img src="../landing/perfil_milene.jpeg" alt="" />
@@ -111,7 +107,7 @@ function LandingPage() {
 
                     <div className="info">
                         <div className="picture">
-                            <img src="../landing/perfil_joao.jp1g" alt="" />
+                            <img src="../landing/perfil_joao.jpg" alt="" />
                         </div>
                         <div className="name">
                             <p><strong>João H. R. Fontes</strong></p>
@@ -171,7 +167,7 @@ function LandingPage() {
 
                     <div className="info">
                         <div className="picture">
-                            <img src="../landing/perfil_tainara.jpeg" alt="" />
+                            <img src="../landing/perfil_tainara.jpg" alt="" />
                         </div>
                         <div className="name">
                             <p><strong>Tainara A. Pereira</strong></p>
@@ -196,10 +192,10 @@ function LandingPage() {
 
         </div>
 
-        <div className="pt2">
+        <div id="funcionalidades" className="pt2">
             <div className="funcionalidades">
                 <h2>Funcionalidades</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed erat nibh tristique ipsum.</p>
+                <p>através de nossas reuniões e discussões decidimos implementar as seguintes funcionalidades principais no nosso projeto, buscando oferecer uma experiência completa e interativa ao usuário enquanto ele cria conexões com leitores, descobre novas leituras, expressa suas opiniões sobre diversas obras e organiza suas leituras atuais e futuras.</p>
             </div>
             <div className="grid">
                 <div className="gridSup">

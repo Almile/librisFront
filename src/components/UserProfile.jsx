@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
+import User from "./User";
 const UserProfile = () => {
   const defaultProfileImage =
     "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
@@ -126,18 +126,11 @@ const UserProfile = () => {
             </div>
             <input type="text" placeholder="Pesquisar usuário..." className="search-user" value={searchTerm} onChange={handleSearch}/>
            
-          <ul className="follow-list">
+          <div className="follow-list">
             {filteredUsers.map((user) => (
-              <li key={user.id} className="follow-item">
-                <img
-                  src={user.image}
-                  className="follow-image"
-                  alt="Foto do Perfil"
-                />
-                <span>{user.name}</span>
-              </li>
+              <User nome={user.name} imagem={user.image} />
             ))}
-          </ul>
+          </div>
         </div>
       )}
 

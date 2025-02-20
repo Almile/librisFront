@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Star } from 'lucide-react';
 import { ReviewQuill } from "../components/ReviewQuill"
 import styles from "../styles/resenha.module.css";
-import userPhoto from '/user_padrao.svg';
+const userPhoto =
+"https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
 
 
 const Resenha = () => {

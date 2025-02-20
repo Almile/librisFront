@@ -525,7 +525,7 @@ ul.user-comments-list .meta {
     background-color: var(--bg-secundario);
     background-size: cover;
     background-position: center;
-    border-radius: 8px;
+    border-radius: 50%;
 }
 
 .header-menu p {

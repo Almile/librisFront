@@ -4,7 +4,6 @@ import { useContext, useState, useRef, useEffect } from 'react';
 import '../styles/navbar.css';
 import Notificacoes from './Notificacoes';
 import logo from '/logotipo.svg';
-import userPhoto from '/user_padrao.svg';
 
 function Navbar() {
     const { isAuthenticated, logout } = useContext(AuthContext);
@@ -17,6 +16,9 @@ function Navbar() {
     const dropdownRef = useRef(null);
     const notificationsRef = useRef(null);
     const savedTheme = localStorage.getItem('theme');
+
+    const userPhoto =
+    "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
 
     const toggleTheme = () => {
         if (!isAuthenticated) return;
@@ -208,7 +210,6 @@ function Navbar() {
     <>
         <a
             href="#sobre"
-            className={location.hash === '#sobre' ? 'active-link' : ''}
             onClick={() => {
                 scrollToSection('sobre');
                 handleLinkClick();
@@ -217,28 +218,26 @@ function Navbar() {
             Sobre
         </a>
         <a
-            href="#servicos"
-            className={location.hash === '#servicos' ? 'active-link' : ''}
+            href="#desenvolvedores"
             onClick={() => {
-                scrollToSection('servicos');
+                scrollToSection('desenvolvedores');
                 handleLinkClick();
             }}
         >
-            Serviços
+            Desenvolvedores
         </a>
         <a
-            href="#contato"
-            className={location.hash === '#contato' ? 'active-link' : ''}
+            href="#funcionalidades"
             onClick={() => {
-                scrollToSection('contato');
+                scrollToSection('funcionalidades');
                 handleLinkClick();
             }}
         >
-            Contato
+            Funcionalidades
         </a>
         <Link
             to="/login"
-            className={`login-button ${location.pathname === '/login' ? 'active-link' : ''}`}
+            className={`login-button`}
             onClick={handleLinkClick}
         >
             Login

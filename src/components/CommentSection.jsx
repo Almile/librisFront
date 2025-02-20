@@ -3,44 +3,50 @@ import { CommentList } from "./CommentList";
 import { CommentForm } from "./CommentForm";
 import { StarRating } from "./StarRating";
 import styles from "../styles/comments.module.css";
-
-import userPhoto from '/user_padrao.svg';
 import { h3 } from "motion/react-client";
 
-const CommentSection = ({ context }) => {
+const userPhoto =
+"https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
+
+
+const CommentSection = ({ context, showCommentForm, onCommentSubmit }) => {
+
   const [comments, setComments] = useState([]);
   const [currentId, setCurrentId] = useState(4);
   const [rating, setRating] = useState(0);
   const [isSpoiler, setIsSpoiler] = useState(false);
-const [Lido, setLido] = useState(false) ;
-  const addComment = (text, isSpoiler, parentId = null) => {
-
-    const newComment = {
-      id: currentId,
-      text,
-      isSpoiler,
-      parentId,
-      likes: 0,
-      likedBy: [],
-      replies: [],
-      isReplying: false,
-      user: {
-        name: "Nome_usuario",
-        userImage: userPhoto,
-      },
-      date: new Date().toLocaleString(),
-      rating: context === "book" && parentId === null ? rating : null,
-    };
-
-    setCurrentId((prevId) => prevId + 1);
-    setComments((prevComments) =>
-      parentId === null
-        ? [...prevComments, newComment]
-        : addReplyToComments(prevComments, parentId, newComment)
-    );
-
-    setRating(0);
+  const [Lido, setLido] = useState(false) ;
+const addComment = (text, isSpoiler, parentId = null) => {
+  const newComment = {
+    id: currentId,
+    text,
+    isSpoiler,
+    parentId,
+    likes: 0,
+    likedBy: [],
+    replies: [],
+    isReplying: false,
+    user: {
+      name: "Nome_usuario",
+      userImage: userPhoto,
+    },
+    date: new Date().toLocaleString(),
+    rating: context === "book" && parentId === null ? rating : null,
   };
+
+  setCurrentId((prevId) => prevId + 1);
+  setComments((prevComments) =>
+    parentId === null
+      ? [...prevComments, newComment]
+      : addReplyToComments(prevComments, parentId, newComment)
+  );
+
+  setRating(0);
+
+  if (onCommentSubmit) {
+    onCommentSubmit(); // 🔹 Oculta apenas o formulário ao enviar um comentário
+  }
+};
 
   const addReplyToComments = (commentsList, parentId, newReply) => {
     return commentsList.map((comment) => {
@@ -57,6 +63,7 @@ const [Lido, setLido] = useState(false) ;
         };
       }
     });
+
   };
 
   const toggleReplyMode = (id) => {
@@ -118,6 +125,20 @@ const [Lido, setLido] = useState(false) ;
     ) : (
       <p>Finalize a leitura para criar um comentário. <button onClick={setLido}>Marcar como lido</button></p>
     )}
+  </>
+)} {context === "forum" && (
+  <>
+      <div>
+            {/* 🔹 Agora, o formulário só aparece se showCommentForm for true */}
+            {showCommentForm && (
+          <CommentForm
+            onSubmit={addComment}
+            isSpoiler={isSpoiler}
+            setIsSpoiler={setIsSpoiler}
+          />
+        )}
+      </div>
+    
   </>
 )}
        
