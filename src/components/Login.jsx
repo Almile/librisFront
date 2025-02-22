@@ -1,12 +1,12 @@
 import { useState, useContext, useEffect } from "react"; // Importa hooks do React para gerenciar estados e efeitos colaterais
-import AuthContext from "../context/AuthContext"; // Importa o contexto de autenticação
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom"; // Hook para navegação entre páginas
 import styles from "../styles/login.module.css"; // Importa estilos CSS do módulo de login
 import imgLogin from "/imgLogin.jpeg"; // Importa imagem utilizada na página de login que se encontra na pasta public
 import backendApi from "../services/backendApi"; // Importe a instância do Axios
 
 function Login() {
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
   const navigate = useNavigate();
   
   // Estado para os dados do formulário de cadastro
@@ -72,10 +72,6 @@ function Login() {
   // Função para login do usuário e redirecionamento para a página inicial caso o login seja bem-sucedido
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    login();
-    navigate("/home");
-/*
     try {
         const response = await backendApi.post("auth/login", {
           login: loginData.emailLogin,
@@ -84,29 +80,17 @@ function Login() {
     
         setLoginSuccess("Login realizado com sucesso.   Redirecionando");
         setLoginError("");
-        login();
+        login(response.data.data.token);
         navigate("/home");
     } catch (err) {
         setLoginError("Erro ao logar. Tente novamente.");
     }
-        */
 };
 
-const loginGoogle = async (e) => {
-  e.preventDefault();
-/*
-  try {
-      window.location.href = "http://localhost:8080/oauth2/authorization/google"
-  
-      setLoginSuccess("Login realizado com sucesso.   Redirecionando");
-      setLoginError("");
-      login();
-      navigate("/home");
-  } catch (err) {
-      setLoginError("Erro ao logar. Tente novamente.");
-  }
-      */
+const loginGoogle = () => {
+  window.location.href = "http://localhost:8080/oauth2/authorization/google";
 };
+
 
   useEffect(() => {
     const toggleElements = document.querySelectorAll(`.${styles.toggle}`);

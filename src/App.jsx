@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import ProtectedRoute from './components/ProtectedRoute'
+import { AuthProvider } from './context/AuthContext'
+import PrivateRoute from './Routes/private.routes'
 import Navbar from './components/Navbar'
 
 import Home from './pages/Home'
@@ -20,6 +21,7 @@ function App() {
 
   return (
     <>
+    <AuthProvider>
       <BrowserRouter>
         <Navbar />
 
@@ -27,18 +29,20 @@ function App() {
           <Route path='/' element={<LandingPage />} />
           <Route path='/login' element={<Login />} />
 
-          <Route path='/configuracao' element={<ProtectedRoute><Configuracao /></ProtectedRoute>} />
-          <Route path='/forum' element={<ProtectedRoute><Forum /></ProtectedRoute>} />
-          <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path='/perfil' element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
-          <Route path='/catalogo' element={<ProtectedRoute><Catalogo /></ProtectedRoute>} />
-          <Route path='/livro/:id' element={<ProtectedRoute><Livro /></ProtectedRoute>} />  
-          <Route path='/resenha' element={<ProtectedRoute><Resenha /></ProtectedRoute>} />  
-
+          <Route element={<PrivateRoute />}>
+            <Route path='/configuracao' element={<Configuracao />} />
+            <Route path='/forum' element={<Forum />} />
+            <Route path='/home' element={<Home />}/>
+            <Route path='/perfil' element={<Perfil />} />
+            <Route path='/catalogo' element={<Catalogo />} />
+            <Route path='/livro/:id' element={<Livro />} />  
+            <Route path='/resenha' element={<Resenha />} />  
+          </Route>
         </Routes>
       </BrowserRouter>
 
       <Footer/> 
+      </AuthProvider>
     </>
   )
 }

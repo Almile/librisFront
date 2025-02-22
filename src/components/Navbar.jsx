@@ -1,12 +1,12 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import AuthContext from '../context/AuthContext';
+import useAuth from '../context/AuthContext';
 import { useContext, useState, useRef, useEffect } from 'react';
 import '../styles/navbar.css';
 import Notificacoes from './Notificacoes';
 import logo from '/logotipo.svg';
 
 function Navbar() {
-    const { isAuthenticated, logout } = useContext(AuthContext);
+    const { isAuthenticated, user, logout } = useContext(useAuth);
     const location = useLocation();
     const navigate = useNavigate();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -17,8 +17,7 @@ function Navbar() {
     const notificationsRef = useRef(null);
     const savedTheme = localStorage.getItem('theme');
 
-    const userPhoto =
-    "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
+    const userPhoto = user?.foto || "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
 
     const toggleTheme = () => {
         if (!isAuthenticated) return;
@@ -167,12 +166,12 @@ function Navbar() {
             {isDropdownOpen && (
                 <div className="dropdown-menu open">
                     <div className="dropdown-user" onClick={toggleDropdown}>
-                        <img src={userPhoto} alt="Perfil" />
-                        <div className="user-info">
-                            <span>Nome do usuário</span>
-                            <span>email@email.com</span>
-                        </div>
+                    <img src={userPhoto} alt="Perfil" />
+                    <div className="user-info">
+                        <span>{"Nome do usuário"}</span>
+                        <span>{ "email@email.com"}</span>
                     </div>
+                </div>
                     <Link
                         to="/perfil"
                         className={location.pathname === '/perfil' ? 'active-link' : ''}
