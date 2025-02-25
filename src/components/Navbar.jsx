@@ -16,9 +16,9 @@ function Navbar() {
     const dropdownRef = useRef(null);
     const notificationsRef = useRef(null);
     const savedTheme = localStorage.getItem('theme');
+    console.log(user);
 
-    const userPhoto = user?.foto || "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
-
+    const userPhoto = user?.perfil?.urlPerfil|| "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
     const toggleTheme = () => {
         if (!isAuthenticated) return;
     
@@ -168,17 +168,18 @@ function Navbar() {
                     <div className="dropdown-user" onClick={toggleDropdown}>
                     <img src={userPhoto} alt="Perfil" />
                     <div className="user-info">
-                        <span>{"Nome do usuário"}</span>
-                        <span>{ "email@email.com"}</span>
+                        <span>{user?.data?.username || "Nome do usuário"}</span>
+                        <span>{user?.data?.email || "email@email.com"}</span>
                     </div>
                 </div>
-                    <Link
-                        to="/perfil"
-                        className={location.pathname === '/perfil' ? 'active-link' : ''}
-                        onClick={handleLinkClick}
+                <Link
+                    to={`/perfil/${user?.perfil?.id}`}
+                    className={location.pathname === `/perfil/${user?.perfil?.id}` ? 'active-link' : ''}
+                    onClick={handleLinkClick}
                     >
-                        Meu perfil
+                    Meu perfil
                     </Link>
+
                     <Link
                         to="/configuracao"
                         className={location.pathname === '/configuracao' ? 'active-link' : ''}

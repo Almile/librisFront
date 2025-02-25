@@ -5,6 +5,7 @@ import './../styles/perfil.css';
 import CommentsProfile from '../components/CommentsProfile';
 import BookCard from "../components/BookCard";
 import EstanteLivros from '../components/EstanteLivros';
+import { useParams } from 'react-router-dom';
 
 const allComments = [
   {
@@ -49,12 +50,15 @@ const allComments = [
     
   ];
   
-  const currentUser = {
-    id: "user1",
-    name: "João Silva",
-  };
+
 
 function Perfil() {
+  const { id } = useParams();
+
+  const currentUser = {
+    id: id,
+  };
+
   const favoritos = [
     "gIr-DwAAQBAJ",
     "GaZMDwAAQBAJ",
@@ -73,7 +77,7 @@ function Perfil() {
 
     return (
         <main className='main'>
-            <UserProfile />
+            <UserProfile id={id}/>
             <section className="top-comentarios">
             <h2>Seus Comentários</h2>
               <CommentsProfile allComments={allComments} currentUser={currentUser} />

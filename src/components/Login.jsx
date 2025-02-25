@@ -20,12 +20,16 @@ function Login() {
     password: "",
     confirmPassword: "",
   });
+  const [email, setEmail] = useState('');
+
   
   // Estado para mensagens de erro/sucesso
   const [cadastroError, setCadastroError] = useState("");
   const [cadastroSuccess, setCadastroSuccess] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loginSuccess, setLoginSuccess] = useState("");
+  const [resetSuccess, setResetSuccess] = useState('');
+  const [resetError, setResetError] = useState('');
   // Função para atualizar os dados do formulário de cadastro
   const handleCadastroChange = (e) => {
     const { id, value } = e.target;
@@ -91,6 +95,33 @@ const loginGoogle = () => {
   window.location.href = "http://localhost:8080/oauth2/authorization/google";
 };
 
+const handleResetPassword = async (e) => {
+  e.preventDefault();
+
+  if (!email) {
+    setLoginError("Por favor, forneça um email.");
+    return;
+  }
+
+  try {
+    const response = await backendApi.post("/usuario/reset-password", { email }, { 
+      headers: { 'Content-Type': 'application/json' } 
+    });
+
+    console.log("sucesso", response.data.message);
+    // Sucesso na recuperação
+    setResetSuccess(response.data.message);
+    setResetError("");  // Limpar qualquer erro anterior
+  } catch (err) {
+    // Checar se há resposta de erro
+    if (err.response && err.response.data && err.response.data.message) {
+      setResetError(err.response.data.message);
+    } else {
+      setResetError("Erro ao processar a solicitação. Tente novamente.");
+    }
+  }
+};
+
 
   useEffect(() => {
     const toggleElements = document.querySelectorAll(`.${styles.toggle}`);
@@ -134,7 +165,7 @@ const loginGoogle = () => {
           </div>
 
           <div className={`${styles.page} ${styles.right} ${styles.cadastro}`}>
-          <form id="pageCadastro" onSubmit={handleCadastroSubmit} method="POST">
+    <form id="pageCadastro" onSubmit={handleCadastroSubmit} method="POST">
     <h1>Cadastro</h1>
 
     <label htmlFor="username">Nome de usuário</label>
@@ -169,14 +200,18 @@ const loginGoogle = () => {
   </form>
             
             {/* Página de Recuperação de Senha */}
-            <form id="pageForgot">
+            <form id="pageForgot" method="POST"  onSubmit={handleResetPassword}>
               <h1>Recuperação de senha</h1>
               <label htmlFor="forgot-email">Email</label>
-              <input type="email" id="forgot-email" placeholder="Digite seu email" required />
+              <input type="email" id="forgot-email" onChange={(e) => setEmail(e.target.value)}
+          placeholder="Digite seu e-mail"
+          required />
               <button type="submit" className={styles.buttonForgot}>Enviar Confirmação</button>
               <p className={styles.link}>
                 Já tem conta? <span className={styles.toggle} data-action="login">Faça login</span>
               </p>
+              {resetError && <p style={{ color: "red", textAlign:"center" }}>{resetError}</p>}
+              {resetSuccess && <p style={{ color: "green" ,textAlign:"center"}}>{resetSuccess}</p>}
             </form>
           </div>
           <footer></footer>

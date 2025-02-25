@@ -1,21 +1,21 @@
-import React, { useState, useRef } from "react";
+import React,{ useContext, useState, useRef } from 'react';
+import useAuth from "../context/AuthContext";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import User from "./User";
 
-const UserProfile = () => {
-  const defaultProfileImage =
-    "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
-  const [backgroundImage, setBackgroundImage] = useState("https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737480828/libris_images/hyxilej7wwvmhyiqmlog.jpg");
-  const [profileImage, setProfileImage] = useState(defaultProfileImage);
+const UserProfile = (id) => {
+  const { user } = useContext(useAuth);
+
+  const [backgroundImage, setBackgroundImage] = useState( user?.perfil?.urlBackPerfil);
+    
+  const [profileImage, setProfileImage] = useState(user?.perfil?.urlPerfil);
+  const [description, setDescription] = useState(user?.perfil?.resumoBio);
+
   const [editable, setEditable] = useState(false);
-  const [description, setDescription] = useState(
-    '<p>💕 Gosto de _</p><p>📚 Livro Favorito _</p><p><br></p><blockquote><strong>" </strong><strong style="color: rgb(58, 58, 58);">Não perca a esperança. O amanhã é desconhecido. O conselho vem muitas vezes com o nascer do sol.</strong><strong>." - </strong><strong style="color: rgb(0, 71, 178);"> Legolas</strong></blockquote>'
-  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("seguidores");
   const [searchTerm, setSearchTerm] = useState("");
-
 
   const openModal = (tab) => {
     setActiveTab(tab);
@@ -155,7 +155,7 @@ const UserProfile = () => {
         </div>
         <div className="info-perfil">
           <div className="top-info-perfil">
-            <h1>Nome do Usuário</h1>
+            <h1>{user.data.username}</h1>
             <div className="estatisticas">
               <button onClick={() => openModal("seguindo")}>
                 {seguindo.length} seguindo

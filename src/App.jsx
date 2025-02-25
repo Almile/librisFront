@@ -1,50 +1,52 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from './context/AuthContext'
-import PrivateRoute from './Routes/private.routes'
-import Navbar from './components/Navbar'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import PrivateRoute from './Routes/private.routes';
+import PublicRoute from './Routes/public.routes';
 
-import Home from './pages/Home'
-import Footer from './components/Footer'
-import Login from './components/Login'
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
-import LandingPage from './pages/LandingPage'
-import Perfil from './pages/Perfil'
-import Catalogo from './pages/Catalogo'
-import Livro from './pages/Livro'
-import Forum from './pages/Forum'
-import Configuracao from './pages/Configuracao'
-import Resenha from './pages/Resenha'
+import Home from './pages/Home';
+import Login from './components/Login';
+import LandingPage from './pages/LandingPage';
+import Perfil from './pages/Perfil';
+import Catalogo from './pages/Catalogo';
+import Livro from './pages/Livro';
+import Forum from './pages/Forum';
+import Configuracao from './pages/Configuracao';
+import Resenha from './pages/Resenha';
 
-import './styles/index.css'
+import './styles/index.css';
 
 function App() {
-
   return (
-    <>
     <AuthProvider>
       <BrowserRouter>
+        {/* Navbar é exibida em todas as páginas */}
         <Navbar />
 
         <Routes>
-          <Route path='/' element={<LandingPage />} />
-          <Route path='/login' element={<Login />} />
+          {/* Rotas públicas */}
+            <Route path='/' element={<LandingPage />} />
+            <Route path='/login' element={<Login />} />
 
+          {/* Rotas privadas */}
           <Route element={<PrivateRoute />}>
-            <Route path='/configuracao' element={<Configuracao />} />
-            <Route path='/forum' element={<Forum />} />
-            <Route path='/home' element={<Home />}/>
-            <Route path='/perfil' element={<Perfil />} />
+            <Route path='/home' element={<Home />} />
+            <Route path='/perfil/:id' element={<Perfil />} />
             <Route path='/catalogo' element={<Catalogo />} />
-            <Route path='/livro/:id' element={<Livro />} />  
-            <Route path='/resenha' element={<Resenha />} />  
+            <Route path='/livro/:id' element={<Livro />} />
+            <Route path='/forum' element={<Forum />} />
+            <Route path='/configuracao' element={<Configuracao />} />
+            <Route path='/resenha' element={<Resenha />} />
           </Route>
         </Routes>
-      </BrowserRouter>
 
-      <Footer/> 
-      </AuthProvider>
-    </>
-  )
+        {/* Footer é exibido em todas as páginas */}
+        <Footer />
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;
