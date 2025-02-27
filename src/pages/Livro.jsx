@@ -10,7 +10,7 @@ const Livro = () => {
     <div className={style.pagLivro}>
       <BookContent id={params.id} />
       <ReviewSection/>
-      <CommentSection context="book" />
+      <CommentSection context="book" livroID={params.id}/>
     </div>
   )
 }

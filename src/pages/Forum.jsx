@@ -4,8 +4,11 @@ import { CommentForm } from "../components/CommentForm";
 import Feed from "../components/Feed";
 import CommentDetail from "../components/CommentDetail";
 import User from "../components/User";
+import backendApi from "../services/backendApi"; // Certifique-se de que isso é importado corretamente
+import { useAuth } from '../context/AuthContext';
 
 function Forum() {    
+  const { user } = useAuth();
   const [posts, setPosts] = useState([]); // Armazena os posts
   const [selectedPost, setSelectedPost] = useState(null); // Guarda o post clicado
   const [tags, setTags] = useState([]); // Armazena as tags digitadas
@@ -14,24 +17,27 @@ function Forum() {
   const [filteredBooks, setFilteredBooks] = useState([]); // Livros filtrados para exibir na sugestão
   const [selectedBook, setSelectedBook] = useState(""); // Livro selecionado
   const [showDropdown, setShowDropdown] = useState(false); // Controle da exibição da lista
-  const [selectedFilter, setSelectedFilter] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // Para o filtro de pesquisa
   
   const [seguindo, setSeguindo] = useState([]); // Lista de usuários que o usuário segue
   const [seguidores, setSeguidores] = useState([]); // Lista de seguidores do usuário
 
   const [isSpoiler, setIsSpoiler] = useState(false);
-  const defaultProfileImage =
-    "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
-  const seguirRecomendados = [
-    { id: 1, name: "João", image: defaultProfileImage },
-    { id: 2, name: "Mariana", image: defaultProfileImage },
-    { id: 3, name: "Anna", image: defaultProfileImage },
-  ];
-  // Carregar livros do localStorage quando o componente monta
+  
+  
   useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await backendApi.get("/posts/listar");
+        setPosts(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar posts:", error);
+      }
+    };
+
+    fetchPosts();
+
     const storedBooks = [];
-    
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       try {
@@ -47,7 +53,6 @@ function Forum() {
     setBooks(storedBooks);
   }, []);
 
-  // Filtrar livros conforme o usuário digita
   const handleBookSearch = (e) => {
     const searchValue = e.target.value;
     setSelectedBook(searchValue);
@@ -63,13 +68,11 @@ function Forum() {
     }
   };
 
-  // Quando o usuário clica em uma sugestão de livro
   const handleBookSelect = (title) => {
     setSelectedBook(title);
     setShowDropdown(false);
   };
 
-  // Função para mudança de texto no campo de texto
   const handleTextChange = (e) => {
     setPostText(e.target.value);
   };
@@ -78,64 +81,43 @@ function Forum() {
     const inputTags = e.target.value;
     const newTags = inputTags.split(',').map(tag => tag.trim()).filter(tag => tag); // separa as tags seguindo a vírgula
     setTags(newTags); // Atualiza as tags
-    
   };
 
-  const publish = (text) => {
+  const publish = async (text) => {
     if (!text.trim()) return;
-  
-    // Verifica se as tags foram definidas 
+
     const extractedTags = tags.length > 0 ? tags : [...new Set(text.match(/#\w+/g))] || [];
     
     const newPost = {
-      id: posts.length + 1,
-      text,
-      tags: extractedTags,
-      selectedBook,
-      isSpoiler,
-      user: {
-        name: "Nome_usuario",
-        userImage: "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg",
-      },
-      date: new Date().toLocaleString(),
-      comments: [],
+      texto: postText,
+      tags: extractedTags, // Junta as tags como string
+      possuiSpoiler: isSpoiler,
+      livro: selectedBookid, // Livro selecionado
+      dataCriacao: new Date().toISOString(),
+      comentarios: [],
+      perfil: user?.perfil?.id, // ID do perfil do usuário
     };
-  
-    setPosts([newPost, ...posts]);
-     // Limpa os campos de texto após o post
-    setPostText("");
-    setTags([]);
-    setSelectedBook("")
+
+    try {
+      const response = await backendApi.post("/posts", newPost);
+      setPosts([response.data, ...posts]); // Adiciona o novo post no início
+      setPostText(""); // Limpa o campo de texto após o post
+      setTags([]);
+      setSelectedBook("");
+    } catch (error) {
+      console.error("Erro ao publicar post:", error);
+    }
   };
 
   const filteredPosts = posts.filter(post => {
-    if (!selectedFilter && !searchQuery) return true; // Se não há filtro, retorna todos
-  
-    if (selectedFilter === "seguindo") {
-      return seguindo.includes(post.user.name); // Retorna posts de quem o usuário segue
-    }
-    
-    if (selectedFilter === "seguidores") {
-      return seguidores.includes(post.user.name); // Retorna posts de quem segue o usuário
-    }
-  
-    if (searchQuery) {
-      return post.user.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-             post.text.toLowerCase().includes(searchQuery.toLowerCase()) || 
-             post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())) || 
-             post.selectedBook.toLowerCase().includes(searchQuery.toLowerCase());
-    }
-  
-    return post.selectedBook === selectedFilter || post.tags.includes(selectedFilter);
+    if (!searchQuery) return true; // Se não há filtro, retorna todos
+    return post.texto.toLowerCase().includes(searchQuery.toLowerCase()) || post.tags.toLowerCase().includes(searchQuery.toLowerCase()) || post.livro.toLowerCase().includes(searchQuery.toLowerCase());
   });
-  
 
-  const booksHype = ["One-Punch Man, Vol. 21", "O Senhor dos Anéis: As duas torres"]
-  const tagsHype = ["end","e"]
   return (
     <main className={styles.forum}>
       <section className={styles.forumContent}>
-        {selectedPost ? ( 
+        {selectedPost ? (
           <div className={styles.postDetail}>
             <button className={styles.backButton} onClick={() => setSelectedPost(null)}>
               <ion-icon name="arrow-back-outline"></ion-icon>
@@ -145,27 +127,22 @@ function Forum() {
           </div>
         ) : (
           <>
-           
-            {/* Campo para texto do post */}
             <div className={styles.commentForm}>
-            <CommentForm 
-              onSubmit={publish} 
-              initialText={postText} 
-              isSpoiler={isSpoiler}
-              setIsSpoiler={setIsSpoiler}    
-              onTextChange={handleTextChange}
-            />
-            <div className={styles.optionalCamp}>
-            {/* Campo para inserir tags */}
-            <input 
-              type="text"
-              onChange={handleTagsChange} 
-              placeholder="Adicione palavras-chave (separe por vírgula)" 
-              className={styles.tagsInput} 
-            />
-           
-             {/* Campo para buscar e selecionar um livro */}
-             <div className={styles.bookSelector}>
+              <CommentForm 
+                onSubmit={publish} 
+                initialText={postText} 
+                isSpoiler={isSpoiler}
+                setIsSpoiler={setIsSpoiler}    
+                onTextChange={handleTextChange}
+              />
+              <div className={styles.optionalCamp}>
+                <input 
+                  type="text"
+                  onChange={handleTagsChange} 
+                  placeholder="Adicione palavras-chave (separe por vírgula)" 
+                  className={styles.tagsInput} 
+                />
+                <div className={styles.bookSelector}>
                   <input
                     type="text"
                     value={selectedBook}
@@ -188,60 +165,34 @@ function Forum() {
                     </ul>
                   )}
                 </div>
-
+              </div>
             </div>
-            </div>
-            
-            <button  onClick={() => publish(postText)} style={{display:'none'}}>Publicar</button>
-
             <button className={styles.loadPosts}>
               <ion-icon name="reload-outline"></ion-icon> Carregar publicações mais recentes
             </button>
             <Feed posts={filteredPosts} onPostClick={setSelectedPost} />
-
           </>
         )}
       </section>
+
       <aside className={styles.forumSidebar}>
-      <div className={styles.search}>
-        <input 
-          type="text" 
-          placeholder="Pesquisar" 
-          className={styles.searchInput} 
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button className={styles.searchButton}>
-          <ion-icon name="search-outline"></ion-icon>
-        </button>
+        <div className={styles.search}>
+          <input 
+            type="text" 
+            placeholder="Pesquisar" 
+            className={styles.searchInput} 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button className={styles.searchButton}>
+            <ion-icon name="search-outline"></ion-icon>
+          </button>
         </div>
 
         <div className={styles.filter}> 
           <h2>Filtrar</h2>  
           <p onClick={() => setSelectedFilter("seguindo")}>Pessoas que sigo</p>
           <p onClick={() => setSelectedFilter("seguidores")}>Pessoas que me seguem</p>
-        </div>
-
-      <div className={styles.filter}>
-      <h2>Em alta</h2>  
-      {booksHype.map((book) => (
-        <p onClick={() => setSelectedFilter(book)}>
-          {book}
-        </p>
-      ))}
-      {tagsHype.map((tag, index) => (
-        <p key={index} onClick={() => setSelectedFilter(`${tag}`)}>
-          #{tag}
-        </p>
-      ))}
-      </div>
-
-
-        <div className={styles.filter}>
-          <h2>Sugestões</h2>
-          {seguirRecomendados.map((user) => (
-              <User nome={user.name} imagem={user.image} />
-          ))}       
         </div>
       </aside>
     </main>

@@ -1,147 +1,135 @@
-import React, { useState, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { CommentList } from "./CommentList";
 import { CommentForm } from "./CommentForm";
-import { StarRating } from "./StarRating";
+import backendApi from "../services/backendApi";
 import styles from "../styles/comments.module.css";
-import { h3 } from "motion/react-client";
+import useAuth from "../context/AuthContext";
 
-const userPhoto =
-"https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
-
-
-const CommentSection = ({ context, showCommentForm, onCommentSubmit }) => {
+const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) => {
+  const { token, user } = useContext(useAuth);
 
   const [comments, setComments] = useState([]);
-  const [currentId, setCurrentId] = useState(4);
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(1);
   const [isSpoiler, setIsSpoiler] = useState(false);
-  const [Lido, setLido] = useState(false) ;
-const addComment = (text, isSpoiler, parentId = null) => {
-  const newComment = {
-    id: currentId,
-    text,
-    isSpoiler,
-    parentId,
-    likes: 0,
-    likedBy: [],
-    replies: [],
-    isReplying: false,
-    user: {
-      name: "Nome_usuario",
-      userImage: userPhoto,
-    },
-    date: new Date().toLocaleString(),
-    rating: context === "book" && parentId === null ? rating : null,
-  };
+  const perfilId = user?.perfil?.id;
+  const [lido, setLido] = useState(user?.perfil?.livrosLidos?.includes(livroID) || true);
 
-  setCurrentId((prevId) => prevId + 1);
-  setComments((prevComments) =>
-    parentId === null
-      ? [...prevComments, newComment]
-      : addReplyToComments(prevComments, parentId, newComment)
-  );
-
-  setRating(0);
-
-  if (onCommentSubmit) {
-    onCommentSubmit(); // 🔹 Oculta apenas o formulário ao enviar um comentário
-  }
-};
-
-  const addReplyToComments = (commentsList, parentId, newReply) => {
-    return commentsList.map((comment) => {
-      if (comment.id === parentId) {
-        return {
-          ...comment,
-          replies: [...comment.replies, newReply],
-          isReplying: false,
-        };
-      } else {
-        return {
-          ...comment,
-          replies: addReplyToComments(comment.replies, parentId, newReply),
-        };
+  // Carregar os comentários ao montar o componente
+  useEffect(() => {
+    const fetchComments = async () => {
+      console.log("Tipo de livroID:", typeof livroID, "Valor:", livroID);
+  
+      const livroIdInt = Number(livroID);
+      if (isNaN(livroIdInt) || livroIdInt <= 0) {
+        console.error("Erro: livroID inválido!", livroID);
+        return;
       }
-    });
+  
+      try {
+        const responseComment = await backendApi.get(`/comentarios/listar/livro/${livroIdInt}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        setComments(responseComment.data.content || []);
+      } catch (error) {
+        console.error("Erro ao carregar comentários:", error.response ? error.response.data : error.message);
+      }
+    };
+  
+    fetchComments();
+  }, [livroID, token]);
+  
+  
 
+  // Função para salvar um comentário
+  const addComment = async (text, isSpoiler, parentId = null) => {
+    const newComment = {
+      perfilId: perfilId,
+      livroId: livroID,
+      texto: text,
+      nota: 3,
+      quantidadeCurtidas: 0,
+      respostas: [],
+    };
+
+    try {
+      const response = await backendApi.post("/comentarios", newComment);
+
+      setComments((prevComments) =>
+        parentId === null
+          ? [...prevComments, response.data]
+          : prevComments.map((comment) =>
+              comment.id === parentId
+                ? { ...comment, respostas: [...comment.respostas, response.data] }
+                : comment
+            )
+      );
+    } catch (error) {
+      console.error("Erro ao adicionar comentário:", error);
+    }
+
+    setRating(0);
+    if (onCommentSubmit) onCommentSubmit();
   };
 
   const toggleReplyMode = (id) => {
-    setComments(comments.map((comment) => toggleReply(comment, id)));
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment.id === id ? { ...comment, isReplying: !comment.isReplying } : comment
+      )
+    );
   };
 
-  const toggleReply = (comment, id) => {
-    if (comment.id === id) {
-      return {
-        ...comment,
-        isReplying: !comment.isReplying,
-      };
-    }
-    return {
-      ...comment,
-      replies: comment.replies.map((reply) => toggleReply(reply, id)),
-    };
-  };
+  const toggleLike = async (id) => {
+    if (!perfilId) return;
 
-  const toggleLike = (id) => {
-    const userId = "currentUser";
-    setComments(comments.map((comment) => toggleCommentLike(comment, id, userId)));
-  };
-
-  const toggleCommentLike = (comment, id, userId) => {
-    if (comment.id === id) {
-      const alreadyLiked = comment.likedBy.includes(userId);
-      return {
-        ...comment,
-        likes: alreadyLiked ? comment.likes - 1 : comment.likes + 1,
-        likedBy: alreadyLiked
-          ? comment.likedBy.filter((user) => user !== userId)
-          : [...comment.likedBy, userId],
-      };
-    }
-    return {
-      ...comment,
-      replies: comment.replies.map((reply) => toggleCommentLike(reply, id, userId)),
-    };
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment.id === id
+          ? {
+              ...comment,
+              quantidadeCurtidas: comment.perfisQueCurtiram.includes(perfilId)
+                ? comment.quantidadeCurtidas - 1
+                : comment.quantidadeCurtidas + 1,
+              perfisQueCurtiram: comment.perfisQueCurtiram.includes(perfilId)
+                ? comment.perfisQueCurtiram.filter((user) => user !== perfilId)
+                : [...comment.perfisQueCurtiram, perfilId],
+            }
+          : comment
+      )
+    );
   };
 
   return (
     <div className={styles.commentSection}>
       <h1>{context === "book" ? "Comentários" : ""}</h1>
       <div className={styles.createComment}>
-        
-      {context === "book" && (
-  <>
-    {Lido ? (
-      <>
-      <div className={styles.rating}>
-      </div>
-      <CommentForm
-          onSubmit={addComment}
-          isSpoiler={isSpoiler}
-          setIsSpoiler={setIsSpoiler}
-        />
-      </>
-    ) : (
-      <p>Finalize a leitura para criar um comentário. <button onClick={setLido}>Marcar como lido</button></p>
-    )}
-  </>
-)} {context === "forum" && (
-  <>
-      <div>
-            {/* 🔹 Agora, o formulário só aparece se showCommentForm for true */}
-            {showCommentForm && (
+        {context === "book" && (
+          <>
+            {lido ? (
+              <>
+                <div className={styles.rating}></div>
+                <CommentForm
+                  onSubmit={addComment}
+                  isSpoiler={isSpoiler}
+                  setIsSpoiler={setIsSpoiler}
+                />
+              </>
+            ) : (
+              <p>
+                Finalize a leitura para criar um comentário.{" "}
+                <button onClick={() => setLido(true)}>Marcar como lido</button>
+              </p>
+            )}
+          </>
+        )}
+        {context === "forum" && showCommentForm && (
           <CommentForm
             onSubmit={addComment}
             isSpoiler={isSpoiler}
             setIsSpoiler={setIsSpoiler}
           />
         )}
-      </div>
-    
-  </>
-)}
-       
       </div>
       <CommentList
         comments={comments}
