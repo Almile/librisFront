@@ -153,8 +153,15 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
+    // Dentro do useEffect que já busca os dados do usuário
+    useEffect(() => {
+        if (user?.data?.username) {
+            fetchPerfil(user.data.username);
+        }
+    }, [user]);
+
     return (
-        <AuthContext.Provider value={{ token, user, isAuthenticated: !!token, login, logout }}>
+        <AuthContext.Provider value={{ token, user, setUser , isAuthenticated: !!token, login, logout }}>
             {children}
             {showGenres && <GenreSelector onSave={handleGenreSelection} />}
         </AuthContext.Provider>

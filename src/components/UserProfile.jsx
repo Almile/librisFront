@@ -1,48 +1,43 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import ReactQuill from "react-quill";
-
 import useAuth from "../context/AuthContext";
 import backendApi from "../services/backendApi";
 import "react-quill/dist/quill.snow.css";
 import User from "./User";
 
 const UserProfile = ({ id }) => {
-  const { token } = useContext(useAuth);
+  const { token, user, setUser } = useContext(useAuth);
   const [perfilUser, setPerfilUser] = useState(null);
   const [seguidores, setSeguidores] = useState([]);
   const [seguindo, setSeguindo] = useState([]);
 
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(null);
+  const [isOwner, setIsOwner] = useState(false);
 
-  const fetchUserData = async (id) => {
-    try {
-      const response = await backendApi.get(`/perfil/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("Dados do perfil que mostra:", response.data);
-      setPerfilUser(response.data);  // Armazena os dados de perfil
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await backendApi.get(`/perfil/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setPerfilUser(response.data);
+        setIsOwner(response?.data?.data?.id === user?.perfil?.id);
+      } catch (error) {
+        console.error("Erro ao buscar usuário:", error);
+      }
+    };
+    fetchUserData();
+  }, [id, user, token]);
 
-      // Atualiza os seguidores e seguindo
-      
-    } catch (error) {
-      console.error("Erro ao buscar usuário:", error);
-    }
-  };
-  const handleDescriptionChange = (content) => {
-    setDescription(content || ""); // Garante que não seja null
+  const handleDescriptionChange = (description) => {
+    setDescription(description || "");
     setPerfilUser((prevState) => ({
       ...prevState,
-      data: {
-        ...prevState.data,
-        resumoBio: content || "", // Garante um valor vazio válido
-      },
+      resumoBio: description,
     }));
   };
-  
   
   const handleProfileImageChange = (imageUrl) => {
     setProfileImage(imageUrl);
@@ -50,7 +45,7 @@ const UserProfile = ({ id }) => {
       ...prevState,
       data: {
         ...prevState.data,
-        urlPerfil: imageUrl, // Atualiza a URL de perfil
+        urlPerfil: imageUrl,
       },
     }));
   };
@@ -61,38 +56,72 @@ const UserProfile = ({ id }) => {
       ...prevState,
       data: {
         ...prevState.data,
-        urlBackPerfil: imageUrl,
+        urlBackPerfil: imageUrl, 
       },
     }));
   };
   
   const saveProfileChanges = async () => {
+    const cleanBio = description.replace(/<[^>]*>?/gm, "").trim();
+  
+    if (!cleanBio) {
+      alert("A bio não pode estar vazia!");
+      return;
+    }
+  
+    let email = perfilUser?.usuario?.email;
+    let username = perfilUser?.usuario?.username;
+  
+    const payload = {
+      usuario: { email, username },
+      urlPerfil: profileImage,
+      resumoBio: description,
+      seguindo: seguindo.length,
+      seguidores: seguidores.length,
+      generosFavoritos: perfilUser?.data?.generosFavoritos,
+      urlBackPerfil: backgroundImage,
+    };
+  
     try {
-      await backendApi.put(`/perfil/${id}`, perfilUser.data, {
+      const response = await backendApi.put(`/perfil/${id}`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert("Perfil atualizado com sucesso!");
+  
+      if (response.data && response.data.success) {
+        // Atualiza o estado local com os dados retornados do backend
+        setPerfilUser((prev) => ({
+          ...prev,
+          data: {
+            ...prev.data,
+            urlPerfil: profileImage,
+            urlBackPerfil: backgroundImage,
+            resumoBio: description,
+          },
+        }));
+        setUser((prev) => ({
+          ...prev,
+          perfil: {
+            ...prev.perfil,
+            urlPerfil: profileImage,
+          },
+        }));
+      }
     } catch (error) {
-      console.error("Erro ao salvar alterações no backend:", error);
-      alert("Erro ao salvar alterações no perfil.");
+      console.error("Erro ao salvar perfil:", error.response?.data || error);
     }
   };
 
-  
   useEffect(() => {
-    fetchUserData(id);
-  }, [id]);
-
-  useEffect(() => {
-    if (perfilUser) {
-      setBackgroundImage(perfilUser?.data?.urlBackPerfil);
-      setProfileImage(perfilUser?.data?.urlPerfil);
-      setDescription(perfilUser?.data?.resumoBio);
-      setSeguidores(perfilUser?.data?.seguidores || []);
-      setSeguindo(perfilUser?.data?.seguindo || []);
+    if (perfilUser?.data) {
+      setBackgroundImage(perfilUser?.data?.urlBackPerfil || backgroundImage);
+      setProfileImage(perfilUser?.data?.urlPerfil || profileImage);
+      setDescription(perfilUser?.data?.resumoBio || description);
+      setSeguidores(perfilUser?.data?.seguidores || seguidores);
+      setSeguindo(perfilUser?.data?.seguindo || seguindo);
     }
-  }, [perfilUser]);
+  }, [perfilUser]); 
 
+  
   const [editable, setEditable] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("seguidores");
@@ -144,6 +173,16 @@ const UserProfile = ({ id }) => {
     ],
   };
 
+  useEffect(() => {
+    if (backgroundImage || profileImage) {
+      const timeout = setTimeout(() => {
+        saveProfileChanges();
+      }, 500); // Aguarda 500ms antes de salvar
+  
+      return () => clearTimeout(timeout); // Limpa o timeout caso o estado mude antes de 500ms
+    }
+  }, [backgroundImage, profileImage]); // Executa quando um dos dois valores mudar
+  
   const toggleEditable = () => setEditable(!editable);
 
   const saveDescription = () => {
@@ -166,22 +205,22 @@ const UserProfile = ({ id }) => {
       async (error, result) => {
         if (!error && result && result.event === "success") {
           const imageUrl = result.info.secure_url;
+          console.log("Imagem carregada:", imageUrl);
   
-          // Atualiza a imagem localmente
           if (target === "background") {
-            handleBackgroundImageChange(imageUrl);
+            setBackgroundImage(imageUrl);
+            handleBackgroundImageChange(imageUrl)
           } else if (target === "perfil") {
-            handleProfileImageChange(imageUrl);
+            setProfileImage(imageUrl);
+            handleProfileImageChange(imageUrl)
           }
-  
-          // Agora, envie os dados atualizados para o backend
-          await saveProfileChanges();
+
         } else if (error) {
           console.error("Erro no upload:", error);
         }
       }
     );
-  };
+  };  
   
 
   return (
@@ -208,22 +247,25 @@ const UserProfile = ({ id }) => {
         </div>
       )}
 
-      <button
-        className="editar-background"
-        onClick={() => handleCloudinaryUpload("background")}
-      >
-        <ion-icon name="camera-outline" className="cam-icon"></ion-icon>
-      </button>
+      {isOwner && (
+        <button className="editar-background" onClick={() => handleCloudinaryUpload("background")}>
+          <ion-icon name="camera-outline" className="cam-icon"></ion-icon>
+        </button>
+      )}
       <div className="perfil-data">
-        <div className="foto-perfil">
-          <img src={profileImage} alt="Foto do Perfil" />
-          <button
-            className="editar-foto"
-            onClick={() => handleCloudinaryUpload("perfil")}
-          >
-            <ion-icon name="camera-outline" className="cam-icon"></ion-icon>
-          </button>
-        </div>
+      <div className="foto-perfil">
+      {profileImage ? (
+            <img src={profileImage} alt="Foto do Perfil" />
+          ) : (
+            <span>Imagem não carregada</span>
+          )}
+          {isOwner && (
+            <button className="editar-foto" onClick={() => handleCloudinaryUpload("perfil")}>
+              <ion-icon name="camera-outline" className="cam-icon"></ion-icon>
+            </button>
+          )}
+      </div>
+
         <div className="info-perfil">
           <div className="top-info-perfil">
             <h1>{perfilUser?.data?.usuario?.username}</h1>
@@ -253,20 +295,18 @@ const UserProfile = ({ id }) => {
                 dangerouslySetInnerHTML={{ __html: description }}
               />
             )}
-            <button
-              className="edit-desc"
-              onClick={editable ? saveDescription : toggleEditable}
-            >
-              {editable ? (
-                <div className="char-counter">
-                  {description.replace(/<[^>]+>/g, "").length} / {maxCharacters}{" "}
-                  caracteres
-                  <span><ion-icon name="save-outline"></ion-icon> {" "} Salvar</span>
-                </div>
-              ) : (
-                <span className="circle"><ion-icon name="pencil-outline"></ion-icon></span>
-              )}
-            </button>
+            {isOwner && (
+              <button className="edit-desc" onClick={editable ? saveDescription : toggleEditable}>
+                {editable ? (
+                  <div className="char-counter">
+                    {description.replace(/<[^>]+>/g, "").length} / 200 caracteres
+                    <span><ion-icon name="save-outline"></ion-icon> Salvar</span>
+                  </div>
+                ) : (
+                  <span className="circle"><ion-icon name="pencil-outline"></ion-icon></span>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>

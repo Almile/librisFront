@@ -23,9 +23,11 @@ const HeatMap = () => {
       <div className="calendar-container">
         <div className="weekday-labels">
           {/* Rótulos dos dias da semana */}
-          {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map(day => (
-            <div key={day} className="weekday-label">{day}</div>
-          ))}
+          {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((day, index) => (
+  <div key={index} className="weekday-label">{day}</div>
+))}
+
+
         </div>
         <CalendarHeatmap
           startDate={startDate} // Data inicial do mapa de calor
