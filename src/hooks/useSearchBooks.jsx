@@ -30,6 +30,7 @@ export default function useSearchBooks(q) {
                 setBooks(prev => [...prev, ...ids]);
             } catch (error) {
                 setError(error);
+                setIsOver(true);
             } finally {
                 setLoading(false);
             }

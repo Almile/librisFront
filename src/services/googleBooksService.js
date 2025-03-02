@@ -3,6 +3,7 @@ import googleBooksApi from "./googleBooksApi";
 export const getBook = (id) => {
     const fields = [
         "volumeInfo.title",
+        "volumeInfo.subtitle",
         "volumeInfo.authors",
         "volumeInfo.averageRating",
         "volumeInfo.ratingsCount",
@@ -15,6 +16,7 @@ export const getBook = (id) => {
         "volumeInfo.publishedDate",
         "volumeInfo.maturityRating",
         "volumeInfo.language",
+        "saleInfo.buyLink"
     ].join(",");
 
     return googleBooksApi.get(`/${id}?fields=${fields}`);

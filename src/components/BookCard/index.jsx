@@ -22,6 +22,14 @@ export default function BookCard({id}) {
         }
     }
 
+    const handleClickAuthors = async () => {
+        if (data.authors) {
+            const query = new URLSearchParams();
+            query.set("q", `+authors:${data.authors[0].trim()}`);
+            navigate(`/catalogo?${query.toString()}`);
+        }
+    };
+
     if (loading) return <p>Carregando...</p>;
     if (error) return <p>A network error was encountered</p>;
 
@@ -30,14 +38,14 @@ export default function BookCard({id}) {
             <img
                 onClick={() => {navigate(`/livro/${id}`);}}
                 className={style.cover}
-                src={`https://books.google.com/books/publisher/content?id=${data.id}&printsec=frontcover&img=1&zoom=1`}
+                src={`https://books.google.com/books/publisher/content?id=${id}&printsec=frontcover&img=1&zoom=1`}
                 alt={`Capa do livro ${data.title}`}
             />
             <div className={style.content}>
                 <span onClick={() => {navigate(`/livro/${id}`);}} className={style.title}>
                     {data.title}
                 </span>
-                <span className={style.authors}>
+                <span className={style.authors} onClick={handleClickAuthors}>
                     {data.authors ? data.authors.join(", ") : "Desconhecido"}
                 </span>
                 <span className={style.pageCount}>Páginas: {data.pageCount}</span>

@@ -28,6 +28,7 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
+    cursor: pointer;
 }
 
 .plCapaButton ion-icon{
@@ -52,6 +53,7 @@
 
 .plAutor {
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .plRating {

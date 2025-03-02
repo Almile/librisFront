@@ -7,8 +7,6 @@ import { useNavigate } from "react-router-dom";
 
 export default function BookContent({ id }) {    
     const { data, error, loading } = useBook(id);
-    const [authorsData, setAuthorsData] = useState(false); //modal para livros do mesmo autor
-    const [authorBooks, setAuthorBooks] = useState([]); // armazena livros do autor
     const navigate = useNavigate();
 
     const handleClickCategory = (category) => {
@@ -23,28 +21,21 @@ export default function BookContent({ id }) {
     if (!data) return <p>Livro não encontrado</p>;
 
     const handleClickAuthors = async () => {
-        if (!data.authors || data.authors.length === 0) return;
-    
-        try {
-            const authorName = encodeURIComponent(data.authors[0]); // Pegando o primeiro autor
-            const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${authorName}`);
-            const result = await response.json();
-    
-            setAuthorBooks(result.items || []);
-        } catch (error) {
-            console.error("Erro ao buscar livros do autor:", error);
+        if (data.authors) {
+            const query = new URLSearchParams();
+            query.set("q", `+authors:${data.authors[0].trim()}`);
+            navigate(`/catalogo?${query.toString()}`);
         }
-        setAuthorsData(true);
     };
     
     return (
         <div className={style.plGrid}>
             <div className={style.plCapa}>
                 <img 
-                    src={`https://books.google.com/books/publisher/content?id=${data.id}&printsec=frontcover&img=1`}
+                    src={`https://books.google.com/books/publisher/content?id=${id}&printsec=frontcover&img=1`}
                     alt={`Capa do livro ${data.title}`} 
                 />
-                <button className={style.plCapaButton}>
+                <button className={style.plCapaButton} onClick={() => {if (data.buyLink) window.open(data.buyLink, '_blank');} }>
                 <ion-icon name="cart-outline"></ion-icon>
                     Comprar livro</button>
                     
@@ -114,34 +105,6 @@ export default function BookContent({ id }) {
                     <p className={style.plInfoInfo}>{data.maturityRating || "Não disponível"}</p>
                 </div>
             </div>
-
-            {authorsData && (
-            <div className={style.authorsData}>
-                <button className={style.closeModal} onClick={() => setAuthorsData(false)}>
-                    <ion-icon name="close"></ion-icon>
-                </button>
-                <div className={style.headerMenu}>
-                    <h2 className={style.plAutor}>{data.authors?.join(", ") || "Autor desconhecido"}</h2>
-                </div>
-                {authorBooks.length > 0 ? (
-                    <div className={style.bookList}>
-                        {authorBooks.map((book) => (
-                            <div key={book.id} className={style.bookItem}>
-                                <img 
-                                    src={book.volumeInfo.imageLinks?.thumbnail || "https://via.placeholder.com/128x200"}
-                                    alt={`Capa do livro ${book.volumeInfo.title}`}
-                                />
-                                <p>{book.volumeInfo.title}</p>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <p>Nenhum outro livro encontrado para este autor.</p>
-                )}
-            </div>
-            )}
-
-
         </div>
     );
 }
