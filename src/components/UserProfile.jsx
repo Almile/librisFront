@@ -17,19 +17,41 @@ const UserProfile = ({ id }) => {
   const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserPerfil = async () => {
       try {
         const response = await backendApi.get(`/perfil/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setPerfilUser(response.data);
-        setIsOwner(response?.data?.data?.id === user?.perfil?.id);
+  
+        const responseFollow = await backendApi.get(`/relacionamentos/seguindo/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        console.log("Seguindo:", responseFollow.data);
+  
+        setSeguindo(responseFollow.data.data.content || []);
+  
+        const responseFollowers = await backendApi.get(`/relacionamentos/seguidores/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        console.log("Seguidores:", responseFollowers.data);
+  
+        setSeguidores(responseFollowers.data.data.content || []);
+  
+        if (response.data && response.data.data) {
+          setPerfilUser(response.data);
+          setIsOwner(response.data.data.id === user?.perfil?.id);
+        } else {
+          console.error("Dados do usuário não encontrados.");
+        }
       } catch (error) {
-        console.error("Erro ao buscar usuário:", error);
+        console.error("Erro ao buscar usuário:", error.response?.data || error);
       }
     };
-    fetchUserData();
+    fetchUserPerfil();
   }, [id, user, token]);
+  
 
   const handleDescriptionChange = (description) => {
     setDescription(description || "");
@@ -98,6 +120,7 @@ const UserProfile = ({ id }) => {
             resumoBio: description,
           },
         }));
+        if(isOwner){
         setUser((prev) => ({
           ...prev,
           perfil: {
@@ -105,6 +128,7 @@ const UserProfile = ({ id }) => {
             urlPerfil: profileImage,
           },
         }));
+        }
       }
     } catch (error) {
       console.error("Erro ao salvar perfil:", error.response?.data || error);
@@ -116,11 +140,8 @@ const UserProfile = ({ id }) => {
       setBackgroundImage(perfilUser?.data?.urlBackPerfil || backgroundImage);
       setProfileImage(perfilUser?.data?.urlPerfil || profileImage);
       setDescription(perfilUser?.data?.resumoBio || description);
-      setSeguidores(perfilUser?.data?.seguidores || seguidores);
-      setSeguindo(perfilUser?.data?.seguindo || seguindo);
     }
-  }, [perfilUser]); 
-
+  }, [perfilUser]);
   
   const [editable, setEditable] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -141,14 +162,16 @@ const UserProfile = ({ id }) => {
   const quillRef = useRef(null);
   const maxCharacters = 200;
 
+  console.log(seguidores)
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
   };
 
   const filteredUsers =
-    activeTab === "seguidores"
-      ? seguidores.filter((user) => user.name.toLowerCase().includes(searchTerm))
-      : seguindo.filter((user) => user.name.toLowerCase().includes(searchTerm));
+  activeTab === "seguidores"
+    ? (seguidores)
+    : (seguindo);
 
   const handleChange = (content, delta, source, editor) => {
     const currentLength = editor.getText().trim().length;
@@ -234,16 +257,32 @@ const UserProfile = ({ id }) => {
             <ion-icon name="close"></ion-icon>
           </button>
           <div className="header-menu">
-            <p className={activeTab === "seguidores" ? "active" : ""} onClick={() => setActiveTab("seguidores")}> Seguidores </p>
-            <p className={activeTab === "seguindo" ? "active" : ""} onClick={() => setActiveTab("seguindo")}> Seguindo </p>
-          </div>
+          <p
+            className={activeTab === "seguidores" ? "active" : ""}
+            onClick={() => setActiveTab("seguidores")}
+          >
+            Seguidores
+          </p>
+          <p
+            className={activeTab === "seguindo" ? "active" : ""}
+            onClick={() => setActiveTab("seguindo")}
+          >
+            Seguindo
+          </p>
+        </div>
+
           <input type="text" placeholder="Pesquisar usuário..." className="search-user" value={searchTerm} onChange={handleSearch} />
 
           <div className="follow-list">
-            {filteredUsers.map((user) => (
-              <User nome={user.name} imagem={user.image} key={user.id} />
-            ))}
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map((user) => (
+                <User nome={user.username} imagem={user.urlPerfil} key={user.id} id={user.id} />
+              ))
+            ) : (
+              <p>Nenhum usuário encontrado.</p> // Caso não haja usuários para exibir
+            )}
           </div>
+
         </div>
       )}
 

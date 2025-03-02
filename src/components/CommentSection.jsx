@@ -7,29 +7,23 @@ import useAuth from "../context/AuthContext";
 
 const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) => {
   const { token, user } = useContext(useAuth);
+  const [commentText, setCommentText] = useState(""); 
 
   const [comments, setComments] = useState([]);
   const [rating, setRating] = useState(1);
   const [isSpoiler, setIsSpoiler] = useState(false);
-  const perfilId = user?.perfil?.id;
-  const [lido, setLido] = useState(user?.perfil?.livrosLidos?.includes(livroID) || true);
+  const perfilId = parseInt(user?.perfil?.id, 10) || null;
+  const [lido, setLido] = useState(user?.perfil?.livrosLidos?.includes(livroID) ?? false);
 
   // Carregar os comentários ao montar o componente
   useEffect(() => {
     const fetchComments = async () => {
-      console.log("Tipo de livroID:", typeof livroID, "Valor:", livroID);
-  
-      const livroIdInt = Number(livroID);
-      if (isNaN(livroIdInt) || livroIdInt <= 0) {
-        console.error("Erro: livroID inválido!", livroID);
-        return;
-      }
-  
+
       try {
-        const responseComment = await backendApi.get(`/comentarios/listar/livro/${livroIdInt}`, {
+        const responseComment = await backendApi.get(`/comentarios/listar/livro/${livroID}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
+        console.log("comentarios procurados")
         setComments(responseComment.data.content || []);
       } catch (error) {
         console.error("Erro ao carregar comentários:", error.response ? error.response.data : error.message);
@@ -45,16 +39,24 @@ const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) 
   const addComment = async (text, isSpoiler, parentId = null) => {
     const newComment = {
       perfilId: perfilId,
-      livroId: livroID,
+      googleId: livroID,
       texto: text,
-      nota: 3,
+      nota: parseFloat(rating.toFixed(1)), // Garantindo que seja um Double válido
       quantidadeCurtidas: 0,
       respostas: [],
     };
-
+    console.log("Enviando comentário:", {
+      perfilId,
+      livroId: livroID,
+      texto: text,
+      nota: rating,
+    });
+    
     try {
-      const response = await backendApi.post("/comentarios", newComment);
-
+      const response = await backendApi.post("/comentarios", newComment, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
       setComments((prevComments) =>
         parentId === null
           ? [...prevComments, response.data]
@@ -64,6 +66,7 @@ const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) 
                 : comment
             )
       );
+      console.log("Comentario adicionado")
     } catch (error) {
       console.error("Erro ao adicionar comentário:", error);
     }
@@ -113,7 +116,10 @@ const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) 
                   onSubmit={addComment}
                   isSpoiler={isSpoiler}
                   setIsSpoiler={setIsSpoiler}
+                  initialText={commentText} 
+                  onTextChange={setCommentText} 
                 />
+
               </>
             ) : (
               <p>

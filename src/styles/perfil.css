@@ -470,7 +470,7 @@ ul.user-comments-list .meta {
     left: 0;
     min-height: 100vh;
     width: 100%;
-    max-width: 330px;
+    max-width: 400px;
     background-color: var(--bg-principal);
     z-index: 1000;
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
@@ -515,8 +515,13 @@ ul.user-comments-list .meta {
 .follow-item{
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 10px ;
     padding: 10px;
+}
+
+.button-follow{
+    background-color: transparent;
+    border: none;
 }
 
 .follow-image{

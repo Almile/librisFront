@@ -25,6 +25,8 @@ export const AuthProvider = ({ children }) => {
             setUser(response.data);
 
             const username = response.data?.data?.username;
+            const emailUser = response.data?.data?.email;
+
 
             if (!username) {
                 console.error("Erro: username não encontrado na resposta do servidor.");
@@ -32,7 +34,9 @@ export const AuthProvider = ({ children }) => {
             }
 
             console.log("Username do usuário:", username);
-            fetchPerfil(username, email);
+            console.log("email do usuário:", emailUser);
+
+            fetchPerfil(username, emailUser);
         } catch (error) {
             console.error("Erro ao buscar usuário:", error);
         }
@@ -46,6 +50,7 @@ export const AuthProvider = ({ children }) => {
 
     const fetchPerfil = async (username, email) => {
         if (!username || !email) {
+            console.log("username",username,"email: ",email)
             console.error("Erro: username ou email inválido.");
             return;
         }
@@ -131,20 +136,6 @@ export const AuthProvider = ({ children }) => {
 
         sessionStorage.setItem("token", newToken);
         setToken(newToken);
-
-        try {
-            const decodedUser = jwtDecode(newToken);
-            setUser(decodedUser);
-
-            if (decodedUser?.sub) {
-                await fetchUserData(decodedUser.sub);
-            } else {
-                console.error("Erro: Token não contém um email válido.");
-            }
-        } catch (error) {
-            console.error("Erro ao decodificar token:", error);
-            setUser(null);
-        }
     };
 
     const logout = () => {

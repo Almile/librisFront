@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import ReactQuill from "react-quill";
+import useAuth from "../context/AuthContext";
 import "react-quill/dist/quill.snow.css";
 import { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
@@ -25,12 +26,13 @@ const modules = {
   },
 };
 
-export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, setIsSpoiler }) => {
-  const [text, setText] = useState("");
+export const CommentForm = ({ onSubmit, initialText = "",  spoilerId, isSpoiler, setIsSpoiler, onTextChange }) => {
+  const { user } = useContext(useAuth);
+  const text = initialText; 
+  const setText = onTextChange; // Usa a função do Forum para sincronizar o estado
   const [focusedImage, setFocusedImage] = useState(null);
   const editorRef = useRef(null);
-   const userPadrao =
-    "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
+   const userPadrao = user?.perfil?.urlPerfil;
 
   useEffect(() => {
     setText(initialText);
@@ -38,15 +40,15 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
   
   const uniqueSpoilerId = spoilerId || `spoiler-checkbox-${Math.random().toString(36).substring(7)}`;
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const plainText = text.trim();
     if (plainText === "" || plainText === "<p><br></p>") return;
-
-    onSubmit(text, isSpoiler);
-    setText("");
-    setIsSpoiler(false);
+  
+    onSubmit(plainText, isSpoiler); // Agora enviando apenas o texto limpo
   };
+  
 
   const handleImageAlignment = (alignment) => {
     if (focusedImage) {
@@ -100,14 +102,13 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
         </div>
 
         <ReactQuill
-            theme="snow"
-            value={text}
-            onChange={setText}
-            className="customQuill"
-            modules={modules}
-            ref={editorRef} 
+          theme="snow"
+          value={text}
+          onChange={setText}
+          className="customQuill"
+          modules={modules}
+          ref={editorRef}
         />
-
 
         {focusedImage && (
           <div className={styles.imageAlignmentDropdown}>
