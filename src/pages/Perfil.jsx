@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import UserProfile from '../components/UserProfile';
 import HeatMap from '../components/HeatMap';
 import './../styles/perfil.css';
@@ -6,6 +6,9 @@ import CommentsProfile from '../components/CommentsProfile';
 import BookCard from "../components/BookCard";
 import EstanteLivros from '../components/EstanteLivros';
 import { useParams } from 'react-router-dom';
+import { getFavoritosByPerfil } from '../services/librisApiService';
+import useAuth from "../context/AuthContext"; 
+import {getLeituraByUser} from "../services/librisApiService";
 
 const allComments = [
   {
@@ -54,30 +57,55 @@ const allComments = [
 
 function Perfil() {
   const { id } = useParams();
+  const [isOwner, setIsOwner] = useState(false);
+  const [favoritos, setFavoritos] = useState([]);
+  const { user } = useContext(useAuth);
+  const [lendo, setLendo] = useState([]);
+  const [lidos, setLidos] = useState([]);
+  const [abandonados, setAbandonados] = useState([]);
 
   const currentUser = {
     id: id,
   };
 
-  const favoritos = [
-    "gIr-DwAAQBAJ",
-    "GaZMDwAAQBAJ",
-    "PM2uCgAAQBAJ",
-    "5BclEAAAQBAJ",
-    "W_tcDwAAQBAJ",
-  ];
+  useEffect(() => {
+    const fetchLivros = async () => {
+      try {
+        const response = await getFavoritosByPerfil(id);
+        setFavoritos(response.data.data.content.map((livro) => livro.googleId))
+        
+      } catch (error){
+        console.error(error);
+      }
+      try {
+        const response = await getLeituraByUser(user.data.username);
+        response.data.data.content.forEach(livro => {
 
-  const lidos = [
-    "m3lvDwAAQBAJ",
-  ];
+          if (livro.status == "LENDO") setLendo(prev => {
+            if (prev.includes(livro.googleId)) return prev;
+            else return [...prev, livro.googleId]
+          });
 
-  const descontinuados = [
-    "C3wTEAAAQBAJ",
-  ];
+          else if (livro.status == "LIDO") setLidos(prev => {
+            if (prev.includes(livro.googleId)) return prev;
+            else return [...prev, livro.googleId]
+          });
+
+          else setAbandonados(prev => {
+            if (prev.includes(livro.googleId)) return prev;
+            else return [...prev, livro.googleId]
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchLivros();
+  }, [id, user]);
 
     return (
         <main className='main'>
-            <UserProfile id={id}/>
+            <UserProfile id={id} isOwner={isOwner} setIsOwner={setIsOwner}/>
             <section className="top-comentarios">
             <h2>Seus Comentários</h2>
               <CommentsProfile allComments={allComments} currentUser={currentUser} />
@@ -88,8 +116,7 @@ function Perfil() {
                 <div className="lendo">
                     <h2>Lendo</h2>
                     <div className='leituras'>
-                        <BookCard id={"UbKuDwAAQBAJ"}/>
-                        <BookCard id={"_i6bDeoCQzsC"}/>
+                    {lendo.map(googleId => <BookCard key={googleId} id={googleId} username={user.data.username} showUpdate={isOwner} setLidos={setLidos} setLendo={setLendo} perfilId={id}/>)}
                     </div>
                 </div>               
         <div className="heatmap">
@@ -100,13 +127,13 @@ function Perfil() {
           <h2 className="section-title">Estante de Livros</h2>
 
           <h2 className="topico-estante">Favoritos</h2>
-          <EstanteLivros filtro={favoritos} />
+          <EstanteLivros items={favoritos} setItems={setFavoritos} />
 
           <h2 className="topico-estante">Lidos</h2>
-          <EstanteLivros filtro={lidos} />
+          <EstanteLivros items={lidos} setItems={setLidos} />
 
           <h2 className="topico-estante">Descontinuados</h2>
-          <EstanteLivros filtro={descontinuados} />
+          <EstanteLivros items={abandonados} setItems={setAbandonados} />
         </section>
       </section>
     </main>

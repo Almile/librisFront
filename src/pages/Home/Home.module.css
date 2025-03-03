@@ -14,7 +14,10 @@
 }
 
 .bookSwiper [class*="cover"] {
-    padding: 20px;
+    width: 80%;
+    padding: 12px;
+    box-sizing: content-box;
+    background-color: var(--bg-secundario);
 }
 
 .slides {
@@ -42,14 +45,14 @@
     font-size: 1rem;
 }
 
-.one {
+.start {
     display: flex;
     justify-content: space-between;
     height: 500px;
     background: linear-gradient(30deg, rgba(214,109,80,0.2) 0%, rgba(2,0,36,0) 30%);
 }
 
-.one p {
+.start p {
     font-size: 0.9rem;
     margin: 1rem 0;
 }

@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react"; // Importa hooks do React para gerenciar estados e efeitos colaterais
+import { useState, useEffect } from "react"; // Importa hooks do React para gerenciar estados e efeitos colaterais
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom"; // Hook para navegação entre páginas
 import styles from "../styles/login.module.css"; // Importa estilos CSS do módulo de login

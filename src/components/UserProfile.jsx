@@ -5,7 +5,7 @@ import backendApi from "../services/backendApi";
 import "react-quill/dist/quill.snow.css";
 import User from "./User";
 
-const UserProfile = ({ id }) => {
+const UserProfile = ({ id, isOwner, setIsOwner}) => {
   const { token, user, setUser } = useContext(useAuth);
   const [perfilUser, setPerfilUser] = useState(null);
   const [seguidores, setSeguidores] = useState([]);
@@ -14,7 +14,6 @@ const UserProfile = ({ id }) => {
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
   const [description, setDescription] = useState(null);
-  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     const fetchUserPerfil = async () => {

@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { getFavorito, favoritar, removeFavorito } from "../services/librisApiService";
+import useAuth from "../context/AuthContext"
 import { Star } from 'lucide-react';
 import useBook from '../hooks/useBook';
 import AddToShelfButton from "./AddToShelfButton";
@@ -8,11 +10,49 @@ import { useNavigate } from "react-router-dom";
 export default function BookContent({ id }) {    
     const { data, error, loading } = useBook(id);
     const navigate = useNavigate();
+    const {user} = useContext(useAuth);
+    const [favoritoId, setFavoritoId] = useState(0);
+
+    useEffect(() => {
+        const isFavorito = async () => {
+            try {
+                const response = await getFavorito(user.data.username, id);
+                if (response.data.data.content.length) {
+                    setFavoritoId(response.data.data.content[0].id);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        if (user?.data) isFavorito();
+    }, [id, user]);
 
     const handleClickCategory = (category) => {
         const query = new URLSearchParams();
-        query.set("q", category);
+        query.set("q", `+subject:${category.trim()}`);
         navigate(`/catalogo?${query.toString()}`);
+    }
+
+    const handleClickAuthors = () => {
+        if (data.authors) {
+            const query = new URLSearchParams();
+            query.set("q", `+authors:${data.authors[0].trim()}`);
+            navigate(`/catalogo?${query.toString()}`);
+        }
+    };
+
+    const handleClickFavoritar = async () => {
+        try {
+            if (!favoritoId) {
+                const response = await favoritar(user.perfil.id, id);
+                setFavoritoId(response.data.data.id);
+            } else {
+                removeFavorito(favoritoId)
+                setFavoritoId(0);
+            }
+        } catch(error) {
+            console.error(error);
+        }
     }
 
     if (loading) return <p>Carregando...</p>;
@@ -20,13 +60,6 @@ export default function BookContent({ id }) {
     
     if (!data) return <p>Livro não encontrado</p>;
 
-    const handleClickAuthors = async () => {
-        if (data.authors) {
-            const query = new URLSearchParams();
-            query.set("q", `+authors:${data.authors[0].trim()}`);
-            navigate(`/catalogo?${query.toString()}`);
-        }
-    };
     
     return (
         <div className={style.plGrid}>
@@ -69,9 +102,9 @@ export default function BookContent({ id }) {
                 <p className={style.plSinopse} dangerouslySetInnerHTML={{ __html: data.description }} ></p>
                  
                 <div className={style.plButtons}>
-                    <AddToShelfButton  bookId={id}/>
+                    <AddToShelfButton  bookId={id} username={user?.data?.username} perfilId={user.perfil.id}/>
 
-                    <button className={style.plButtonFavoritar}>Favoritar</button>
+                    <button className={style.plButtonFavoritar} onClick={handleClickFavoritar}>{favoritoId ? "Remover dos favoritos" : "Favoritar"}</button>
                 </div>
                
             </div>
