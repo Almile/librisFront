@@ -76,3 +76,11 @@ export const favoritar = (perfilId, googleId) => {
         {perfilId, googleId},
         { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }});
 }
+
+// Perfil
+
+export const getPerfilById = (id) => {
+    return librisApi.get(
+        `/perfil/${id}`,
+        { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }});
+}

@@ -29,7 +29,7 @@ export default function AddToShelfButton({ bookId, username, perfilId }) {
 
     const handleSelect = async (category) => {
         const body = {
-            "perfilId": 1,
+            "perfilId": perfilId,
             "googleId": bookId,
             "pagina": 1,
             "status": category

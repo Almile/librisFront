@@ -8,7 +8,7 @@ import EstanteLivros from '../components/EstanteLivros';
 import { useParams } from 'react-router-dom';
 import { getFavoritosByPerfil } from '../services/librisApiService';
 import useAuth from "../context/AuthContext"; 
-import {getLeituraByUser} from "../services/librisApiService";
+import {getLeituraByUser, getPerfilById} from "../services/librisApiService";
 
 const allComments = [
   {
@@ -78,7 +78,8 @@ function Perfil() {
         console.error(error);
       }
       try {
-        const response = await getLeituraByUser(user.data.username);
+        const perfil = await getPerfilById(id);
+        const response = await getLeituraByUser(perfil.data.data.usuario.username);
         response.data.data.content.forEach(livro => {
 
           if (livro.status == "LENDO") setLendo(prev => {
