@@ -31,6 +31,7 @@
 .authors {
     --line-clamp: 1;
     font-size: 0.8rem;
+    cursor: pointer;
 }
 
 .rating {

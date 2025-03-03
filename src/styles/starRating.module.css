@@ -1,0 +1,27 @@
+.rating{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.starRating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.starRating input{
+    color:var(--destaque);
+    border: 1px solid var(--borda-suave);
+    background-color: transparent;
+    padding: 2px;
+    min-width: 40px;
+    border-radius: 10px;
+    text-align: center;
+    margin-left: 8px;
+}
+
+.starIcon:hover {
+    transform: scale(1.2);
+}

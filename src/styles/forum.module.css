@@ -1,0 +1,159 @@
+.forum {
+    max-width: 1200px;
+    margin: 20px auto;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    min-height: 85vh;
+}
+
+.forumContent, .forumSidebar {
+    background-color: var(--bg-secundario);
+    padding: 20px;
+    border-radius: 5px;
+    width: 70%;
+    min-height: 80vh;
+}
+
+.forumSidebar {
+    width: 30%;
+}
+ 
+.filter{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.searchInput{
+    height: 40px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid var(--borda-suave);
+    background-color: var(--bg-principal);
+    border-radius: 5px;
+  }
+
+  .searchButton{
+    height: 40px;
+    padding: 10px;
+    width: 40px;
+    border: none;
+    background-color: var(--destaque);
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .searchButton ion-icon{
+    color: var(--bg-principal);
+    font-size: 20px;
+  }
+
+  .loadPosts{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    margin: 20px 0;
+    background-color: var(--borda-suave);
+  }
+
+.followItem{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.followImage{
+    width: 20px;
+    height: 20px;
+    background-color: var(--bg-secundario);
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+}
+
+.backButton{
+    border: none;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.tagsInput {
+    border: 1px solid var(--borda-suave);
+    background-color: transparent;
+    padding: 5px;
+    width: 100%;
+}
+
+.commentForm{
+    border: 1px solid var(--borda-suave);
+    border-radius: 5px;
+}
+
+.optionalCamp{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 10px 10px;
+}
+
+.bookSelector {
+    position: relative;
+    width: 100%;
+  }
+  
+  .dropdownList {
+    position: absolute;
+    width: 100%;
+    min-width: 300px;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 10;
+  }
+  
+  .dropdownItem {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .dropdownItem:hover {
+    background: #f0f0f0;
+  }
+
+  
+@media (max-width: 1024px) {
+    .forum {
+        flex-direction: column;
+        justify-content:unset;
+        gap: 0;
+    }
+
+    .forumContent, .forumSidebar {
+        width: 100%;
+    }
+}

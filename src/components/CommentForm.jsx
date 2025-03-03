@@ -1,9 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import ReactQuill from "react-quill";
+import useAuth from "../context/AuthContext";
 import "react-quill/dist/quill.snow.css";
 import { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
-import userPadrao from '/user_padrao.svg'
+import styles from "../styles/comments.module.css";
+import "../styles/quill.css"
+
 Quill.register("modules/imageResize", ImageResize);
 
 const modules = {
@@ -23,10 +26,13 @@ const modules = {
   },
 };
 
-export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, setIsSpoiler }) => {
-  const [text, setText] = useState("");
+export const CommentForm = ({ onSubmit, initialText = "",  spoilerId, isSpoiler, setIsSpoiler, onTextChange }) => {
+  const { user } = useContext(useAuth);
+  const text = initialText; 
+  const setText = onTextChange; // Usa a função do Forum para sincronizar o estado
   const [focusedImage, setFocusedImage] = useState(null);
   const editorRef = useRef(null);
+   const userPadrao = user?.perfil?.urlPerfil;
 
   useEffect(() => {
     setText(initialText);
@@ -34,24 +40,24 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
   
   const uniqueSpoilerId = spoilerId || `spoiler-checkbox-${Math.random().toString(36).substring(7)}`;
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const plainText = text.trim();
     if (plainText === "" || plainText === "<p><br></p>") return;
-
-    onSubmit(text, isSpoiler);
-    setText("");
-    setIsSpoiler(false);
+  
+    onSubmit(plainText, isSpoiler); // Agora enviando apenas o texto limpo
   };
+  
 
   const handleImageAlignment = (alignment) => {
     if (focusedImage) {
       focusedImage.style.float = "";
       focusedImage.className = "";
       if (alignment === "left") {
-        focusedImage.classList.add("float-left");
+        focusedImage.classList.add(styles.floatLeft);
       } else if (alignment === "right") {
-        focusedImage.classList.add("float-right");
+        focusedImage.classList.add(styles.floatRight);
       }
     }
   };
@@ -64,8 +70,6 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
     }
   };
 
-
-  
   useEffect(() => {
     const editorElement = editorRef.current.getEditor().root;
     editorElement.addEventListener("click", handleEditorClick);
@@ -76,15 +80,15 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
   }, []);
 
   return (
-    <form onSubmit={handleSubmit} className="form-comment">
+    <form onSubmit={handleSubmit} className={styles.formComment}>
       <img
         src={userPadrao}
         alt="Foto de perfil"
-        className="profile-picture"
+        className={styles.profilePicture}
       />
 
-      <div className="box-comment">
-        <div className="spoiler">
+      <div className={styles.boxComment}>
+        <div className={styles.spoiler}>
           <input
             id={uniqueSpoilerId} 
             type="checkbox"
@@ -101,33 +105,31 @@ export const CommentForm = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
           theme="snow"
           value={text}
           onChange={setText}
-          className="custom-quill"
+          className="customQuill"
           modules={modules}
-          ref={editorRef} 
+          ref={editorRef}
         />
 
         {focusedImage && (
-          <div className="image-alignment-dropdown">
+          <div className={styles.imageAlignmentDropdown}>
             <button
               type="button"
               onClick={() => handleImageAlignment("left")}
-              className="align-left-button"
+              className={styles.alignLeftButton}
             >
               Alinhar à Esquerda
             </button>
             <button
               type="button"
               onClick={() => handleImageAlignment("right")}
-              className="align-right-button"
+              className={styles.alignRightButton}
             >
               Alinhar à Direita
             </button>
           </div>
         )}
 
-        <button type="submit" className="envy-button">
-          Enviar
-        </button>
+        <button type="submit" className={styles.envyButton}> Enviar </button>
       </div>
     </form>
   );

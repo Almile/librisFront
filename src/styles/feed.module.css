@@ -1,0 +1,99 @@
+  .card {
+    max-height: 400px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .cardPrincipal{
+    border-bottom: 1px solid var(--bg-principal);
+    padding-bottom: 10px;
+  }
+  
+  .cardContent {
+    padding: 8px;
+  }
+  
+  .header {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+  }
+  
+  .topic {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--link);
+    display: flex;
+    align-items: baseline;
+    margin: 0;
+    gap: 5px;
+  }
+  
+  .tag {
+    font-size: 12px;
+    color: var(--texto-secundario);
+    margin: 0;
+  }
+  
+  .text {
+    font-size: 15px;
+    margin: 8px 0; 
+    color: var(--link);
+  }
+  
+  .image {
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 12px;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 30px;
+    margin-top: 10px;
+  }
+  
+  .actionButton {
+    background: none;
+    border: none;
+    color: var(--texto-secundario);
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .actionButton:hover {
+    color: var(--destaque);
+  }
+  
+  .headerContent {position: relative;width: 100%;}
+
+  .headerContent ion-icon{
+    position: absolute;
+    color: var(--destaque);
+    font-size: 20px;
+    right: 10px;
+    top: 5px;
+  }
+  .bookSelected{
+    font-size: 12px;
+    width: 100%;
+    overflow: hidden;
+    height: 1.3em;
+    color: var(--destaque);
+  }
+  .tags{
+    position: relative;
+    display: flex;
+    align-items: center;
+  }

@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import styles from "../styles/GenreSelector.module.css";
 
-const genres = [
-  "Infantil",
-  "Mistério",
-  "Fantasia",
-  "Ficção Científica",
-  "Ficção",
-  "Não Ficção",
-  "Ciência",
-  "Histórico",
-  "Tecnologia",
-  "Biografia",
-  "Romance",
-  "Saude e Hábitos",
-];
+const genreMap = {
+  "Infantil": "INFANTIS",
+  "Mistério": "MISTERIO",
+  "Fantasia": "FANTASIA",
+  "Ficcao Científica": "FICCAO_CIENTIFICA",
+  "Ficção": "FICCAO",
+  "Não Ficção": "NAO_FICCAO",
+  "Ciência": "CIENCIA",
+  "Histórico": "AUTOAJUDA", // Ajuste necessário conforme o contexto do backend
+  "Tecnologia": "TECNOLOGIA",
+  "Biografia": "BIOGRAFIA",
+  "Romance": "ROMANCE",
+  "Saude e Hábitos": "SAUDE_E_HABITOS",
+};
+
+const genres = Object.keys(genreMap);
 
 const GenreSelector = ({ onSave, initialGenres = [] }) => {
   const [isModalOpen, setIsModalOpen] = useState(true);
@@ -33,7 +35,9 @@ const GenreSelector = ({ onSave, initialGenres = [] }) => {
   };
 
   const savePreferences = () => {
-    onSave(selectedGenres);
+    const backendGenres = selectedGenres.map((genre) => genreMap[genre] || genre);
+    console.log("Gêneros convertidos para envio:", backendGenres);
+    onSave(backendGenres);
     closeModal();
   };
 

@@ -1,24 +1,16 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import ReviewSection from "../components/ReviewSection";
 import BookContent from '../components/BookContent'
 import CommentSection from "../components/CommentSection"
-import "../styles/comments.css"
-
-
-
+import style from "../styles/Livro.module.css"
 const Livro = () => {
-  const navigate = useNavigate();
   const params = useParams();
-
-  const navegarParaResenha = () => {
-    navigate('/resenha');
-  };
   return(
-    <div className="content">
+    <div className={style.pagLivro}>
       <BookContent id={params.id} />
-      <button onClick={navegarParaResenha}>Ir para Resenha</button>
-
-      <CommentSection />
+      <ReviewSection/>
+      <CommentSection context="book" livroID={params.id}/>
     </div>
   )
 }

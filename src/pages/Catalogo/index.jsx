@@ -42,7 +42,7 @@ export default function Catalogo() {
     return (
         <>
             <OutlinedButton onClick={() => setSearchParams()}>
-                <h2>{searchParams.get("q")} <X size={16} color="red"/></h2>
+                <h2>{searchParams.get("q").replace("+subject:", "").replace("+authors:", "")} <X size={16} color="red"/></h2>
             </OutlinedButton>
             <div className={style.grid}>
                 {books.map((id, index) => 

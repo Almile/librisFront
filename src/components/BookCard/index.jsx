@@ -3,19 +3,32 @@ import style from './BookCard.module.css'
 import useBook from '../../hooks/useBook'
 import { useState } from 'react'
 import OutlinedButton from '../OutlinedButton';
+import BookLecture from "../BookLecture";
 import { useNavigate } from 'react-router-dom';
 
 export default function BookCard({id}) {
     const [currentPage, setCurrentPage] = useState(0);
     const { data, loading, error } = useBook(id);
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
 
     const handleClick = () => {
         const page = window.prompt("Página atual");
         if (page >= 0 && page <= data.pageCount) {
             setCurrentPage(+page);
         }
+        if(page == data.pageCount){
+            setShowModal(true);
+        }
     }
+
+    const handleClickAuthors = async () => {
+        if (data.authors) {
+            const query = new URLSearchParams();
+            query.set("q", `+authors:${data.authors[0].trim()}`);
+            navigate(`/catalogo?${query.toString()}`);
+        }
+    };
 
     if (loading) return <p>Carregando...</p>;
     if (error) return <p>A network error was encountered</p>;
@@ -23,15 +36,16 @@ export default function BookCard({id}) {
     return (
         <div className={style.bookCard}>
             <img
+                onClick={() => {navigate(`/livro/${id}`);}}
                 className={style.cover}
-                src={`https://books.google.com/books/publisher/content?id=${data.id}&printsec=frontcover&img=1&zoom=1`}
+                src={`https://books.google.com/books/publisher/content?id=${id}&printsec=frontcover&img=1&zoom=1`}
                 alt={`Capa do livro ${data.title}`}
             />
             <div className={style.content}>
                 <span onClick={() => {navigate(`/livro/${id}`);}} className={style.title}>
                     {data.title}
                 </span>
-                <span className={style.authors}>
+                <span className={style.authors} onClick={handleClickAuthors}>
                     {data.authors ? data.authors.join(", ") : "Desconhecido"}
                 </span>
                 <span className={style.pageCount}>Páginas: {data.pageCount}</span>
@@ -45,6 +59,8 @@ export default function BookCard({id}) {
                 </>
                 }
             </div>
+            {showModal && <BookLecture bookId={data.id} onClose={() => setShowModal(false)} />}
+
         </div>
     );
 }

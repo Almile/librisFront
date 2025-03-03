@@ -5,10 +5,10 @@
 }
 
 .back, 
-.back .back-to-book,
-.back .button-edit, 
+.back .backToBook,
+.back .buttonEdit, 
 .resenha .autor,
-.review-details{
+.reviewDetails{
     background-color: transparent;
     border: none;
     display: flex;
@@ -23,12 +23,12 @@
     gap: 10px;
 }
 
-.back-to-book{
+.backToBook{
    justify-content: flex-start;
    font-size: 14px;
 }
 
-.edit-review {
+.editReview {
     position: absolute;
     right: 20px;
     display: flex;
@@ -41,7 +41,7 @@
     width: 120px;
 }
 
-.alert-spoiler-review{
+.alertSpoilerReview{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -50,36 +50,35 @@
     border-radius: 5px;
     color:  rgb(207, 98, 98);
     padding: 8px 14px;
+    margin-bottom: 30px;
     width: 100%;
 }
 
-.title-review{
+.titleReview{
     border: none;
     padding: 10px;
     font-size: 24px;
     width: 100%;
     background-color: transparent;
 }
-.date-review {
+
+.resenha{
+    margin-bottom: 50px;
+}
+.dateReview {
     font-size: 12px;
 }
 
 .resenha .meta{
     flex-direction: column-reverse;
 }
-.resenha .profile-picture {
+.resenha .profilePicture {
     display: none;
 }
 
-.resenha .form-comment {
+.resenha .formComment {
     padding: 0;
     border: none;
-}
-
-.resenha .custom-quill .ql-editor {
-    max-width:100%;
-    min-height: 40vh;
-    margin: 0;
 }
 
 .autorImage{
@@ -88,21 +87,20 @@
     border-radius: 50px;
 }
 
-.resenha .review button.envy-button{    
+.envyReviewButton{    
     width: 100%;
-    background-color: #333;
+    background-color: var(--texto-secundario);
     color: rgb(255, 255, 255);
     border: none;
     padding: 10px;
 }
 
-.box-comment {
+.boxComment {
     border: 1px solid var(--borda-suave);
     border-radius: 5px;
-    margin-top: 10px;
 }
 
-.resenha  .inner-review{
+.resenha  .innerReview{
     width: 100%;
     margin-top: 10px;
     border: none;

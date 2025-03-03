@@ -8,12 +8,17 @@
 
 body{
     background-color: var(--bg-principal);
+    position: relative;
+    min-height: 100vh;
 }
 
 a{
     text-decoration: none;
 }
 
+ul{
+    list-style: none;
+}
 
 :root{
     --bg-principal: #ffffff;
@@ -25,6 +30,7 @@ a{
     --borda-suave: #66666640;
     --terraCota: #ED553B;
     --tema: #3e3eb4;
+    --terraCota: #ED553B;
 }
 
 body.dark-mode{
@@ -34,7 +40,15 @@ body.dark-mode{
     --texto-secundario: #b0b0b0;
     --destaque: #00d8d8;
     --link:#cccccc;
-    --borda-suave: #33333340;
     --tema: #009c9d;
+    --terraCota: #ED553B;
 }
 
+footer{
+    width: 100%;
+    background-color: var(--bg-secundario);
+    color: var(--texto-secundario);
+    padding: 10px;
+    text-align: center;
+    font-size: .8em;
+}

@@ -1,47 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import "../styles/notificacoes.css";
+import useAuth from '../context/AuthContext';
+import backendApi from "../services/backendApi";
 
 const Notificacoes = () => {
+  const { token, user } = useContext(useAuth);
   const navigate = useNavigate();
 
-  const navegarParaConfiguracoes = () => {
-    navigate('/configuracao');
+  const [activeTab, setActiveTab] = useState("Todos");
+  const [notificacoes, setNotificacoes] = useState([]);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const fetchNotifications = async () => {
+    if (!token) {
+      console.error("Token ausente, não foi possível buscar os dados do usuário.");
+      return;
+    }
+    try {
+      const resp = await backendApi.get(`/libris/notificacoes/perfil/${user?.perfil?.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setNotificacoes(resp.data.content); 
+    } catch (error) {
+      console.error("Erro ao buscar notificações:", error);
+    }
   };
 
-  const [activeTab, setActiveTab] = useState("Todos");
-  const [notificacoes, setNotificacoes] = useState([
-    {
-      id: 1,
-      tipo: "comentario",
-      usuario: "Nome do usuário",
-      mensagem: "comentou sua publicação",
-      descricao: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-      data: "DD/MM/AAAA",
-      lida: false,
-    },
-    {
-      id: 2,
-      tipo: "seguidores",
-      usuario: "Nome do usuário",
-      mensagem: "começou a te seguir",
-      descricao: "",
-      data: "DD/MM/AAAA",
-      lida: false,
-    },
-    {
-      id: 3,
-      tipo: "curtida",
-      usuario: "Nome do usuário",
-      mensagem: "curtiu seu comentário",
-      descricao: "",
-      data: "DD/MM/AAAA",
-      lida: true,
-    },
-  ]);
+  const marcarTodasComoLidas = async () => {
+    if (!token) return;
+    
+    try {
+      await backendApi.patch(`/libris/notificacoes/marcar-todas-como-lida`, null, {
+        params: { perfilId: user?.perfil?.id },
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-  const marcarTodasComoLidas = () => {
-    setNotificacoes(notificacoes.map((n) => ({ ...n, lida: true })));
+      setNotificacoes((prev) => prev.map((n) => ({ ...n, lida: true })));
+    } catch (error) {
+      console.error("Erro ao marcar todas como lidas:", error);
+    }
+  };
+
+  const marcarComoLida = async (id) => {
+    if (!token) return;
+
+    try {
+      await backendApi.patch(`/libris/notificacoes/${id}/marcar-como-lida`, null, {
+        params: { perfilId: user?.perfil?.id },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setNotificacoes((prev) => prev.map((n) => (n.id === id ? { ...n, lida: true } : n)));
+    } catch (error) {
+      console.error("Erro ao marcar notificação como lida:", error);
+    }
   };
 
   const notificacoesFiltradas =
@@ -79,15 +96,17 @@ const Notificacoes = () => {
               {notificacao.descricao && <p className="paragrafo-limitado">{notificacao.descricao}</p>}
               <span className="data">{notificacao.data}</span>
             </div>
-            {!notificacao.lida && <div className="status"></div>}
+            {!notificacao.lida && (
+              <div className="status" onClick={() => marcarComoLida(notificacao.id)}></div>
+            )}
           </div>
         ))}
       </div>
       <div className="configurar">
-        <a onClick={navegarParaConfiguracoes}>Configurar notificações</a>
+        <a onClick={() => navigate('/configuracao')}>Configurar notificações</a>
       </div>
     </div>
   );
 };
 
-export default Notificacoes
+export default Notificacoes;

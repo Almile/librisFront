@@ -1,183 +1,141 @@
-import React, { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { CommentList } from "./CommentList";
 import { CommentForm } from "./CommentForm";
-import { StarRating } from "./StarRating";
+import backendApi from "../services/backendApi";
+import styles from "../styles/comments.module.css";
+import useAuth from "../context/AuthContext";
 
-import userPhoto from '/user_padrao.svg';
+const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) => {
+  const { token, user } = useContext(useAuth);
+  const [commentText, setCommentText] = useState(""); 
 
-const commentsData = [
-  {
-    id: 1,
-    text: "Este é um comentário sem spoiler.",
-    user: {
-      name: "João Silva",
-      userImage: userPhoto,
-    },
-    date: "2025-01-15",
-    isSpoiler: false,
-    likedBy: ["Maria Oliveira","Mariana"],
-    likes: 2,
-    rating: 4,
-    parentId: null,
-    isReplying: false,
-    replies: [
-      {
-        id: 2,
-        text: "Uma resposta ao comentário acima.",
-        user: {
-          name: "Maria Oliveira",
-          userImage: userPhoto,
-        },
-        date: "2025-01-16",
-        isSpoiler: false,
-        likedBy: [],
-        likes: 0,
-        rating: null,
-        parentId: 1,
-        isReplying: false,
-        replies: [],
-      },
-      {
-        id: 3,
-        text: "Com tag de Spoiler.",
-        user: {
-          name: "Mariana",
-          userImage: userPhoto,
-        },
-        date: "2025-01-16",
-        isSpoiler: true,
-        likedBy: ["Maria Oliveira","Mariana","João Silva"],
-        likes: 3,
-        rating: null,
-        parentId: 1,
-        isReplying: false,
-        replies: [],
-      },
-    ],
-  },
-];
-
-const CommentSection = () => {
-  const [comments, setComments] = useState(commentsData);
-  const [currentId, setCurrentId] = useState(4);
-  const [rating, setRating] = useState(0);
+  const [comments, setComments] = useState([]);
+  const [rating, setRating] = useState(1);
   const [isSpoiler, setIsSpoiler] = useState(false);
+  const perfilId = parseInt(user?.perfil?.id, 10) || null;
+  const [lido, setLido] = useState(user?.perfil?.livrosLidos?.includes(livroID) ?? false);
 
-  const addComment = (text, isSpoiler, parentId = null) => {
-    if (rating === 0 && parentId === null) {
-      alert("A nota é obrigatória!");
-      return;
-    }
+  // Carregar os comentários ao montar o componente
+  useEffect(() => {
+    const fetchComments = async () => {
 
-    const newComment = {
-      id: currentId,
-      text,
-      isSpoiler,
-      parentId,
-      likes: 0,
-      likedBy: [],
-      replies: [],
-      isReplying: false,
-      user: {
-        name: "Nome_usuario",
-        userImage: "/user_padrao.svg",
-      },
-      date: new Date().toLocaleString(),
-      rating: parentId === null ? rating : null,
-    };
-
-    console.log('Adicionando novo comentário:', newComment);
-
-    setCurrentId((prevId) => prevId + 1);
-    if (parentId === null) {
-      setComments([...comments, newComment]);
-    } else {
-      setComments((prevComments) =>
-        addReplyToComments(prevComments, parentId, newComment)
-      );
-    }
-    setRating(0);
-  };
-
-  const addReplyToComments = (commentsList, parentId, newReply) => {
-    return commentsList.map((comment) => {
-      if (comment.id === parentId) {
-        return {
-          ...comment,
-          replies: [...comment.replies, newReply],
-          isReplying: false,
-        };
-      } else {
-        return {
-          ...comment,
-          replies: addReplyToComments(comment.replies, parentId, newReply),
-        };
+      try {
+        const responseComment = await backendApi.get(`/comentarios/listar/livro/${livroID}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("comentarios procurados")
+        setComments(responseComment.data.content || []);
+      } catch (error) {
+        console.error("Erro ao carregar comentários:", error.response ? error.response.data : error.message);
       }
+    };
+  
+    fetchComments();
+  }, [livroID, token]);
+  
+  
+
+  // Função para salvar um comentário
+  const addComment = async (text, isSpoiler, parentId = null) => {
+    const newComment = {
+      perfilId: perfilId,
+      googleId: livroID,
+      texto: text,
+      nota: parseFloat(rating.toFixed(1)), // Garantindo que seja um Double válido
+      quantidadeCurtidas: 0,
+      respostas: [],
+    };
+    console.log("Enviando comentário:", {
+      perfilId,
+      livroId: livroID,
+      texto: text,
+      nota: rating,
     });
+    
+    try {
+      const response = await backendApi.post("/comentarios", newComment, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      setComments((prevComments) =>
+        parentId === null
+          ? [...prevComments, response.data]
+          : prevComments.map((comment) =>
+              comment.id === parentId
+                ? { ...comment, respostas: [...comment.respostas, response.data] }
+                : comment
+            )
+      );
+      console.log("Comentario adicionado")
+    } catch (error) {
+      console.error("Erro ao adicionar comentário:", error);
+    }
+
+    setRating(0);
+    if (onCommentSubmit) onCommentSubmit();
   };
 
   const toggleReplyMode = (id) => {
-    const updatedComments = comments.map((comment) => toggleReply(comment, id));
-    setComments(updatedComments);
-  };
-
-  const toggleReply = (comment, id) => {
-    if (comment.id === id) {
-      return {
-        ...comment,
-        isReplying: !comment.isReplying,
-      };
-    }
-    return {
-      ...comment,
-      replies: comment.replies.map((reply) => toggleReply(reply, id)),
-    };
-  };
-
-  const toggleLike = (id) => {
-    const userId = "currentUser"; 
-    const updatedComments = comments.map((comment) =>
-      toggleCommentLike(comment, id, userId)
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment.id === id ? { ...comment, isReplying: !comment.isReplying } : comment
+      )
     );
-    setComments(updatedComments);
   };
 
-  const toggleCommentLike = (comment, id, userId) => {
-    if (comment.id === id) {
-      const alreadyLiked = comment.likedBy.includes(userId);
-      return {
-        ...comment,
-        likes: alreadyLiked ? comment.likes - 1 : comment.likes + 1,
-        likedBy: alreadyLiked
-          ? comment.likedBy.filter((user) => user !== userId)
-          : [...comment.likedBy, userId],
-      };
-    }
-    return {
-      ...comment,
-      replies: comment.replies.map((reply) =>
-        toggleCommentLike(reply, id, userId)
-      ),
-    };
+  const toggleLike = async (id) => {
+    if (!perfilId) return;
+
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment.id === id
+          ? {
+              ...comment,
+              quantidadeCurtidas: comment.perfisQueCurtiram.includes(perfilId)
+                ? comment.quantidadeCurtidas - 1
+                : comment.quantidadeCurtidas + 1,
+              perfisQueCurtiram: comment.perfisQueCurtiram.includes(perfilId)
+                ? comment.perfisQueCurtiram.filter((user) => user !== perfilId)
+                : [...comment.perfisQueCurtiram, perfilId],
+            }
+          : comment
+      )
+    );
   };
 
   return (
-    <div className="commentSection">
-      <h1>Comentários</h1>
-      <div className="create-comment">
-        <span className="rating">
-          Comente o que achou do livro:{" "}
-          <StarRating 
-            rating={rating} 
-            onRatingChange={(star) => setRating(star)} 
-            required={true}
+    <div className={styles.commentSection}>
+      <h1>{context === "book" ? "Comentários" : ""}</h1>
+      <div className={styles.createComment}>
+        {context === "book" && (
+          <>
+            {lido ? (
+              <>
+                <div className={styles.rating}></div>
+                <CommentForm
+                  onSubmit={addComment}
+                  isSpoiler={isSpoiler}
+                  setIsSpoiler={setIsSpoiler}
+                  initialText={commentText} 
+                  onTextChange={setCommentText} 
+                />
+
+              </>
+            ) : (
+              <p>
+                Finalize a leitura para criar um comentário.{" "}
+                <button onClick={() => setLido(true)}>Marcar como lido</button>
+              </p>
+            )}
+          </>
+        )}
+        {context === "forum" && showCommentForm && (
+          <CommentForm
+            onSubmit={addComment}
+            isSpoiler={isSpoiler}
+            setIsSpoiler={setIsSpoiler}
           />
-        </span>
-        <CommentForm
-          onSubmit={addComment}
-          isSpoiler={isSpoiler}
-          setIsSpoiler={setIsSpoiler}
-        />
+        )}
       </div>
       <CommentList
         comments={comments}

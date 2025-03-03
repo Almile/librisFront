@@ -2,7 +2,7 @@
   display:flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height:  calc(100vh - 40px);
   width: 100vw;
   color: #333;
   overflow: hidden;
@@ -276,8 +276,4 @@
 .book .messageRegister h1{
   color: #009c9d;
 
-}
-
-#pageForgot{
-  display: none;
 }

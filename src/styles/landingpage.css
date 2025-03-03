@@ -1,0 +1,140 @@
+.pt1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.shelf1 {
+    display: flex;
+    justify-content: left;
+    grid-column: 1;
+}
+
+.shelf1 img {
+    height: 1000px;
+
+}
+
+.shelf2 {
+    display: flex;
+    justify-content: right;
+    grid-column: 4;
+}
+
+.shelf2 img {
+    height: 1000px;
+}
+
+.logolp {
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+    margin-bottom: 60px
+}
+
+.logolp img{
+    height: 80px;
+}
+
+.description {
+    grid-column: 2;
+    grid-column: span 2;
+    justify-content: center;
+}
+
+.subtitulo {
+    text-align: center;
+    font-size: 38px;
+}
+
+.text {
+    text-align: center;
+    font-size: 21px;
+    line-height: 32px;
+    margin-bottom: 30px;
+}
+
+.cta {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.cta button {
+    background-color: #009C9D;
+    color: white;
+    border: none;
+    border-radius: 40px;
+    padding: 20px 55px;
+    font-size: 23px;
+}
+
+.cta button:hover {
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid #009C9D;
+    color: grey;
+}
+
+.authors {
+    grid-column: 2;
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.info {
+    width: 175px;
+    text-align: center;
+}
+
+.picture img{
+    border-radius: 50%;
+    height: 90px;
+    width: 90px;
+    background-color: lightgrey;
+    object-fit: cover;
+}
+
+.funcionalidades {
+    text-align: center;
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
+}
+
+.gridSup {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 30px;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto
+}
+
+.aplication {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.aplication .image img {
+    width: 35px;
+    height: 35px;
+    border: 1px solid;
+    object-fit: cover; 
+}
+
+.aplication .title h2 {
+    margin: 10px 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.aplication .atext p {
+    margin: 0;
+    font-size: 0.9em;
+    color: #666;
+}

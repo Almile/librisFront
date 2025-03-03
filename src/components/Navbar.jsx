@@ -1,13 +1,12 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import AuthContext from '../context/AuthContext';
+import useAuth from '../context/AuthContext';
 import { useContext, useState, useRef, useEffect } from 'react';
 import '../styles/navbar.css';
 import Notificacoes from './Notificacoes';
 import logo from '/logotipo.svg';
-import userPhoto from '/user_padrao.svg';
 
 function Navbar() {
-    const { isAuthenticated, logout } = useContext(AuthContext);
+    const { isAuthenticated, user, logout } = useContext(useAuth);
     const location = useLocation();
     const navigate = useNavigate();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -17,7 +16,9 @@ function Navbar() {
     const dropdownRef = useRef(null);
     const notificationsRef = useRef(null);
     const savedTheme = localStorage.getItem('theme');
+    console.log("usuario navbar:",user);
 
+    const userPhoto = user?.perfil?.urlPerfil|| "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
     const toggleTheme = () => {
         if (!isAuthenticated) return;
     
@@ -112,12 +113,10 @@ function Navbar() {
         setIsNotificationsOpen(false);
     };
 
-
-
     return (
         <nav className={`navbar ${isLoginPage ? 'navbar-fixed' : 'navbar-relative'}`}>
             <div>
-                <Link to={isAuthenticated ? "/homePage" : "/"} className="logo">
+                <Link to={isAuthenticated ? "/home" : "/"} className="logo">
                     <img src={logo} alt="Logo Libris" />
                     <h1 className='libris'>LIBRIS</h1>
                 </Link>
@@ -131,8 +130,8 @@ function Navbar() {
                {isAuthenticated ? (
     <>
         <Link
-            to="/homePage"
-            className={location.pathname === '/homePage' ? 'active-link' : ''}
+            to="/home"
+            className={location.pathname === '/home' ? 'active-link' : ''}
             onClick={handleLinkClick}
         >
             Home
@@ -167,19 +166,20 @@ function Navbar() {
             {isDropdownOpen && (
                 <div className="dropdown-menu open">
                     <div className="dropdown-user" onClick={toggleDropdown}>
-                        <img src={userPhoto} alt="Perfil" />
-                        <div className="user-info">
-                            <span>Nome do usuário</span>
-                            <span>email@email.com</span>
-                        </div>
+                    <img src={userPhoto} alt="Perfil" />
+                    <div className="user-info">
+                        <span>{user?.data?.username || "Nome do usuário"}</span>
+                        <span>{user?.data?.email || "email@email.com"}</span>
                     </div>
-                    <Link
-                        to="/perfil"
-                        className={location.pathname === '/perfil' ? 'active-link' : ''}
-                        onClick={handleLinkClick}
+                </div>
+                <Link
+                    to={`/perfil/${user?.perfil?.id}`}
+                    className={location.pathname === `/perfil/${user?.perfil?.id}` ? 'active-link' : ''}
+                    onClick={handleLinkClick}
                     >
-                        Meu perfil
+                    Meu perfil
                     </Link>
+
                     <Link
                         to="/configuracao"
                         className={location.pathname === '/configuracao' ? 'active-link' : ''}
@@ -210,7 +210,6 @@ function Navbar() {
     <>
         <a
             href="#sobre"
-            className={location.hash === '#sobre' ? 'active-link' : ''}
             onClick={() => {
                 scrollToSection('sobre');
                 handleLinkClick();
@@ -219,28 +218,26 @@ function Navbar() {
             Sobre
         </a>
         <a
-            href="#servicos"
-            className={location.hash === '#servicos' ? 'active-link' : ''}
+            href="#desenvolvedores"
             onClick={() => {
-                scrollToSection('servicos');
+                scrollToSection('desenvolvedores');
                 handleLinkClick();
             }}
         >
-            Serviços
+            Desenvolvedores
         </a>
         <a
-            href="#contato"
-            className={location.hash === '#contato' ? 'active-link' : ''}
+            href="#funcionalidades"
             onClick={() => {
-                scrollToSection('contato');
+                scrollToSection('funcionalidades');
                 handleLinkClick();
             }}
         >
-            Contato
+            Funcionalidades
         </a>
         <Link
             to="/login"
-            className={`login-button ${location.pathname === '/login' ? 'active-link' : ''}`}
+            className={`login-button`}
             onClick={handleLinkClick}
         >
             Login
