@@ -41,13 +41,14 @@ const HeatMap = () => {
           }}
           tooltipDataAttrs={value => {
             if (!value || !value.date) {
-              return { 'data-tooltip-id': 'tooltip', 'data-tooltip-content': 'No data available' }; // Tooltip para células sem dados
+              return { 'data-tooltip-id': 'tooltip', 'data-tooltip-content': 'Sem dados' };
             }
             return {
               'data-tooltip-id': 'tooltip',
-              'data-tooltip-content': `${value.date.toISOString().slice(0, 10)} has count: ${value.count}`, // Tooltip com data e contagem
+              'data-tooltip-content': `${value.date.toISOString().slice(0, 10)}: ${value.count} atividade(s)`, 
             };
           }}
+          
           showWeekdayLabels={false} // Oculta rótulos dos dias da semana no calendário
           showMonthLabels={false} // Oculta rótulos dos meses no calendário
         />

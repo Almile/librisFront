@@ -424,12 +424,12 @@ ul.user-comments-list .meta {
     justify-content: space-between;
     align-items: center;
     margin-right: 10px;
-    gap: 15px;
+    gap: 14px;
   }
-  
+
   .weekday-label {
     width: 10px;
-    font-size: 16px;
+    font-size: 14px;
     text-align: center;
     font-weight: bold;
     color: var(--texto-secundario);
@@ -444,11 +444,35 @@ ul.user-comments-list .meta {
     justify-content: center;
   }
     
-.react-calendar-heatmap .color-scale-1 { fill: #bbb;}
-.react-calendar-heatmap .color-scale-2 { fill: #888;}
-.react-calendar-heatmap .color-scale-3 { fill: #555;}
-.react-calendar-heatmap .color-scale-4 { fill: #3b3b3b;}
+  .react-calendar-heatmap .color-scale-1 {
+    fill: #f4f4f4; /* Fundo sem atividade */
+  }
+  
+  .react-calendar-heatmap .color-scale-2 {
+    fill: #90D5D4; /* Verde claro */
+  }
+  
+  .react-calendar-heatmap .color-scale-3 {
+    fill: #52B1B3; /* Verde médio */
+  }
+  
+  .react-calendar-heatmap .color-scale-4 {
+    fill: #2A999C; /* Verde escuro */
+  }
+  
+  .react-calendar-heatmap .color-scale-5 {
+    fill: #038081; /* Verde mais escuro */
+  }
+  
 
+.react-calendar-heatmap rect {
+    rx: 2px; /* Cantos arredondados */
+    ry: 6px;
+    width: 10px; /* Tamanho do quadrado */
+    height: 8px;
+    margin: 3px; /* Espaçamento entre os quadrados */
+  }
+  
 /* estante */
 
 .section-title{
