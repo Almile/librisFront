@@ -30,14 +30,14 @@ function Slides() {
                     keyboard={{enabled: true,}}
                 >
                     <SwiperSlide>
-                        <div className={style.one}>
+                        <div className={style.start}>
                             <div className={style.card}>
                                 <h2>Sua jornada literária começa aqui</h2>
                                 <p>Uma rede social feita para leitores apaixonados. Aqui você pode compartilhar resenhas, descobrir novos livros e fazer amizades com quem ama ler tanto quanto você.</p>
                                 <p>Organize sua lista de leitura, explore novas histórias e veja o impacto dos seus livros favoritos no mundo.</p>
                                 <p>É simples, divertido e totalmente sobre livros.</p>
-                                <Button onClick={() => navigate("/login")}>
-                                    <span className={style.action}>Cadastre-se</span>
+                                <Button onClick={() => navigate("/catalogo")}>
+                                    <span className={style.action}>Comece Agora!</span>
                                 </Button>
                             </div>
                             <img src="./frame216.png"/>

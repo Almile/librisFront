@@ -1,19 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import style from "../styles/bookcontent.module.css";
 import BookLecture from "./BookLecture";
+import {getLeituraByUser, addLeitura, updateLeitura} from "../services/librisApiService";
 
-export default function AddToShelfButton({ bookId }) {
+export default function AddToShelfButton({ bookId, username, perfilId }) {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [status, setStatus] = useState(null);
 
-    const categories = ["Lendo", "Lido", "Abandonado"];
+    useEffect(() => {
+        const fetchLeitura = async () => {
+            try {
+                const response = await getLeituraByUser(username);
+                response.data.data.content.forEach(livro => {
+                    if (livro.googleId == bookId) {
+                        setStatus(livro.id);
+                        setSelectedCategory(livro.status);
+                    }
+                });
+                
+            } catch(e) {
+                console.log(e);
+            }
+        }
+        if (username) fetchLeitura();
+    }, [bookId, username])
 
-    const handleSelect = (category) => {
+    const handleSelect = async (category) => {
+        const body = {
+            "perfilId": perfilId,
+            "googleId": bookId,
+            "pagina": 1,
+            "status": category
+        }
+
+        if (status == null) {
+            const response = await addLeitura(body);
+            setStatus(response.data.data.id);
+        } else {
+            updateLeitura(status, body);
+        }
+
         setSelectedCategory(category);
         setIsOpen(false);
-
-        if (category === "Lido") {
+        if (category === "LIDO") {
             setShowModal(true);
         }
     };
@@ -31,11 +62,15 @@ export default function AddToShelfButton({ bookId }) {
 
             {isOpen && (
                 <ul className={style.dropdownLecture}>
-                    {categories.map((category, index) => (
-                        <li key={index} onClick={() => handleSelect(category)}>
-                            {category}
-                        </li>
-                    ))}
+                    <li onClick={() => handleSelect("LENDO")}>
+                        Lendo 
+                    </li>
+                    <li onClick={() => handleSelect("LIDO")}>
+                        Lido 
+                    </li>
+                    <li onClick={() => handleSelect("ABANDONADO")}>
+                        Abandonado 
+                    </li>
                 </ul>
             )}
 
