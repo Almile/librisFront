@@ -44,6 +44,12 @@ export const getLeituraByUser = (username) => {
         { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }});
 };
 
+export const getLeituraByUserAndGoogleId = (username, googleId) => {
+    return librisApi.get(
+        `/status/perfil/${username}/livro/${googleId}`,
+        { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }});
+}
+
 export const updateLeitura = (id, body) => {
     return librisApi.put(
         `/status/${id}`,

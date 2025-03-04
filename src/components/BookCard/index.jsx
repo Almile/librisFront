@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react'
 import OutlinedButton from '../OutlinedButton';
 import BookLecture from "../BookLecture";
 import { useNavigate } from 'react-router-dom';
-import { updateLeitura, getLeituraByUser } from '../../services/librisApiService';
+import { updateLeitura, getLeituraByUserAndGoogleId } from '../../services/librisApiService';
 
 export default function BookCard({id, username, showUpdate, setLidos, setLendo, perfilId}) {
     const [currentPage, setCurrentPage] = useState(0);
@@ -16,13 +16,13 @@ export default function BookCard({id, username, showUpdate, setLidos, setLendo, 
 
     useEffect(() => {
         const fetchLeitura = async () => {
-            const leituras = await getLeituraByUser(username);
-            leituras.data.data.content.forEach(livro => {
-                if (livro.googleId == id) {
-                    leituraId.current = livro.id;
-                    setCurrentPage(livro.pagina)
-                }
-            });
+            try {
+                const response = await getLeituraByUserAndGoogleId(username, id)
+                leituraId.current = response.data.data.id;
+                setCurrentPage(response.data.data.pagina)
+            } catch (error) {
+                console.error(error);
+            }
         }
         fetchLeitura();
     }, [id, username])
