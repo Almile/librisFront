@@ -33,31 +33,34 @@ const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) 
       }, [location?.state?.rating, livroID, user])
 
 
+       const fetchComments = async () => {
+          try {
+              const responseComment = await backendApi.get(`/comentarios/listar/livro/${livroID}`, {
+                  headers: { Authorization: `Bearer ${token}` },
+              });
+      
+              const normalizedComments = responseComment.data.data.content.map((c) => ({
+                  ...c,
+                  perfisQueCurtiram: Array.isArray(c.perfisQueCurtiram) ? c.perfisQueCurtiram : [], 
+              }));
+      
+              setComments(normalizedComments);
+      
+          } catch (error) {
+              console.error("Erro ao carregar comentários:", error.response ? error.response.data : error.message);
+          }
+          console.log("COMENTS: ",comments)
+      };
+      
+      // Chamar `fetchComments` sempre que `livroID` ou `token` mudar
       useEffect(() => {
-        const fetchComments = async () => {
-            try {
-                const responseComment = await backendApi.get(`/comentarios/listar/livro/${livroID}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-    
-                const normalizedComments = responseComment.data.data.content.map((c) => ({
-                    ...c,
-                    perfisQueCurtiram: Array.isArray(c.perfisQueCurtiram) ? c.perfisQueCurtiram : [], // Garante que seja um array
-                }));
-    
-                setComments(normalizedComments);
-                
-            } catch (error) {
-                console.error("Erro ao carregar comentários:", error.response ? error.response.data : error.message);
-            }
-        };
-    
-        fetchComments();
-    }, [livroID, token]);  
+          fetchComments();
+      }, [livroID, token]);
+      
     
       
-      const addComment = async (text, isSpoiler, parentId = null) => {
-        const newComment = {
+    const addComment = async (text, isSpoiler, parentId = null) => {
+      const newComment = {
           perfilId: perfilId,
           googleId: livroID,
           texto: text,
@@ -65,46 +68,37 @@ const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) 
           quantidadeCurtidas: 0,
           respostas: [],
           spoiler: isSpoiler
-        };
-        
-        try {
-          if (parentId) {
-            // Enviar para o endpoint de respostas
-            const newCommentReply = {
-              perfilId: perfilId,
-              texto: text,
-            };
-            
-            const response = await backendApi.post(
-              `/comentarios/${parentId}/respostas`, // Rota de respostas
-              newCommentReply,
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            );
-            
-            // Atualiza o estado com a nova resposta no comentário pai
-            setComments((prevComments) =>
-              prevComments.map((comment) =>
-                comment.id === parentId
-                  ? { ...comment, respostas: [...comment.respostas, response.data] }
-                  : comment
-              )
-            );
-          } else {
-            // Enviar para o endpoint de comentários principais
-            const response = await backendApi.post("/comentarios", newComment, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            setComments((prevComments) => [...prevComments, response.data]);
-          }
-      
-          if (onCommentSubmit) onCommentSubmit(); // Chama o callback para subir o estado de comentário
-      
-        } catch (error) {
-          console.error("Erro ao adicionar comentário:", error);
-        }
       };
+  
+      try {
+
+          if (parentId) {
+              const newCommentReply = {
+                  perfilId: perfilId,
+                  texto: text,
+              };
+  
+              await backendApi.post(
+                  `/comentarios/${parentId}/respostas`, 
+                  newCommentReply,
+                  { headers: { Authorization: `Bearer ${token}` } }
+              );
+          } else {
+              await backendApi.post("/comentarios", newComment, {
+                  headers: { Authorization: `Bearer ${token}` },
+              });
+          }
+  
+          // 🚀 Recarregar os comentários após a adição
+          fetchComments();
+  
+          if (onCommentSubmit) onCommentSubmit();
+  
+      } catch (error) {
+          console.error("Erro ao adicionar comentário:", error);
+      }
+  };
+  
       
   const toggleReplyMode = (id) => {
     setComments((prevComments) =>
@@ -114,61 +108,70 @@ const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) 
     );
   };
 
-  const toggleLike = async (id) => {
+  const toggleLike = async (id, parentId = null) => { 
     if (!perfilId) return;
 
-    const comment = comments.find((c) => c.id === id);
-
-    if (!comment) {
-        console.error(`Erro: Comentário com ID ${id} não encontrado.`);
-        return;
-    }
-
-    if (!Array.isArray(comment.perfisQueCurtiram)) {
-        console.error(`Erro: 'perfisQueCurtiram' não é um array no comentário com ID ${id}.`, comment);
-        return;
-    }
-
     try {
-        if (comment.perfisQueCurtiram.includes(perfilId)) {
-            // Se o perfil já curtiu, descurte
-            await backendApi.delete(`/curtidas/comentario/${id}/perfil/${perfilId}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+        const url = parentId
+            ? `/curtidas/resposta/${id}/perfil/${perfilId}`
+            : `/curtidas/comentario/${id}/perfil/${perfilId}`;
 
-            setComments((prevComments) =>
-                prevComments.map((c) =>
-                    c.id === id
-                        ? {
-                              ...c,
-                              quantidadeCurtidas: c.quantidadeCurtidas - 1,
-                              perfisQueCurtiram: c.perfisQueCurtiram.filter((user) => user !== perfilId),
-                          }
-                        : c
-                )
-            );
+        console.log(`Toggle Like - ID: ${id}, Parent ID: ${parentId || "Nenhum (Comentário Principal)"}`);
+
+        setComments((prevComments) => {
+            return prevComments.map((c) => {
+                if (c.id === id && !parentId) {  // Comentário principal
+                    const hasLiked = c.perfisQueCurtiram.includes(perfilId);
+                    return {
+                        ...c,
+                        quantidadeCurtidas: hasLiked ? c.quantidadeCurtidas - 1 : c.quantidadeCurtidas + 1,
+                        perfisQueCurtiram: hasLiked
+                            ? c.perfisQueCurtiram.filter((p) => p !== perfilId)
+                            : [...c.perfisQueCurtiram, perfilId],
+                    };
+                }
+
+                if (c.id === parentId) {  // Se for resposta, encontra dentro do comentário pai
+                    return {
+                        ...c,
+                        respostas: c.respostas.map((r) => {
+                            if (r.id === id) {
+                                const hasLiked = r.perfisQueCurtiram.includes(perfilId);
+                                return {
+                                    ...r,
+                                    quantidadeCurtidas: hasLiked ? r.quantidadeCurtidas - 1 : r.quantidadeCurtidas + 1,
+                                    perfisQueCurtiram: hasLiked
+                                        ? r.perfisQueCurtiram.filter((p) => p !== perfilId)
+                                        : [...r.perfisQueCurtiram, perfilId],
+                                };
+                            }
+                            return r;
+                        }),
+                    };
+                }
+
+                return c;
+            });
+        });
+
+        const isLiked = parentId
+            ? comments.some(
+                  (c) => c.id === parentId && c.respostas.some((r) => r.id === id && r.perfisQueCurtiram.includes(perfilId))
+              )
+            : comments.some((c) => c.id === id && c.perfisQueCurtiram.includes(perfilId));
+
+        if (isLiked) {
+            console.log(`Removendo curtida de ${parentId ? "resposta" : "comentário"} com ID ${id}`);
+            await backendApi.delete(url, { headers: { Authorization: `Bearer ${token}` } });
         } else {
-            // Se o perfil não curtiu, curta
-            await backendApi.post(`/curtidas/comentario/${id}/perfil/${perfilId}`, {}, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-
-            setComments((prevComments) =>
-                prevComments.map((c) =>
-                    c.id === id
-                        ? {
-                              ...c,
-                              quantidadeCurtidas: c.quantidadeCurtidas + 1,
-                              perfisQueCurtiram: [...c.perfisQueCurtiram, perfilId],
-                          }
-                        : c
-                )
-            );
+            console.log(`Adicionando curtida a ${parentId ? "resposta" : "comentário"} com ID ${id}`);
+            await backendApi.post(url, {}, { headers: { Authorization: `Bearer ${token}` } });
         }
     } catch (error) {
         console.error("Erro ao realizar a curtida:", error);
     }
 };
+
 
 
   
