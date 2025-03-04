@@ -102,7 +102,7 @@ export default function BookContent({ id }) {
                 <p className={style.plSinopse} dangerouslySetInnerHTML={{ __html: data.description }} ></p>
                  
                 <div className={style.plButtons}>
-                    <AddToShelfButton  bookId={id} username={user?.data?.username} perfilId={user.perfil.id}/>
+                    <AddToShelfButton  bookId={id} username={user?.data?.username} perfilId={user?.perfil?.id}/>
 
                     <button className={style.plButtonFavoritar} onClick={handleClickFavoritar}>{favoritoId ? "Remover dos favoritos" : "Favoritar"}</button>
                 </div>

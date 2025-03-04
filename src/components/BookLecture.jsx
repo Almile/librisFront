@@ -15,13 +15,15 @@ const BookLecture = ({ bookId, onClose }) => {
       setStage(true);
   };
 
-    const navegarParaLivro = () => {
-        navigate(`/livro/${bookId}`);
-        onClose();
+  const navegarParaLivro = () => {
+    console.log("Rating sendo passado:", rating);
+    navigate(`/livro/${bookId}`, { state: { rating } });
+    onClose();
     };
 
+
     const navegarParaResenha = () => {
-        navigate(`/resenha`);
+        navigate(`/resenha`, { state: { rating } });
         onClose();
     };
 

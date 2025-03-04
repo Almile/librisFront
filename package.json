@@ -18,8 +18,8 @@
     "cropperjs": "^1.6.2",
     "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",
-    "motion": "^12.0.1",
     "lucide-react": "^0.473.0",
+    "motion": "^12.0.1",
     "prop-types": "^15.8.1",
     "quill": "^2.0.3",
     "quill-image-resize-module-react": "^3.0.0",
@@ -29,6 +29,7 @@
     "react-quill": "^2.0.0",
     "react-router-dom": "^7.1.0",
     "react-tooltip": "^5.28.0",
+    "socket.io-client": "^4.8.1",
     "swiper": "^11.2.0"
   },
   "devDependencies": {

@@ -22,7 +22,8 @@ export const addLivro = (book) => {
         "categoria": book.categories ? JSON.stringify(book.categories) : null,
         "url_capa": `https://books.google.com/books/publisher/content?id=${book.id}&printsec=frontcover&img=1&zoom=1`,
         "linkCompra": book.buyLink || null,
-        "dataPublicacao": format(new Date(book.publishedDate), "yyyy-MM-dd") || null
+        "dataPublicacao": format(new Date(book.publishedDate), "yyyy-MM-dd") || null,
+        "faixaEtaria": book.maturityRating || null
     }
 
     return librisApi.post("/livro",
@@ -42,6 +43,12 @@ export const getLeituraByUser = (username) => {
         `/status/perfil/${username}`,
         { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }});
 };
+
+export const getLeituraByUserAndGoogleId = (username, googleId) => {
+    return librisApi.get(
+        `/status/perfil/${username}/livro/${googleId}`,
+        { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }});
+}
 
 export const updateLeitura = (id, body) => {
     return librisApi.put(

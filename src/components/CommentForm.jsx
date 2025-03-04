@@ -34,9 +34,10 @@ export const CommentForm = ({ onSubmit, initialText = "",  spoilerId, isSpoiler,
   const editorRef = useRef(null);
    const userPadrao = user?.perfil?.urlPerfil;
 
-  useEffect(() => {
-    setText(initialText);
-  }, [initialText]);
+  
+   useEffect(() => {
+    onTextChange(initialText); // Atualiza o estado de texto com a `initialText`
+  }, [initialText, onTextChange]);
   
   const uniqueSpoilerId = spoilerId || `spoiler-checkbox-${Math.random().toString(36).substring(7)}`;
 
@@ -46,7 +47,7 @@ export const CommentForm = ({ onSubmit, initialText = "",  spoilerId, isSpoiler,
     const plainText = text.trim();
     if (plainText === "" || plainText === "<p><br></p>") return;
   
-    onSubmit(plainText, isSpoiler); // Agora enviando apenas o texto limpo
+    onSubmit(plainText, isSpoiler);
   };
   
 

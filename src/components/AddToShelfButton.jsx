@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import style from "../styles/bookcontent.module.css";
 import BookLecture from "./BookLecture";
-import {getLeituraByUser, addLeitura, updateLeitura} from "../services/librisApiService";
+import {addLeitura, updateLeitura, getLeituraByUserAndGoogleId} from "../services/librisApiService";
 
 export default function AddToShelfButton({ bookId, username, perfilId }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,16 +12,11 @@ export default function AddToShelfButton({ bookId, username, perfilId }) {
     useEffect(() => {
         const fetchLeitura = async () => {
             try {
-                const response = await getLeituraByUser(username);
-                response.data.data.content.forEach(livro => {
-                    if (livro.googleId == bookId) {
-                        setStatus(livro.id);
-                        setSelectedCategory(livro.status);
-                    }
-                });
-                
-            } catch(e) {
-                console.log(e);
+                const response = await getLeituraByUserAndGoogleId(username, bookId);
+                setStatus(response.data.data.id);
+                setSelectedCategory(response.data.data.status);
+            } catch(error) {
+                console.error(error);
             }
         }
         if (username) fetchLeitura();
