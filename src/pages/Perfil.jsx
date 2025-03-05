@@ -80,6 +80,13 @@ function Perfil() {
       try {
         const perfil = await getPerfilById(id);
         const response = await getLeituraByUser(perfil.data.data.usuario.username);
+
+        // Limpa os estados de leitura
+        setLendo([]);
+        setLidos([]);
+        setAbandonados([]);
+        setFavoritos([]);
+        
         response.data.data.content.forEach(livro => {
 
           if (livro.status == "LENDO") setLendo(prev => {
