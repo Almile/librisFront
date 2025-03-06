@@ -8,7 +8,27 @@ import backendApi from "../services/backendApi"; // Importe a instância do Axio
 function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("URL Params:", window.location.search);  // Adicione esse log para depurar
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get("token");
+    const refreshToken = urlParams.get("refreshToken");
   
+    console.log("Access Token:", accessToken);  // Verifique se os tokens estão sendo capturados
+    console.log("Refresh Token:", refreshToken);
+
+    if (accessToken && refreshToken) {
+      sessionStorage.setItem("token", accessToken);
+      sessionStorage.setItem("refreshToken", refreshToken);
+      login(accessToken)
+      navigate("/home")
+    } else {
+     console.log("erro")
+    }
+  }, [navigate]);
+  
+
   // Estado para os dados do formulário de cadastro
   const [loginData, setLoginData] = useState({
     emailLogin: "",
@@ -91,9 +111,15 @@ function Login() {
     }
 };
 
-const loginGoogle = () => {
+const loginGoogle = (e) => {
+  e.preventDefault();
   window.location.href = "http://localhost:8080/oauth2/authorization/google";
+
+    login(accessToken);
+    navigate("/home");
+
 };
+
 
 const handleResetPassword = async (e) => {
   e.preventDefault();

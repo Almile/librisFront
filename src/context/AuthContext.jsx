@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     const [showGenres, setShowGenres] = useState(false);
     const [genres, setGenres] = useState([]);
 
+
     const fetchUserData = async (email) => {
         if (!token) {
             console.error("Token ausente, não foi possível buscar os dados do usuário.");
@@ -134,6 +135,7 @@ export const AuthProvider = ({ children }) => {
 
         sessionStorage.setItem("token", newToken);
         setToken(newToken);
+        
     };
 
     const logout = () => {
