@@ -30,34 +30,22 @@ function Perfil() {
       try {
         const response = await getFavoritosByPerfil(id);
         setFavoritos(response.data.data.content.map((livro) => livro.googleId))
-        
       } catch (error){
         console.error(error);
       }
       try {
         const perfil = await getPerfilById(id);
         const response = await getLeituraByUser(perfil.data.data.usuario.username);
-        response.data.data.content.forEach(livro => {
 
-          if (livro.status == "LENDO") setLendo(prev => {
-            if (prev.includes(livro.googleId)) return prev;
-            else return [...prev, livro.googleId]
-          });
+        setLendo([...response.data.data.content.filter(livro => livro.status == "LENDO")].map(livro => livro.googleId));
+        setLidos([...response.data.data.content.filter(livro => livro.status == "LIDO")].map(livro => livro.googleId));
+        setAbandonados([...response.data.data.content.filter(livro => livro.status == "ABANDONADO")].map(livro => livro.googleId));
 
-          else if (livro.status == "LIDO") setLidos(prev => {
-            if (prev.includes(livro.googleId)) return prev;
-            else return [...prev, livro.googleId]
-          });
-
-          else setAbandonados(prev => {
-            if (prev.includes(livro.googleId)) return prev;
-            else return [...prev, livro.googleId]
-          });
-        });
       } catch (error) {
         console.log(error);
       }
     }
+
     fetchLivros();
   }, [id, user]);
 

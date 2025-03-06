@@ -40,7 +40,7 @@ export const addLeitura = (body) => {
 
 export const getLeituraByUser = (username) => {
     return librisApi.get(
-        `/status/perfil/${username}`,
+        `/status/perfil/${username}?size=1000`,
         { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }});
 };
 
@@ -60,7 +60,7 @@ export const updateLeitura = (id, body) => {
 // Favoritos
 export const getFavoritosByPerfil = (id) => {
     return librisApi.get(
-        `/favoritos/perfil/${id}`,
+        `/favoritos/perfil/${id}?size=1000`,
         { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }});
 }
 
