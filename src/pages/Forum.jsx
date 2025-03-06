@@ -151,13 +151,12 @@ function Forum() {
   };
   
   const filteredPosts = Array.isArray(posts) ? posts.filter(post => {
-
     if (!selectedFilter && !searchQuery) return true;
   
     if (selectedFilter === "seguindo") {
       return seguindo.includes(post.perfil?.name);
     }
-    
+  
     if (selectedFilter === "seguidores") {
       return seguidores.includes(post.perfil?.name);
     }
@@ -165,12 +164,13 @@ function Forum() {
     if (searchQuery) {
       return post.perfil?.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
              post.texto.toLowerCase().includes(searchQuery.toLowerCase()) || 
-             post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())) || 
+             post.tags.split(',').map(tag => tag.trim().toLowerCase()).includes(searchQuery.toLowerCase()) || 
              post.livro?.toLowerCase().includes(searchQuery.toLowerCase());
     }
   
-    return post.livro === selectedFilter || post.tags.includes(selectedFilter);
+    return post.livro === selectedFilter || post.tags.split(',').map(tag => tag.trim().toLowerCase()).includes(selectedFilter.toLowerCase());
   }) : [];
+  
 
   const booksHype = ["One-Punch Man, Vol. 21", "O Senhor dos Anéis: As Duas Torres"];
   const tagsHype = ["end", "e"];
