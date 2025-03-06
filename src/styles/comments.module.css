@@ -196,7 +196,6 @@ button.envyButton {
 .spoilerContent.visible {
     transition: filter .5s ease;
     filter: blur(0);
-
 }
 
 .protectionWrapper {

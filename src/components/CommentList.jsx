@@ -3,63 +3,65 @@ import { ReplyForm } from "./ReplyForm";
 import { SpoilerProtection } from "./SpoilerProtection";
 import styles from "../styles/comments.module.css";
 import backendApi from "../services/backendApi"; // Ajuste conforme sua estrutura de API
-import useAuth from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export const CommentList = ({ comments = [], onAddComment, onToggleReply, onToggleLike }) => {
-    const { token } = useContext(useAuth);
+    const { token } = useAuth();
     const navigate = useNavigate(); 
 
     if (!Array.isArray(comments)) {
         console.error("Erro: comments não é um array", comments);
-        return null; // Ou exiba um carregamento
+        return null;
     }
     const [spoilerVisibility, setSpoilerVisibility] = useState({});
     const [expandedComments, setExpandedComments] = useState({});
-    const [userProfiles, setUserProfiles] = useState({}); // Armazena os perfis dos usuários
+    const [userProfiles, setUserProfiles] = useState({});
 
+    
     useEffect(() => {
         const fetchUserProfiles = async () => {
-            const uniqueProfileIds = [
-                ...new Set(
-                  comments.flatMap(comment => {
-                    if (!comment.perfilId) {
-                      console.error("Perfil ID não encontrado para comentário:", comment);
-                    }
-                    return [comment.perfilId, ...(Array.isArray(comment.respostas) ? comment.respostas.map(r => r.perfilId) : [])];
-                  })
-                )
-              ];
-      
-              try {
+            // Obtém os IDs únicos de perfis sem tentar acessar como array
+            const uniqueProfileIds = [...new Set(comments.map((c) => c.perfilId || c.nomePerfil).filter(Boolean))];
+    
+            if (uniqueProfileIds.length === 0) return;
+    
+            try {
                 const responses = await Promise.all(
                     uniqueProfileIds.map(async (id) => {
                         if (!userProfiles[id]) {
-                            const response = await backendApi.get(`/perfil/${id}`, {
-                                headers: { Authorization: `Bearer ${token}` },
-                            });
-                            console.log("Resposta da API para o perfil:", response.data.data);
+                            let response;
+                            if (comments.some((c) => c.perfilId)) {
+                                response = await backendApi.get(`/perfil/${id}`, {
+                                    headers: { Authorization: `Bearer ${token}` },
+                                });
+                                console.log("CommentlList perfil id: ", id);
+                            } else {
+                                response = await backendApi.get(`/perfil/buscar/${id}`, {
+                                    headers: { Authorization: `Bearer ${token}` },
+                                });
+
+                            }
                             return { id, data: response.data.data };
                         }
                         return null;
                     })
                 );
-            
+    
                 const newProfiles = responses.reduce((acc, profile) => {
                     if (profile) acc[profile.id] = profile.data;
                     return acc;
                 }, {});
-                
-                setUserProfiles((prevProfiles) => ({ ...prevProfiles, ...newProfiles }));
+    
+                setUserProfiles((prev) => ({ ...prev, ...newProfiles }));
             } catch (error) {
                 console.error("Erro ao buscar perfis dos usuários:", error.response?.data || error);
             }
-            
         };
-      
+    
         fetchUserProfiles();
-      }, [comments]);
-
+    }, [comments, token]);
+    
     const toggleSpoiler = (commentId) => {
         setSpoilerVisibility((prev) => ({
             ...prev,
@@ -77,12 +79,12 @@ export const CommentList = ({ comments = [], onAddComment, onToggleReply, onTogg
     const handleAddReply = (text, isSpoiler, parentId) => {
         onAddComment(text, isSpoiler, parentId);
     };
-  
 
     return (
         <ul className={styles.comments}>
             {comments.map((comment) => {
-                const user = userProfiles[comment.perfilId] || { username: "Carregando...", urlPerfil: "/default-profile.png" };
+            const profileId = String(comment.perfilId || comment.nomePerfil);
+            const user = userProfiles[profileId] || { usuario: { username: "Carregando..." }};
 
                 return (
                     <li key={comment.id} className={`${styles.commentList} ${comment.parentId ? styles.replyComment : ""}`}>
@@ -91,12 +93,12 @@ export const CommentList = ({ comments = [], onAddComment, onToggleReply, onTogg
                                 <div className={styles.commentUser}>
                                     <img
                                         src={user.urlPerfil}
-                                        alt={`${user.username}`}
+                                        alt={`${user.username }`}
                                         className={styles.urlPerfil}
                                     />
-                                    <strong onClick={() => navigate(`/perfil/${comment.perfilId}`)}>{user?.usuario?.username}</strong>
-                                    <span className={styles.commentDate}>{new Date(comment.dataComentario || comment.dataResposta).toLocaleDateString()}</span>
-                                </div>
+                                    <strong onClick={() => navigate(`/perfil/${comment.perfilId}`)}>{user?.usuario?.username|| user.username}</strong>
+                                    <span className={styles.commentDate}>{new Date(comment.dataComentario || comment.data|| comment.dataResposta).toLocaleDateString()}</span>
+                                </div> 
                                 <div className={styles.meta}>
                                     {comment.nota >= 0  || comment.parentId  ? (
                                         <div className={styles.commentRating}>

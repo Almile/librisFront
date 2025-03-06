@@ -15,6 +15,9 @@ const UserProfile = ({ id, isOwner, setIsOwner}) => {
   const [profileImage, setProfileImage] = useState(null);
   const [description, setDescription] = useState(null);
 
+  const [isFollowing, setIsFollowing] = useState(false);
+  const userId = user?.perfil?.id;
+
   useEffect(() => {
     const fetchUserPerfil = async () => {
       try {
@@ -49,7 +52,7 @@ const UserProfile = ({ id, isOwner, setIsOwner}) => {
       }
     };
     fetchUserPerfil();
-  }, [id, user, token]);
+  }, [id,isFollowing, user, token]);
   
 
   const handleDescriptionChange = (description) => {
@@ -245,6 +248,49 @@ const UserProfile = ({ id, isOwner, setIsOwner}) => {
   };  
   
 
+  useEffect(() => {
+    const checkIfFollowing = async () => {
+      try {
+        const response = await backendApi.get(`/relacionamentos/esta-seguindo/${userId}/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setIsFollowing(response.data.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Erro ao verificar o seguimento:", error.response ? error.response.data : error.message);
+      }
+    };
+    checkIfFollowing();
+  }, [userId, id, token]);
+
+  const handleFollow = async () => {
+    console.log(isFollowing);
+
+    if (isFollowing) {
+      try {
+        const deleteResponse = await backendApi.delete(`/relacionamentos/deixar-de-seguir/${userId}/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setIsFollowing(false);
+        console.log(deleteResponse);
+      } catch (error) {
+        console.error("Erro ao deixar de seguir:", error.response ? error.response.data : error.message);
+      }      
+    } else {
+      // Seguir
+      try {
+        const seguirResp = await backendApi.post(`/relacionamentos/seguir/${userId}/${id}`, {}, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log(seguirResp);
+        setIsFollowing(true);
+      } catch (error) {
+        console.error("Erro ao seguir o perfil:", error.response ? error.response.data : error.message);
+      }
+    }
+  };
+  if (userId === id) return null;
+
   return (
     <section
       className="perfil"
@@ -302,6 +348,11 @@ const UserProfile = ({ id, isOwner, setIsOwner}) => {
               <ion-icon name="camera-outline" className="cam-icon"></ion-icon>
             </button>
           )}
+          {!isOwner && (
+               <button className="buttonFollow" onClick={handleFollow}>
+               {isFollowing ? "Deixar de Seguir" : "Seguir"}
+             </button>
+            )}
       </div>
 
         <div className="info-perfil">

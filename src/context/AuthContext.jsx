@@ -83,13 +83,11 @@ export const AuthProvider = ({ children }) => {
         }
 
         const novoPerfil = {
-            usuario: { email, username },
             urlPerfil: "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg",
             resumoBio: '<p>💕 Gosto de _</p><p>📚 Livro Favorito _</p><p><br></p>',
-            seguindo: 0,
-            seguidores: 0,
             generosFavoritos: genres, // Corrigido para manter um array plano
             urlBackPerfil: "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737480828/libris_images/hyxilej7wwvmhyiqmlog.jpg",
+            usuarioEmail: email
         };
 
         try {

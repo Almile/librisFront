@@ -12,6 +12,8 @@
   list-style: none; 
   overflow-x: scroll; 
   scroll-behavior: smooth;
+  min-height: 100px;
+
 }
 
 .carouselList::-webkit-scrollbar {

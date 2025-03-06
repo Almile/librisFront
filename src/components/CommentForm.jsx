@@ -34,7 +34,6 @@ export const CommentForm = ({ onSubmit, initialText = "",  spoilerId, isSpoiler,
   const editorRef = useRef(null);
    const userPadrao = user?.perfil?.urlPerfil;
 
-  
    useEffect(() => {
     onTextChange(initialText); // Atualiza o estado de texto com a `initialText`
   }, [initialText, onTextChange]);

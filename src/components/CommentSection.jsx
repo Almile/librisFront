@@ -3,61 +3,57 @@ import { CommentList } from "./CommentList";
 import { CommentForm } from "./CommentForm";
 import backendApi from "../services/backendApi";
 import styles from "../styles/comments.module.css";
-import useAuth from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { useLocation } from "react-router-dom";
 import { getLeituraByUser } from "../services/librisApiService";
 
-const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) => {
+const CommentSection = ({ context, livroID, onCommentSubmit }) => {
   const location = useLocation();
 
-  const { token, user } = useContext(useAuth);
+  const { token, user } = useAuth();
   const [commentText, setCommentText] = useState(""); 
   const [comments, setComments] = useState([]);
   const [isSpoiler, setIsSpoiler] = useState(false);
   const perfilId = parseInt(user?.perfil?.id, 10) || null;
   const [category, setSelectedCategory] = useState(null);
+
    useEffect(() => {
-          const fetchLeitura = async () => {
-              try {
-                  const response = await getLeituraByUser(user?.data?.username);
-                  response.data.data.content.forEach(livro => {
-                      if (livro.googleId == livroID) {
-                          setSelectedCategory(livro.status);
-                      }
-                  });
-              } catch(e) {
-                  console.error(e);
+    const fetchLeitura = async () => {
+      try {
+          const response = await getLeituraByUser(user?.data?.username);
+          response.data.data.content.forEach(livro => {
+              if (livro.googleId == livroID) {
+                  setSelectedCategory(livro.status);
               }
-          }
-          if (user?.data?.username) fetchLeitura();
-      }, [location?.state?.rating, livroID, user])
+          });
+      } catch(e) {
+          console.error(e);
+      }
+    }
+    if (user?.data?.username) fetchLeitura();
+  }, [location?.state?.rating, livroID, user])
 
-
-       const fetchComments = async () => {
-          try {
-              const responseComment = await backendApi.get(`/comentarios/listar/livro/${livroID}`, {
-                  headers: { Authorization: `Bearer ${token}` },
-              });
-      
-              const normalizedComments = responseComment.data.data.content.map((c) => ({
-                  ...c,
-                  perfisQueCurtiram: Array.isArray(c.perfisQueCurtiram) ? c.perfisQueCurtiram : [], 
-              }));
-      
-              setComments(normalizedComments);
-      
-          } catch (error) {
-              console.error("Erro ao carregar comentários:", error.response ? error.response.data : error.message);
-          }
-          console.log("COMENTS: ",comments)
-      };
-      
-      // Chamar `fetchComments` sempre que `livroID` ou `token` mudar
-      useEffect(() => {
-          fetchComments();
-      }, [livroID, token]);
-      
-    
+    const fetchComments = async () => {
+      try {
+          const responseComment = await backendApi.get(`/comentarios/listar/livro/${livroID}`, {
+              headers: { Authorization: `Bearer ${token}` },
+          });
+  
+          const normalizedComments = responseComment.data.data.content.map((c) => ({
+              ...c,
+              perfisQueCurtiram: Array.isArray(c.perfisQueCurtiram) ? c.perfisQueCurtiram : [], 
+          }));
+  
+          setComments(normalizedComments);
+  
+      } catch (error) {
+          console.error("Erro ao carregar comentários:", error.response ? error.response.data : error.message);
+      }
+  };
+  
+  useEffect(() => {
+      fetchComments();
+  }, [livroID, token]);
       
     const addComment = async (text, isSpoiler, parentId = null) => {
       const newComment = {
@@ -99,7 +95,6 @@ const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) 
       }
   };
   
-      
   const toggleReplyMode = (id) => {
     setComments((prevComments) =>
       prevComments.map((comment) =>
@@ -172,9 +167,6 @@ const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) 
     }
 };
 
-
-
-  
   return (
     <div className={styles.commentSection}>
       <h1>{context === "book" ? "Comentários" : ""}</h1>
@@ -200,13 +192,7 @@ const CommentSection = ({ context, livroID, showCommentForm, onCommentSubmit }) 
             )}
           </>
         )}
-        {context === "forum" && showCommentForm && (
-          <CommentForm
-            onSubmit={addComment}
-            isSpoiler={isSpoiler}
-            setIsSpoiler={setIsSpoiler}
-          />
-        )}
+        
       </div>
       <CommentList
         comments={comments}

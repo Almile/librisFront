@@ -10,51 +10,6 @@ import { getFavoritosByPerfil } from '../services/librisApiService';
 import useAuth from "../context/AuthContext"; 
 import {getLeituraByUser, getPerfilById} from "../services/librisApiService";
 
-const allComments = [
-  {
-    id: 1,
-    bookTitle:"O Senhor dos Anéis",
-    text: "Uma resposta ao comentário.Uma resposta ao comentárioUma resposta ao comentárioUma resposta ao comentárioUma resposta ao comentário",
-    user: { id: "user1", name: "João Silva", userImage: "https://via.placeholder.com/50" },
-    date: "2025-01-16",
-    isSpoiler: false,
-    likedBy: [],
-    likes: 1,
-    rating: 2.3,
-    parentId: 1,
-    replies: [],
-  },
-  {
-    id: 3,
-    bookTitle:"One Punch Man",
-    text: "Uma resposta ao comentário.Uma resposta ao comentárioUma resposta ao comentárioUma resposta ao comentárioUma resposta ao comentário",
-    user: { id: "user1", name: "João Silva", userImage: "https://via.placeholder.com/50" },
-    date: "2025-01-17",
-    isSpoiler: false,
-    likedBy: [],
-    likes: 3,
-    rating: 5.5,
-    parentId: 1,
-    replies: [],
-  },
-  {
-    id: 4,
-    bookTitle:"Harry Potter",
-    text: "Este é um comentário sem spoiler.",
-    user: { id: "user1", name: "João Silva", userImage: "https://via.placeholder.com/50" },
-    date: "2025-01-15",
-    isSpoiler: false,
-    likedBy: [],
-    likes: 4,
-    rating: 4,
-    parentId: null,
-    replies: [],
-  },
-    
-  ];
-  
-
-
 function Perfil() {
   const { id } = useParams();
   const [isOwner, setIsOwner] = useState(false);
@@ -67,6 +22,8 @@ function Perfil() {
   const currentUser = {
     id: id,
   };
+
+  const allComments = []; 
 
   useEffect(() => {
     const fetchLivros = async () => {
