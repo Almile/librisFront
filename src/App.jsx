@@ -6,6 +6,8 @@ import PublicRoute from './Routes/public.routes';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
+import ResetPassword from './pages/ResetPassword';
+
 import Home from './pages/Home';
 import Login from './components/Login';
 import LandingPage from './pages/LandingPage';
@@ -29,6 +31,8 @@ function App() {
           {/* Rotas públicas */}
             <Route path='/' element={<LandingPage />} />
             <Route path='/login' element={<Login />} />
+
+            <Route path='/reset-password' element={<ResetPassword />} />
 
           {/* Rotas privadas */}
           <Route element={<PrivateRoute />}>

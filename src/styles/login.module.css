@@ -27,6 +27,11 @@
   justify-content: center;
 }
 
+.bookSpace{
+  width: 40% !important;
+  height: 65vh !important;
+}
+
 .page {
   width:100%;
   height: 100%;

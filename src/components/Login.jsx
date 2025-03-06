@@ -40,9 +40,7 @@ function Login() {
     password: "",
     confirmPassword: "",
   });
-  const [email, setEmail] = useState('');
-
-  
+  const [email, setEmail] = useState("");
   // Estado para mensagens de erro/sucesso
   const [cadastroError, setCadastroError] = useState("");
   const [cadastroSuccess, setCadastroSuccess] = useState("");
@@ -130,16 +128,16 @@ const handleResetPassword = async (e) => {
   }
 
   try {
-    const response = await backendApi.post("/usuario/reset-password", { email }, { 
+    const response = await backendApi.post("usuario/reset-password", { email }, { 
       headers: { 'Content-Type': 'application/json' } 
-    });
+    });    
 
     console.log("sucesso", response.data.message);
-    // Sucesso na recuperação
+
     setResetSuccess(response.data.message);
-    setResetError("");  // Limpar qualquer erro anterior
+    setResetError(""); 
   } catch (err) {
-    // Checar se há resposta de erro
+
     if (err.response && err.response.data && err.response.data.message) {
       setResetError(err.response.data.message);
     } else {
