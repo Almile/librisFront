@@ -93,17 +93,14 @@ const UserProfile = ({ id, isOwner, setIsOwner}) => {
       return;
     }
   
-    let email = perfilUser?.usuario?.email;
-    let username = perfilUser?.usuario?.username;
+    let email = perfilUser?.data?.usuario?.email;
   
     const payload = {
-      usuario: { email, username },
       urlPerfil: profileImage,
       resumoBio: description,
-      seguindo: seguindo.length,
-      seguidores: seguidores.length,
       generosFavoritos: perfilUser?.data?.generosFavoritos,
       urlBackPerfil: backgroundImage,
+      usuarioEmail: email,
     };
   
     try {

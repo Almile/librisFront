@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }) => {
     const [showGenres, setShowGenres] = useState(false);
     const [genres, setGenres] = useState([]);
 
-
     const fetchUserData = async (email) => {
         if (!token) {
             console.error("Token ausente, não foi possível buscar os dados do usuário.");
@@ -25,9 +24,8 @@ export const AuthProvider = ({ children }) => {
             console.log("Dados do usuário:", response.data);
             setUser(response.data);
 
-            const username = response.data?.data?.username;
-            const emailUser = response.data?.data?.email;
-
+            const username = response?.data?.data?.username;
+            const emailUser = response?.data?.data?.email;
 
             if (!username) {
                 console.error("Erro: username não encontrado na resposta do servidor.");
