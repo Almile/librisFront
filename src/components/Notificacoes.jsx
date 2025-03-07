@@ -25,9 +25,10 @@ const Notificacoes = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
     
-      console.log("Resposta da API:", resp.data.data.content); // 👀 Log da resposta
+      console.log("Resposta da API:", resp.data.data.content);
     
       setNotificacoes(resp.data.data.content || []);
+      console.log("notificações : ",resp.data.data.content)
     } catch (error) {
       console.error("Erro ao buscar notificações:", error.response?.data || error.message);
     }
@@ -76,7 +77,7 @@ const Notificacoes = () => {
         </button>
       </div>
       <div className="tabs">
-        {["Todos", "curtida", "seguidor"].map((tab) => (
+        {["Todos", "Curtida", "seguidor"].map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? "active" : ""}`}
