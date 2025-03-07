@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/Configuracao.module.css';
 import GenreSelector from '../components/GenreSelector';
 
@@ -8,16 +8,23 @@ function Configuracao() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [genres, setGenres] = useState(["Romance", "Fantasia"]); // Inicialize com valores padrão
-  const [showGenres, setShowGenres] = useState(false);  const [notifications, setNotifications] = useState({
-    mentions: false,
-    followers: false,
-    newFollowers: false,
-    likes: false,
+  const [showGenres, setShowGenres] = useState(false);  
+  const [notifications, setNotifications] = useState({
+    comentario: true,
+    seguidor: true,
+    curtida: true,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const [deletePassword, setDeletePassword] = useState('');
+
+  useEffect(() => {
+    const savedNotifications = JSON.parse(localStorage.getItem("notificationSettings"));
+    if (savedNotifications) {
+      setNotifications(savedNotifications);
+    }
+  }, []);
 
   // Callback para receber os gêneros do GenreSelector
   const handleGenreSelection = (selectedGenres) => {
@@ -45,7 +52,9 @@ function Configuracao() {
 
   const handleNotificationChange = (e) => {
     const { name, checked } = e.target;
-    setNotifications({ ...notifications, [name]: checked });
+    const updatedNotifications = { ...notifications, [name]: checked };
+    setNotifications(updatedNotifications);
+    localStorage.setItem("notificationSettings", JSON.stringify(updatedNotifications));
   };
 
   const toggleGenres = () => setShowGenres(!showGenres);
@@ -114,12 +123,12 @@ function Configuracao() {
       <h1>Configurações de Notificação</h1>
       <div className={styles.notificationSettings}>
         <div className={styles.notificationItem}>
-          <span>Menções</span>
+          <span>Comentários</span>
           <label className={styles.switch}>
             <input
               type="checkbox"
-              name="mentions"
-              checked={notifications.mentions}
+              name="comentario"
+              checked={notifications.comentario}
               onChange={handleNotificationChange}
             />
             <span className={`${styles.slider} ${styles.round}`}></span>
@@ -130,32 +139,21 @@ function Configuracao() {
           <label className={styles.switch}>
             <input
               type="checkbox"
-              name="followers"
-              checked={notifications.followers}
+              name="seguidor"
+              checked={notifications.seguidor}
               onChange={handleNotificationChange}
             />
             <span  className={`${styles.slider} ${styles.round}`}></span>
           </label>
         </div>
-        <div className={styles.notificationItem}>
-          <span>Novos Seguidores</span>
-          <label className={styles.switch}>
-            <input
-              type="checkbox"
-              name="newFollowers"
-              checked={notifications.newFollowers}
-              onChange={handleNotificationChange}
-            />
-            <span  className={`${styles.slider} ${styles.round}`}></span>
-          </label>
-        </div>
+       
         <div className={styles.notificationItem}>
           <span>Curtidas</span>
           <label className={styles.switch}>
             <input
               type="checkbox"
-              name="likes"
-              checked={notifications.likes}
+              name="curtida"
+              checked={notifications.curtida}
               onChange={handleNotificationChange}
             />
             <span className={`${styles.slider} ${styles.round}`}></span>

@@ -64,9 +64,42 @@ const Notificacoes = () => {
     }
   };
 
-  const notificacoesFiltradas = notificacoes.filter(n => 
-    activeTab === "Todos" || n.tipo.toLowerCase() === activeTab.toLowerCase()
-  );
+  const limparNotificacoesLidas = async () => {
+    if (!token) return;
+  
+    try {
+      await backendApi.delete(`/notificacoes/deletar-todas`, {
+        params: { perfilId: user?.perfil?.id },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      setNotificacoes((prev) => prev.filter((n) => !n.lida)); // Remove as notificações lidas da lista
+    } catch (error) {
+      console.error("Erro ao limpar notificações lidas:", error.response?.data || error.message);
+    }
+  };
+  
+  const notificationSettings = JSON.parse(localStorage.getItem("notificationSettings")) || {
+    curtida: true,
+    seguidor: true,
+    comentario: true,
+  };
+  
+  // Mapeando as abas disponíveis com base nas preferências do usuário
+  const allTabs = [
+    { label: "Todos", key: "Todos", enabled: true },
+    { label: "Curtida", key: "curtida", enabled: notificationSettings.curtida },
+    { label: "Seguidor", key: "seguidor", enabled: notificationSettings.seguidor },
+    { label: "Comentários", key: "comentario", enabled: notificationSettings.comentario },
+  ];
+  
+  // Filtra apenas as abas ativas
+  const tabs = allTabs.filter(tab => tab.enabled).map(tab => tab.label);
+  
+  const notificacoesFiltradas = notificacoes.filter((notificacao) => {
+    if (activeTab === "Todos") return true;
+    return notificacao.tipo === activeTab; // Ajuste conforme a estrutura das notificações
+  });
   
   return (
     <div className="container-notificacao">
@@ -77,7 +110,7 @@ const Notificacoes = () => {
         </button>
       </div>
       <div className="tabs">
-        {["Todos", "Curtida", "seguidor"].map((tab) => (
+        {tabs.map((tab) => (
           <button
             key={tab}
             className={`tab ${activeTab === tab ? "active" : ""}`}
@@ -87,9 +120,10 @@ const Notificacoes = () => {
           </button>
         ))}
       </div>
+
       <div>
         {notificacoesFiltradas.map((notificacao) => (
-          <div key={notificacao.id} className="item">
+          <div key={notificacao.id} className="item" onClick={() => marcarComoLida(notificacao.id)}>
             <div className="imgPlaceholder"></div>
             <div className="configurar-conteudo">
               <p className="paragrafo-limitado">
@@ -99,11 +133,17 @@ const Notificacoes = () => {
               <span className="data">{notificacao.data}</span>
             </div>
             {notificacao.lida === false && (
-              <div className="status" onClick={() => marcarComoLida(notificacao.id)}></div>
+              <div className="status" ></div>
             )}
           </div>
         ))}
       </div>
+      <div>
+        <button className="limparNotificacoes" onClick={limparNotificacoesLidas}>
+          Limpar notificações lidas
+        </button>
+      </div>
+
       <div className="configurar">
         <a onClick={() => navigate('/configuracao')}>Configurar notificações</a>
       </div>
