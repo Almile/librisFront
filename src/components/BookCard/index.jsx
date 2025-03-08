@@ -62,8 +62,8 @@ export default function BookCard({id, username, showUpdate, setLidos, setLendo, 
         }
     };
 
-    if (loading) return <p>Carregando...</p>;
-    if (error) return <p>A network error was encountered</p>;
+    if (loading) return <div className="loader"></div>;
+    if (error) return <p>Ocorreu um erro de rede</p>;
 
     return (
         <div className={style.bookCard}>

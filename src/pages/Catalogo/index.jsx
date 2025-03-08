@@ -7,9 +7,60 @@ import OutlinedButton from "../../components/OutlinedButton"
 import useSearchBooks from "../../hooks/useSearchBooks"
 import PropTypes from "prop-types";
 import { X } from 'lucide-react';
+import { searchBooks } from '../../services/googleBooksService';
+import { useEffect, useState, useContext } from "react";
+import useAuth from "../../context/AuthContext";
+import { getPerfilById } from "../../services/librisApiService"; 
 
 export default function Catalogo() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const [recommended, setRecommended] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const {user} = useContext(useAuth);
+
+    useEffect(() => {
+
+        async function searchRecommendedBooks() {
+            const genreMap = {
+                "INFANTIS": "O castelo animado",
+                "MISTERIO": "Stephen King",
+                "FANTASIA": "mistborn",
+                "FICCAO_CIENTIFICA": "Eu, Robô",
+                "FICCAO": "Júlio Verne",
+                "NAO_FICCAO": "James Clear",
+                "CIENCIA": "Carl Sagan",
+                "AUTOAJUDA": "James Clear",
+                "TECNOLOGIA": "Clean Code",
+                "BIOGRAFIA": "Anne Frank",
+                "ROMANCE": "Jane Austen",
+                "SAUDE_E_HABITOS": "Hábitos Atômicos",
+              };
+
+            let genres;
+
+            try {
+                const response = await getPerfilById(user?.perfil?.id);
+                genres = response.data.data.generosFavoritos;
+                console.log(genres)
+            } catch(error) {
+                console.error(error);
+            }
+
+            const maxResults = 6 / genres.length;
+            let books = [];
+            for (const g of genres) {
+                try {
+                    const response = await searchBooks(`${encodeURIComponent(genreMap[g])}`, 0, maxResults);
+                    books = [...books, ...Object.values(response.data.items).map((item) => item.id)];
+                } catch (error) {
+                    console.error(`Erro ao carregar gênero: ${error}`);
+                }
+            }
+            setRecommended(books);
+            setLoading(false);
+        }
+        if (user?.perfil?.id) searchRecommendedBooks();
+    }, [user])
 
     return (
         <div className={style.container}>
@@ -21,10 +72,15 @@ export default function Catalogo() {
                 setSearchParams={setSearchParams}/>
             : ( 
             <>
+                {
+                loading ?
+                <div className="loader"></div>
+                :
                 <BookGrid 
                     title={"Recomendados"}
-                    books={["GjgQCwAAQBAJ", "hjcQCwAAQBAJ", "-DgQCwAAQBAJ", "qDYQCwAAQBAJ", "9TcQCwAAQBAJ", "yjUQCwAAQBAJ"]}
+                    books={recommended}
                 />
+                }
                 <BookSwiper
                     title={"Populares"} 
                     books={["m3lvDwAAQBAJ","C3wTEAAAQBAJ","gIr-DwAAQBAJ","GaZMDwAAQBAJ","PM2uCgAAQBAJ","5BclEAAAQBAJ","W_tcDwAAQBAJ"]}
@@ -53,8 +109,8 @@ export default function Catalogo() {
                     />)
                 }
             </div>
-            {loading && <p>Carregando...</p>}
-            {error && <p>A network error was encountered</p>}
+            {loading && <div className="loader"></div>}
+            {error && <p>Ocorreu um erro de rede</p>}
         </>
     );
 }

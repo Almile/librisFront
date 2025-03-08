@@ -55,7 +55,7 @@ export default function BookContent({ id }) {
         }
     }
 
-    if (loading) return <p>Carregando...</p>;
+    if (loading) return <div className="loader"></div>;
     if (error) return <p>Ocorreu um erro de rede</p>;
     
     if (!data) return <p>Livro não encontrado</p>;

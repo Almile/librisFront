@@ -13,7 +13,7 @@ export default function Home() {
             <Slides />
             <BookSwiper
                 title={"Títulos Novos"} 
-                books={["m3lvDwAAQBAJ","C3wTEAAAQBAJ","gIr-DwAAQBAJ","GaZMDwAAQBAJ","PM2uCgAAQBAJ","5BclEAAAQBAJ","W_tcDwAAQBAJ"]}
+                books={["C9oZEQAAQBAJ", "ud06EAAAQBAJ", "HNWsEAAAQBAJ","IF0QEAAAQBAJ","I-fUDAAAQBAJ","-bF2CwAAQBAJ"]}
                 className={style.bookSwiper}
             />
         </div>
