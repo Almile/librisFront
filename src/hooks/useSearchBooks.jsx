@@ -21,12 +21,11 @@ export default function useSearchBooks(q) {
     }, [loading])
 
     useEffect(() => {
-        console.log("Oi")
         const fetchBooks = async () => {
             try {
                 setLoading(true);
                 const response = await searchBooks(q, index);
-                if (!Object.keys(response).length) return setIsOver(true)
+                if (!response.data.items || !Object.keys(response).length) return setIsOver(true)
                 const ids = Object.values(response.data.items).map((item) => item.id);
                 setBooks(prev => [...prev, ...ids]);
             } catch (error) {
