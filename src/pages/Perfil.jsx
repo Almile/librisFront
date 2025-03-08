@@ -18,6 +18,7 @@ function Perfil() {
   const [lendo, setLendo] = useState([]);
   const [lidos, setLidos] = useState([]);
   const [abandonados, setAbandonados] = useState([]);
+  const [perfil, setPerfil] = useState();
 
   const currentUser = {
     id: id,
@@ -35,6 +36,7 @@ function Perfil() {
       }
       try {
         const perfil = await getPerfilById(id);
+        setPerfil(perfil);
         const response = await getLeituraByUser(perfil.data.data.usuario.username);
 
         setLendo([...response.data.data.content.filter(livro => livro.status == "LENDO")].map(livro => livro.googleId));
@@ -62,7 +64,7 @@ function Perfil() {
                 <div className="lendo">
                     <h2>Lendo</h2>
                     <div className='leituras'>
-                    {lendo.map(googleId => <BookCard key={googleId} id={googleId} username={user.data.username} showUpdate={isOwner} setLidos={setLidos} setLendo={setLendo} perfilId={id}/>)}
+                    {lendo.map(googleId => <BookCard key={googleId} id={googleId} username={perfil.data.data.usuario.username} showUpdate={isOwner} setLidos={setLidos} setLendo={setLendo} perfilId={id}/>)}
                     </div>
                 </div>               
         <div className="heatmap">
