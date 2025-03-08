@@ -21,6 +21,7 @@ export default function useSearchBooks(q) {
     }, [loading])
 
     useEffect(() => {
+        console.log("Oi")
         const fetchBooks = async () => {
             try {
                 setLoading(true);
