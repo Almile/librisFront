@@ -124,7 +124,6 @@ function Forum() {
     setTags(newTags);
   };
 
-  
   const publish = async (content) => {
     if (!content.trim()) {
       console.error("O campo de texto não pode estar vazio.");

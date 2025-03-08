@@ -297,12 +297,14 @@ button.envyButton {
     width: 40px;
     text-align: center;
 }
+
 .starIcon ion-icon, .rating ion-icon{
     font-size: 24px;
     color: var(--destaque);
     cursor: pointer;
     transition: transform 0.2s ease, color 0.2s ease;
 }
+
 .rating ion-icon{
     font-size: 18px;
     color: var(--destaque);

@@ -10,7 +10,7 @@ function Configuracao() {
   const [genres, setGenres] = useState(["Romance", "Fantasia"]); // Inicialize com valores padrão
   const [showGenres, setShowGenres] = useState(false);  
   const [notifications, setNotifications] = useState({
-    comentario: true,
+    resposta: true,
     seguidor: true,
     curtida: true,
   });
@@ -123,12 +123,12 @@ function Configuracao() {
       <h1>Configurações de Notificação</h1>
       <div className={styles.notificationSettings}>
         <div className={styles.notificationItem}>
-          <span>Comentários</span>
+          <span>Respostas</span>
           <label className={styles.switch}>
             <input
               type="checkbox"
-              name="comentario"
-              checked={notifications.comentario}
+              name="resposta"
+              checked={notifications.resposta}
               onChange={handleNotificationChange}
             />
             <span className={`${styles.slider} ${styles.round}`}></span>

@@ -40,10 +40,15 @@ const CommentSection = ({ context, livroID, onCommentSubmit }) => {
           });
   
           const normalizedComments = responseComment.data.data.content.map((c) => ({
-              ...c,
-              perfisQueCurtiram: Array.isArray(c.perfisQueCurtiram) ? c.perfisQueCurtiram : [], 
-          }));
-  
+            ...c,
+            perfisQueCurtiram: Array.isArray(c.perfisQueCurtiram) ? c.perfisQueCurtiram : [],
+            respostas: c.respostas.map((r) => ({
+                ...r,
+                perfisQueCurtiram: Array.isArray(r.perfisQueCurtiram) ? r.perfisQueCurtiram : [],
+                parentId: c.id
+            }))
+        }));
+        
           setComments(normalizedComments);
   
       } catch (error) {
@@ -116,8 +121,8 @@ const CommentSection = ({ context, livroID, onCommentSubmit }) => {
         setComments((prevComments) => {
             return prevComments.map((c) => {
                 if (c.id === id && !parentId) {  // Comentário principal
-                    const hasLiked = c.perfisQueCurtiram.includes(perfilId);
-                    return {
+                  const hasLiked = (c.perfisQueCurtiram || []).includes(perfilId);
+                  return {
                         ...c,
                         quantidadeCurtidas: hasLiked ? c.quantidadeCurtidas - 1 : c.quantidadeCurtidas + 1,
                         perfisQueCurtiram: hasLiked
@@ -131,7 +136,7 @@ const CommentSection = ({ context, livroID, onCommentSubmit }) => {
                         ...c,
                         respostas: c.respostas.map((r) => {
                             if (r.id === id) {
-                                const hasLiked = r.perfisQueCurtiram.includes(perfilId);
+                              const hasLiked = (r.perfisQueCurtiram || []).includes(perfilId);
                                 return {
                                     ...r,
                                     quantidadeCurtidas: hasLiked ? r.quantidadeCurtidas - 1 : r.quantidadeCurtidas + 1,
@@ -166,6 +171,8 @@ const CommentSection = ({ context, livroID, onCommentSubmit }) => {
         console.error("Erro ao realizar a curtida:", error);
     }
 };
+console.log("Comentários carregados:", comments);
+
 
   return (
     <div className={styles.commentSection}>

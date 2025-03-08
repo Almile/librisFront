@@ -16,14 +16,9 @@ function Perfil() {
   const [favoritos, setFavoritos] = useState([]);
   const { user } = useContext(useAuth);
   const [lendo, setLendo] = useState([]);
+  const [perfil,setPerfil] = useState([])
   const [lidos, setLidos] = useState([]);
   const [abandonados, setAbandonados] = useState([]);
-
-  const currentUser = {
-    id: id,
-  };
-
-  const allComments = []; 
 
   useEffect(() => {
     const fetchLivros = async () => {
@@ -35,6 +30,7 @@ function Perfil() {
       }
       try {
         const perfil = await getPerfilById(id);
+        setPerfil(perfil.data.data)
         const response = await getLeituraByUser(perfil.data.data.usuario.username);
 
         setLendo([...response.data.data.content.filter(livro => livro.status == "LENDO")].map(livro => livro.googleId));
@@ -54,7 +50,7 @@ function Perfil() {
             <UserProfile id={id} isOwner={isOwner} setIsOwner={setIsOwner}/>
             <section className="top-comentarios">
             <h2>Seus Comentários</h2>
-              <CommentsProfile allComments={allComments} currentUser={currentUser} />
+              <CommentsProfile currentUser={perfil} />
               <button className='view-history'>Visualizar historico Completo</button>
             </section>
             <section className="conteudo">
@@ -67,7 +63,7 @@ function Perfil() {
                 </div>               
         <div className="heatmap">
           <h2>HeatMap</h2>
-          <HeatMap />
+          <HeatMap id={id} />
         </div>
         <section className="estante">
           <h2 className="section-title">Estante de Livros</h2>

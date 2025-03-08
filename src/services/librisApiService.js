@@ -20,7 +20,7 @@ export const addLivro = (book) => {
         "isbn": book.industryIdentifiers?.[0]?.identifier || null,
         "idioma": book.language || null,
         "categoria": book.categories ? JSON.stringify(book.categories) : null,
-        "url_capa": `https://books.google.com/books/publisher/content?id=${book.id}&printsec=frontcover&img=1&zoom=1`,
+        "urlCapa": `https://books.google.com/books/publisher/content?id=${book.id}&printsec=frontcover&img=1&zoom=1`,
         "linkCompra": book.buyLink || null,
         "dataPublicacao": format(new Date(book.publishedDate), "yyyy-MM-dd") || null,
         "faixaEtaria": book.maturityRating || null

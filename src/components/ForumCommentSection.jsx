@@ -69,8 +69,8 @@ const ForumCommentSection = ({ postId, showCommentForm, onCommentSubmit }) => {
 
     try {
         const url = parentId
-            ? `/curtidas/resposta-forum/${id}/perfil/${perfilId}`
-            : `/curtidas/comentario-forum/${id}/perfil/${perfilId}`;
+            ? `/curtidas/comentario-forum/${id}/perfil/${perfilId}`
+            : `/curtidas/post/${id}/perfil/${perfilId}`;
 
         console.log(`Toggle Like - ID: ${id}, Parent ID: ${parentId || "Nenhum (Comentário Principal)"}`);
 

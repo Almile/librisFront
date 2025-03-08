@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext , useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { SpoilerProtection } from "./SpoilerProtection";
 import styles from "../styles/feed.module.css";
@@ -85,12 +85,13 @@ const PostCard = ({ id, userId, foto, nome, date, text, tags, book, isSpoiler, r
           </div>
         </div>
         <div className={styles.actions}>
-          <button
-            className={styles.actionButton}
-            onClick={onLikeClick}
-          >
-            👍 {stats?.likes || 0} Likes
-          </button>
+        <button
+  className={styles.actionButton}
+  onClick={onLikeClick}
+>
+  👍 {stats.likes} Likes
+</button>
+
           {/* Correção na exibição de respostas */}
           <span className={styles.actionButton}>
             💬 {respostas?.length || 0} Respostas
@@ -123,36 +124,43 @@ const Feed = ({ posts, userProfiles, onPostClick }) => {
   const perfilId = user?.perfil?.id;
   const [likedPosts, setLikedPosts] = useState({});
 
-  
+
   const toggleLike = async (postId) => {
-    const postIdNum = Number(postId);
-    const perfilIdNum = Number(perfilId);
+    if (!perfilId) return;
   
-    if (isNaN(postIdNum) || isNaN(perfilIdNum) || !Number.isInteger(postIdNum) || !Number.isInteger(perfilIdNum)) {
-      console.error("Erro: postId ou perfilId não são inteiros!", { postId, perfilId });
-      return;
-    }
-  
-    console.log("Curtindo post com ID:", postIdNum, "e perfil ID:", perfilIdNum); // Log para verificar os IDs
+    const isLiked = likedPosts[postId];
   
     try {
-      const url = `/curtidas/comentario-forum/${postIdNum}/perfil/${perfilIdNum}`;
-      const isLiked = likedPosts[postIdNum];
-  
-      setLikedPosts((prev) => ({
-        ...prev,
-        [postIdNum]: !isLiked,
-      }));
+      const url = `/curtidas/post/${postId}/perfil/${perfilId}`;
   
       if (isLiked) {
         await backendApi.delete(url, { headers: { Authorization: `Bearer ${token}` } });
       } else {
         await backendApi.post(url, {}, { headers: { Authorization: `Bearer ${token}` } });
       }
+  
+      // Atualiza diretamente os posts sem depender de `setPosts` (se `posts` for prop)
+      setLikedPosts((prev) => ({
+        ...prev,
+        [postId]: !isLiked,
+      }));
+  
+      // Atualiza as curtidas diretamente no post alterado
+      const updatedPosts = posts.map((post) =>
+        post.id === postId
+          ? { ...post, curtidas: isLiked ? Math.max(post.curtidas - 1, 0) : post.curtidas + 1 }
+          : post
+      );
+  
+      // Verifica se `setPosts` está disponível antes de chamar
+      if (typeof setPosts === "function") {
+        setPosts(updatedPosts);
+      }
     } catch (error) {
-      console.error("Erro ao realizar a curtida:", error);
+      console.error("Erro ao curtir/descurtir post:", error);
     }
   };
+  
 
 
   return (
@@ -173,15 +181,11 @@ const Feed = ({ posts, userProfiles, onPostClick }) => {
             isSpoiler={post.possuiSpoiler}
             tags={post.tags}
             respostas={post.comentarios || []}
-            stats={{
-              likes: likedPosts[post.id]
-                ? (post.stats?.likes || 0) + 1
-                : post.stats?.likes,
-
-            }}
+            stats={{ likes: post.curtidas }} // Corrigido para garantir que seja um objeto `stats`
+            onLikeClick={() => toggleLike(post.id)}
             onPostClick={() => onPostClick(post, authorProfile)}
-            onLikeClick={() => toggleLike(post.id)} // Função para curtir
           />
+
         );
       })}
     </div>

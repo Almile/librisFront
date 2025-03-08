@@ -82,15 +82,15 @@ const Notificacoes = () => {
   const notificationSettings = JSON.parse(localStorage.getItem("notificationSettings")) || {
     curtida: true,
     seguidor: true,
-    comentario: true,
+    resposta: true,
   };
   
   // Mapeando as abas disponíveis com base nas preferências do usuário
   const allTabs = [
     { label: "Todos", key: "Todos", enabled: true },
-    { label: "Curtida", key: "curtida", enabled: notificationSettings.curtida },
-    { label: "Seguidor", key: "seguidor", enabled: notificationSettings.seguidor },
-    { label: "Comentários", key: "comentario", enabled: notificationSettings.comentario },
+    { label: "curtida", key: "curtida", enabled: notificationSettings.curtida },
+    { label: "seguidor", key: "seguidor", enabled: notificationSettings.seguidor },
+    { label: "resposta", key: "resposta", enabled: notificationSettings.resposta },
   ];
   
   // Filtra apenas as abas ativas

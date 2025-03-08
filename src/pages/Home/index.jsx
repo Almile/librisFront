@@ -23,31 +23,31 @@ export default function Home() {
 function Slides() {
     const navigate = useNavigate();
     return (
-                <Swiper
-                    className={style.slides}
-                    modules={[Pagination, Keyboard]}
-                    pagination={{clickable: true,}}
-                    keyboard={{enabled: true,}}
-                >
-                    <SwiperSlide>
-                        <div className={style.start}>
-                            <div className={style.card}>
-                                <h2>Sua jornada literária começa aqui</h2>
-                                <p>Uma rede social feita para leitores apaixonados. Aqui você pode compartilhar resenhas, descobrir novos livros e fazer amizades com quem ama ler tanto quanto você.</p>
-                                <p>Organize sua lista de leitura, explore novas histórias e veja o impacto dos seus livros favoritos no mundo.</p>
-                                <p>É simples, divertido e totalmente sobre livros.</p>
-                                <Button onClick={() => navigate("/catalogo")}>
-                                    <span className={style.action}>Comece Agora!</span>
-                                </Button>
-                            </div>
-                            <img src="./frame216.png"/>
-                        </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <div>
+        <Swiper
+            className={style.slides}
+            modules={[Pagination, Keyboard]}
+            pagination={{clickable: true,}}
+            keyboard={{enabled: true,}}
+        >
+            <SwiperSlide>
+                <div className={style.start}>
+                    <div className={style.card}>
+                        <h2>Sua jornada literária começa aqui</h2>
+                        <p>Uma rede social feita para leitores apaixonados. Aqui você pode compartilhar resenhas, descobrir novos livros e fazer amizades com quem ama ler tanto quanto você.</p>
+                        <p>Organize sua lista de leitura, explore novas histórias e veja o impacto dos seus livros favoritos no mundo.</p>
+                        <p>É simples, divertido e totalmente sobre livros.</p>
+                        <Button onClick={() => navigate("/catalogo")}>
+                            <span className={style.action}>Comece Agora!</span>
+                        </Button>
+                    </div>
+                    <img src="./frame216.png"/>
+                </div>
+            </SwiperSlide>
+            <SwiperSlide>
+                <div>
 
-                        </div>
-                    </SwiperSlide>
-                </Swiper>
+                </div>
+            </SwiperSlide>
+        </Swiper>
     );
 }

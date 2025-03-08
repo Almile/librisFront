@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { ReplyForm } from "./ReplyForm";
 import { SpoilerProtection } from "./SpoilerProtection";
 import styles from "../styles/comments.module.css";
@@ -100,7 +100,7 @@ export const CommentList = ({ comments = [], onAddComment, onToggleReply, onTogg
                                     <span className={styles.commentDate}>{new Date(comment.dataComentario || comment.data|| comment.dataResposta).toLocaleDateString()}</span>
                                 </div> 
                                 <div className={styles.meta}>
-                                    {comment.nota >= 0  || comment.parentId  ? (
+                                    {comment.nota >= 0  || !comment.parentId  ? (
                                         <div className={styles.commentRating}>
                                             {[1, 2, 3, 4, 5].map((star) => (
                                                 <ion-icon
@@ -145,10 +145,11 @@ export const CommentList = ({ comments = [], onAddComment, onToggleReply, onTogg
                                 )}
                             </div>
                             <div className={styles.commentActions}>
-                                <button
-                                    className={styles.commentButton}
-                                    onClick={() => onToggleLike(comment.id)}
-                                >
+                            <button
+                                className={styles.commentButton}
+                                onClick={() => comment.parentId ? onToggleLike(comment.id, comment.parentId) : onToggleLike(comment.id)}
+                            >
+
                                     {comment.likedBy?.includes("currentUser") ? (
                                         <ion-icon name="thumbs-up"></ion-icon>
                                     ) : (
