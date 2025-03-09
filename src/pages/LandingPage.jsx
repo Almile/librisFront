@@ -67,7 +67,7 @@ function LandingPage() {
 
                     <div className="info">
                         <div className="picture">
-                            <img src="../landing/perfil_felipe.jpeg" alt="" />
+                            <img src="../landing/perfil_felipe.webp" alt="" />
                         </div>
                         <div className="name">
                             <p><strong>Felipe Roufman</strong></p>
