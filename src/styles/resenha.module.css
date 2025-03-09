@@ -54,6 +54,11 @@
     width: 100%;
 }
 
+.alertSpoilerReviewOn {
+    color: white;
+    background-color: rgb(207, 98, 98);
+}
+
 .titleReview{
     border: none;
     padding: 10px;

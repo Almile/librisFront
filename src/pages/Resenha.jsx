@@ -48,6 +48,12 @@ const Resenha = () => {
     }
   }
 
+  const [active, setActive] = useState(false);
+
+  const handleClick = () => {
+    setActive(current => !current);
+  };
+
   return (
     <main className={styles.content}>
       <div className={styles.back}>
@@ -111,7 +117,8 @@ const Resenha = () => {
           </div>
         </div>
 
-        <button className={styles.alertSpoilerReview} onClick={() => {setSpoiler(true)}}>Possui Spoiler</button>
+        <button className={`${styles.alertSpoilerReview} ${active ? styles.alertSpoilerReviewOn : styles.alertSpoilerReview}`} 
+          onClick={() => {setSpoiler(true); handleClick()} }>Possui Spoiler</button>
 
         <div className={styles.review}>
           {editable ? (
