@@ -1,28 +1,38 @@
-import React, {useState} from 'react';
-import { useNavigate, useParams } from 'react-router-dom'
+import React, {useState, useContext, useEffect} from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import style from "../styles/reviewsection.module.css"
 import 'swiper/css';
+import backendApi from "../services/backendApi";
+import useAuth from "../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
 
-const ReviewSection = () => {
-    const navigate = useNavigate();
-  
-    const navegarParaResenha = () => {
-      navigate('/resenha');
-    };
 
+const ReviewSection = (livroID) => {
     const [profileImage, setProfileImage] = useState('/user_padrao.svg');
+    const [review, setReview] = useState([]);
+    const bookId = livroID.livroID
 
-    const userResenha = [    
-      { id: 1, name: "Ana", image: profileImage },
-      { id: 2, name: "Maria", image: profileImage }
-    ];
+    const { token, user } = useContext(useAuth);
+
+    useEffect(() => {
+      const reviewGet = async(bookId) => {
+        try {
+          const resenhaLer = await backendApi.get(`/resenhas/livro/${bookId}`, {headers: { Authorization: `Bearer ${token}`}, });
+          setReview(resenhaLer.data.data.content);
+          console.log('TESTE RESENHA CARREGADA: ', resenhaLer.data.data.content);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      reviewGet(bookId);
+    }, [livroID])
+
+    console.log('REVIEW: ', review);
 
   return (
     <div className={style.reviewSection}>
     <div className={style.reviewTitle}>
       <h2>Resenhas</h2>
-      <button onClick={navegarParaResenha} className={style.buttonReview}>Escreva uma Resenha</button>
     </div>
     <Swiper
     className={style.swiper}
@@ -31,41 +41,18 @@ const ReviewSection = () => {
       onSlideChange={() => console.log('Slide mudou')}
       onSwiper={(swiper) => console.log(swiper)}
     >
-      <SwiperSlide className={style.swiperSlide} >
-        <h3>Título resenha</h3>
-        <span class={style.plResenhaP}>Muito boa leitura, com uma bela mensagem! Recomendo</span>
-        <div className={style.fotoPerfil}>
-          <img src={profileImage} alt="Foto do Perfil"/>
-          <p>Nome user</p>
-        </div>
-      </SwiperSlide>
-
-      <SwiperSlide className={style.swiperSlide}>
-        <h3>Título resenha</h3>
-        <span class={style.plResenhaP}>Narrativa envolvente e personagens cativantes fazem deste livro uma leitura imperdível</span>
-        <div className={style.fotoPerfil}>
-          <img src={profileImage} alt="Foto do Perfil"/>
-          <p>Nome user</p>
-        </div>
-      </SwiperSlide>
-
-      <SwiperSlide className={style.swiperSlide}>
-        <h3>Título resenha</h3>
-        <span class={style.plResenhaP}>Uma história emocionante que prende do início ao fim</span>
-        <div className={style.fotoPerfil}>
-          <img src={profileImage} alt="Foto do Perfil"/>
-          <p>Nome user</p>
-        </div>
-      </SwiperSlide>
-
-      <SwiperSlide className={style.swiperSlide}>
-        <h3>Título resenha</h3>
-        <span class={style.plResenhaP}>Leitura rápida, porém impactante e memorável</span>
-        <div className={style.fotoPerfil}>
-          <img src={profileImage} alt="Foto do Perfil"/>
-          <p>Nome user</p>
-        </div>
-      </SwiperSlide>
+      {review.length > 0 ? (
+        <div>
+          { review.map((r) => (
+            <SwiperSlide className={style.swiperSlide}>
+              <h3>{r.titulo}</h3>
+              <span class={style.plResenhaP} dangerouslySetInnerHTML={{ __html: r.texto }}></span>
+              <div className={style.fotoPerfil}>
+                <p>{r.autor}</p>
+              </div>
+            </SwiperSlide>
+          ))
+        }</div>):("Não possui resenhas, seja o primeiro a escrever!")}
     </Swiper>
     </div>
   );

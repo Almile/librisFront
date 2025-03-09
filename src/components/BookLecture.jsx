@@ -23,7 +23,7 @@ const BookLecture = ({ bookId, onClose }) => {
 
 
     const navegarParaResenha = () => {
-        navigate(`/resenha`, { state: { rating } });
+        navigate(`/resenha/${bookId}`, { state: { rating } });
         onClose();
     };
 

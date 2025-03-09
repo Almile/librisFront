@@ -25,7 +25,7 @@ const modules = {
   },
 };
 
-export const ReviewQuill = ({ onSubmit, initialText = "", spoilerId, isSpoiler, setIsSpoiler }) => {
+export const ReviewQuill = ({ onSubmit, initialText = ""}) => {
   const [text, setText] = useState("");
   const [focusedImage, setFocusedImage] = useState(null);
   const editorRef = useRef(null);
@@ -39,9 +39,8 @@ export const ReviewQuill = ({ onSubmit, initialText = "", spoilerId, isSpoiler, 
     const plainText = text.trim();
     if (plainText === "" || plainText === "<p><br></p>") return;
 
-    onSubmit(text, isSpoiler);
+    onSubmit(text);
     setText("");
-    setIsSpoiler(false);
   };
 
   const handleImageAlignment = (alignment) => {

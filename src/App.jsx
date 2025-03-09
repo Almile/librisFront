@@ -42,7 +42,7 @@ function App() {
             <Route path='/livro/:id' element={<Livro />} />
             <Route path='/forum' element={<Forum />} />
             <Route path='/configuracao' element={<Configuracao />} />
-            <Route path='/resenha' element={<Resenha />} />
+            <Route path='/resenha/:id' element={<Resenha />} />
           </Route>
         </Routes>
 
