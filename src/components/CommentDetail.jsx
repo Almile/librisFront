@@ -5,8 +5,22 @@ import ForumCommentSection from './ForumCommentSection'; // Novo componente
 
 const CommentDetail = ({ post, authorProfile }) => {
   const [postText, setPostText] = useState("");
+  const [likes, setLikes] = useState(post.curtidas);
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [spoilerVisibility, setSpoilerVisibility] = useState({});
+
+  const handleLike = async () => {
+    setIsLiked(!isLiked); 
+    setLikes(isLiked ? likes - 1 : likes + 1); 
+
+    try {
+      await onLikeClick();
+    } catch (error) {
+      console.error("Erro ao curtir/descurtir post:", error);
+      setIsLiked(isLiked);
+      setLikes(likes); 
+    }
+  };
 
   const toggleSpoiler = (commentId) => {
     setSpoilerVisibility((prev) => ({
@@ -62,13 +76,13 @@ const CommentDetail = ({ post, authorProfile }) => {
 
               <div className={styles.actions}>
                 {/* Corrigindo exibição de likes */}
-                <button className={styles.actionButton}>
-                  👍 {post.stats?.likes || 0} Likes
+                <button className={styles.actionButton} onClick={handleLike}>
+                  👍 {likes} Likes
                 </button>
                 
                 {/* Corrigindo exibição de respostas */}
                 <button className={styles.actionButton}>
-                  💬 {post.respostas?.length || 0} Respostas
+                  💬 {post.comentarios?.length || 0} Respostas
                 </button>
                 
                 {post.possuiSpoiler && (

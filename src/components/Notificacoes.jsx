@@ -124,7 +124,6 @@ const Notificacoes = () => {
       <div>
         {notificacoesFiltradas.map((notificacao) => (
           <div key={notificacao.id} className="item" onClick={() => marcarComoLida(notificacao.id)}>
-            <div className="imgPlaceholder"></div>
             <div className="configurar-conteudo">
               <p className="paragrafo-limitado">
                {notificacao.mensagem}

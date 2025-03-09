@@ -96,7 +96,7 @@ const Resenha = () => {
             </div>
           </div>
           <div className={styles.meta}>
-            <span>1000 reviews</span>
+            <span>reviews</span>
             <div className={styles.rating}>
                 <span>
                     {Array.from({ length: Math.ceil(4 || 0) }).map((_, index) => (
@@ -107,7 +107,7 @@ const Resenha = () => {
                     ))}
                 </span>
             </div>
-            {4.5}
+            {rating?.state?.rating}
           </div>
         </div>
 

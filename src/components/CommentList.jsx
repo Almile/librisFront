@@ -85,7 +85,6 @@ export const CommentList = ({ comments = [], onAddComment, onToggleReply, onTogg
             {comments.map((comment) => {
             const profileId = String(comment.perfilId || comment.nomePerfil);
             const user = userProfiles[profileId] || { usuario: { username: "Carregando..." }};
-
                 return (
                     <li key={comment.id} className={`${styles.commentList} ${comment.parentId ? styles.replyComment : ""}`}>
                         <div className={styles.comment}>

@@ -8,6 +8,7 @@ import backendApi from "../services/backendApi"; // Importe a instância do Axio
 function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     console.log("URL Params:", window.location.search);  // Adicione esse log para depurar
@@ -67,6 +68,7 @@ function Login() {
 
   const handleCadastroSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Inicia o loading
 
     if (cadastroData.password !== cadastroData.confirmPassword) {
         setCadastroError("As senhas não coincidem.");
@@ -84,6 +86,8 @@ function Login() {
         setCadastroError("");
 
         setTimeout(() => {
+          setLoading(false); // Inicia o loading
+
             navigate("/login");
         }, 2000);
     } catch (err) {
@@ -94,6 +98,8 @@ function Login() {
   // Função para login do usuário e redirecionamento para a página inicial caso o login seja bem-sucedido
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true); 
+
     try {
         const response = await backendApi.post("auth/login", {
           login: loginData.emailLogin,
@@ -111,9 +117,13 @@ function Login() {
 
 const loginGoogle = (e) => {
   e.preventDefault();
+  setLoading(true); // Inicia o loading
+
   window.location.href = "http://localhost:8080/oauth2/authorization/google";
 
     login(accessToken);
+    setLoading(false); // Inicia o loading
+
     navigate("/home");
 
 };
@@ -121,6 +131,7 @@ const loginGoogle = (e) => {
 
 const handleResetPassword = async (e) => {
   e.preventDefault();
+  setLoading(true); // Inicia o loading
 
   if (!email) {
     setLoginError("Por favor, forneça um email.");
@@ -131,9 +142,7 @@ const handleResetPassword = async (e) => {
     const response = await backendApi.post("usuario/reset-password", { email }, { 
       headers: { 'Content-Type': 'application/json' } 
     });    
-
-    console.log("sucesso", response.data.message);
-
+    setLoading(false); // Inicia o loading
     setResetSuccess(response.data.message);
     setResetError(""); 
   } catch (err) {

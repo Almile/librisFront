@@ -1,43 +1,56 @@
-import React from 'react';
-import CalendarHeatmap from 'react-calendar-heatmap'; // Importa o componente de mapa de calor
-import { Tooltip as ReactTooltip } from 'react-tooltip'; // Importa o componente de tooltip
-import 'react-calendar-heatmap/dist/styles.css'; // Importa os estilos do mapa de calor
+import React, { useEffect, useState } from 'react';
+import CalendarHeatmap from 'react-calendar-heatmap';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
+import 'react-calendar-heatmap/dist/styles.css';
+import backendApi from "../services/backendApi";
+import { useAuth } from "../context/AuthContext";
 
-const today = new Date(); // Obtém a data atual
+const today = new Date();
 
-const HeatMap = () => {
-  // Gera valores aleatórios para preencher o mapa de calor
-  const randomValues = getRange(65).map(index => {
-    return {
-      date: shiftDate(today, -index), // Gera datas retroativas
-      count: getRandomInt(1, 4), // Gera contagens aleatórias entre 1 e 4
+const HeatMap = ({ id }) => {
+  const { token } = useAuth();
+  const [heatmapData, setHeatmapData] = useState([]);
+
+  useEffect(() => {
+    const fetchHeatMap = async () => {
+      try {
+        const response = await backendApi.get(`/atividade/${id}?dias=60`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        
+        const fetchedData = response.data.data.map(item => ({
+          date: new Date(item.data),
+          count: item.quantidade,
+        }));
+
+        setHeatmapData(fetchedData);
+      } catch (error) {
+        console.error(error.response?.data || error);
+      }
     };
-  });
 
-  const startDate = shiftDate(today, -65); // Define a data inicial (65 dias atrás)
-  const endDate = today; // Define a data final como hoje
+    fetchHeatMap();
+  }, [id, token]);
+
+  const startDate = shiftDate(today, -60);
+  const endDate = today;
 
   return (
     <div className='heatmap-content'>
-        <p>01/11/2024 - 05/01/2025</p> {/* Exibe o intervalo de datas */}
+      <p>{startDate.toDateString()} - {endDate.toDateString()}</p>
       <div className="calendar-container">
         <div className="weekday-labels">
-          {/* Rótulos dos dias da semana */}
           {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((day, index) => (
-  <div key={index} className="weekday-label">{day}</div>
-))}
-
-
+            <div key={index} className="weekday-label">{day}</div>
+          ))}
         </div>
         <CalendarHeatmap
-          startDate={startDate} // Data inicial do mapa de calor
-          endDate={endDate} // Data final do mapa de calor
-          values={randomValues} // Valores aleatórios gerados
+          startDate={startDate}
+          endDate={endDate}
+          values={heatmapData}
           classForValue={value => {
-            if (!value) {
-              return 'color-empty'; // Classe para células sem dados
-            }
-            return `color-scale-${value.count}`; // Classe baseada na contagem
+            if (!value || value.count === 0) return 'color-empty';
+            return `color-scale-${Math.min(value.count, 4)}`;
           }}
           tooltipDataAttrs={value => {
             if (!value || !value.date) {
@@ -45,34 +58,22 @@ const HeatMap = () => {
             }
             return {
               'data-tooltip-id': 'tooltip',
-              'data-tooltip-content': `${value.date.toISOString().slice(0, 10)}: ${value.count} atividade(s)`, 
+              'data-tooltip-content': `${value.date.toISOString().slice(0, 10)}: ${value.count} atividade(s)`,
             };
           }}
-          
-          showWeekdayLabels={false} // Oculta rótulos dos dias da semana no calendário
-          showMonthLabels={false} // Oculta rótulos dos meses no calendário
+          showWeekdayLabels={false}
+          showMonthLabels={false}
         />
-        <ReactTooltip id="tooltip" /> {/* Componente de tooltip */}
+        <ReactTooltip id="tooltip" />
       </div>
     </div>
   );
-}
+};
 
-// Função para ajustar uma data em um número específico de dias
 function shiftDate(date, numDays) {
   const newDate = new Date(date);
   newDate.setDate(newDate.getDate() + numDays);
   return newDate;
 }
 
-// Função para gerar um array de números sequenciais
-function getRange(count) {
-  return Array.from({ length: count }, (_, i) => i);
-}
-
-// Função para gerar um número inteiro aleatório entre min e max
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-export default HeatMap; // Exporta o componente HeatMap
+export default HeatMap;
