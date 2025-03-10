@@ -57,13 +57,33 @@
     margin: 1rem 0;
 }
 
+.slide2 {
+    display: flex;
+    padding: 32px;
+    background-color: var(--bg-secundario);
+    border-radius: 8px;
+    height: 500px;
+}
+
+.slide2Info {
+    padding: 32px;
+}
+
+.slide2 img {
+    width: 500px;
+}
+
 @media (max-width: 1050px){
 
     .card {
         width: 100%;
     }
 
-    .one img {
+    .start img {
+        display: none;
+    }
+
+    .slide2 img {
         display: none;
     }
 }

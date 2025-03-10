@@ -1,13 +1,12 @@
-/* eslint-disable react/prop-types */
 import PropTypes from 'prop-types'
 import style from './BookCard.module.css'
 import useBook from '../../hooks/useBook'
 import { useState, useEffect, useRef } from 'react'
-import OutlinedButton from '../OutlinedButton';
-import Button from '../Button';
-import BookLecture from "../BookLecture";
-import { useNavigate } from 'react-router-dom';
-import { updateLeitura, getLeituraByUserAndGoogleId } from '../../services/librisApiService';
+import OutlinedButton from '../OutlinedButton'
+import BookLecture from "../BookLecture"
+import { useNavigate } from 'react-router-dom'
+import { updateLeitura, getLeituraByUserAndGoogleId } from '../../services/librisApiService'
+import UpdateReading from '../UpdateReading'
 
 export default function BookCard({id, username, showUpdate, setLidos, setLendo, perfilId}) {
     const [currentPage, setCurrentPage] = useState(0);
@@ -48,7 +47,7 @@ export default function BookCard({id, username, showUpdate, setLidos, setLendo, 
                 setShowModal(true);
                 setLidos(prev => [...prev, id]);
             }
-            const response = updateLeitura(leituraId.current, body);
+            const response = await updateLeitura(leituraId.current, body);
             console.log(response)
         }
         setShowModalUpdate(false);
@@ -115,37 +114,6 @@ function ProgressBar({currentPage, pageCount}) {
     );
 }
 
-function UpdateReading({data, handleUpdate, currentPage, setShowModalUpdate}) {
-    const [page, setPage] = useState(currentPage)
-    return (
-        <div className={style.modalOverlay}>
-            <div className={style.modalUpdate}>
-                <img 
-                    className={style.cover}
-                    src={`https://books.google.com/books/publisher/content?id=${data.id}&printsec=frontcover&img=1&zoom=1`}
-                    alt={`Capa do livro ${data.title}`} 
-                />
-                <div className={style.modalInfo}>
-                    <span className={style.title}>{data.title}</span>
-                    <input type="range" min={0} max={data.pageCount} value={page} onChange={(e) => setPage(e.target.value)}/>
-                    <span>Página <input type='number' min="0" max={data.pageCount} value={page} onChange={(e) => setPage(e.target.value)}/> de {data.pageCount}</span>
-                    <div className={style.modalButtons}>
-                        <OutlinedButton onClick={() => handleUpdate(data.pageCount)}>
-                            Marcar como lido
-                        </OutlinedButton>
-                        <Button onClick={() => handleUpdate(page)}>
-                            Atualizar
-                        </Button>
-                    </div>
-                    <span className={style.closeModal} onClick={() => setShowModalUpdate(false)}>
-                        ✖
-                    </span>
-                </div>
-            </div>
-        </div>
-    );
-}
-
 BookCard.propTypes = {
     id: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
@@ -158,8 +126,4 @@ BookCard.propTypes = {
 ProgressBar.propTypes = {
     currentPage: PropTypes.number.isRequired,
     pageCount: PropTypes.number.isRequired,
-}
-
-UpdateReading.prototype = {
-    data: PropTypes.object.isRequired
 }

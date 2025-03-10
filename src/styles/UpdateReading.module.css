@@ -1,0 +1,103 @@
+.modalOverlay {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    background-color: var(--borda-suave);
+    backdrop-filter: blur(6px); 
+    animation: fadeIn 0.3s forwards;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+}
+
+.modalUpdate {
+    background-color: var(--bg-principal);
+    border-radius:10px;
+    position: relative;
+    width: 80%;
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.modalInfo {
+    width: 100%;
+    min-height: 200px;
+    max-width: 330px;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px;
+}
+
+.modalButtons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modalButtons button {
+    height: 36px;
+    border-radius: 8px;
+    width: 100%;
+    margin: 8px;
+}
+
+.modalInfo input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none; 
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.modalInfo input[type="range"]::-webkit-slider-runnable-track {
+    height: 15px;
+    background: #ccc;
+    border-radius: 16px;
+}
+
+.modalInfo input[type="range"]::-moz-range-track {
+    height: 15px;
+    background: #ccc;
+    border-radius: 16px;
+}
+
+.modalInfo input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none; 
+    height: 15px;
+    width: 15px;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 2px solid var(--destaque);
+    box-shadow: -407px 0 0 400px var(--destaque);
+}
+
+.modalInfo input[type="range"]::-moz-range-thumb {
+    height: 15px;
+    width: 15px;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 1px solid var(--destaque);
+    box-shadow: -407px 0 0 400px var(--destaque);
+}
+
+.closeModal{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: var(--terraCota);
+    font-weight: bolder;
+    font-size: 16px;
+}
+
+.title {
+    font-weight: 700;
+    font-size: 1.2rem;
+}

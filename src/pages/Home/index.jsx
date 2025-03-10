@@ -44,8 +44,12 @@ function Slides() {
                 </div>
             </SwiperSlide>
             <SwiperSlide>
-                <div>
-
+                <div className={style.slide2}>
+                    <div className={style.slide2Info}>
+                        <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium amet delectus vitae velit dignissimos molestias dicta cumque dolorem vero maiores? Deserunt quia saepe et. Hic cumque dolor magnam voluptates suscipit?</p>
+                    </div>
+                    <img src="./Unsplash.png" />
                 </div>
             </SwiperSlide>
         </Swiper>
