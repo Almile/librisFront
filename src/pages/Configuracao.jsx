@@ -127,31 +127,54 @@ function Configuracao() {
 
   // tentar trocar a senha
   const handleModifyPassword = async () => {
-
     const currentPassword = document.querySelector('input[name="currentPassword"]').value;
     const newPassword = document.querySelector('input[name="newPassword"]').value;
     const confirmPassword = document.querySelector('input[name="confirmPassword"]').value;
     
+    // Validação básica
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      alert("Todos os campos são obrigatórios");
+      return;
+    }
+    
     if (newPassword !== confirmPassword) {
-      alert("as duas estao diferentes");
+      alert("As senhas novas estão diferentes");
       return;
     }
     
     try {
-      const response = await backendApi.put('/usuario/alterar-senha', {
+      const response = await backendApi.put('/usuario/change-password', {
         oldPassword: currentPassword,
         newPassword: newPassword
       }, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
       
       if (response.data && response.data.success) {
-        alert("sucesso");
+        alert("Senha alterada com sucesso");
+        // Limpar os campos
+        document.querySelector('input[name="currentPassword"]').value = '';
+        document.querySelector('input[name="newPassword"]').value = '';
+        document.querySelector('input[name="confirmPassword"]').value = '';
         closeModal();
       }
     } catch (error) {
-      alert("erro: " + (error.response?.data?.message || "erro estranho"));
-      console.error("erro:", error.response?.data || error);
+      console.error("Erro ao alterar senha:", error);
+      
+      // Mostrar mensagem de erro mais detalhada
+      if (error.response) {
+        // O servidor respondeu com um status de erro
+        alert("Erro: " + (error.response?.data?.message || "Senha atual incorreta ou erro no servidor"));
+      } else if (error.request) {
+        // A requisição foi feita mas não houve resposta
+        alert("Erro: Sem resposta do servidor. Verifique sua conexão.");
+      } else {
+        // Erro na configuração da requisição
+        alert("Erro: " + error.message);
+      }
     }
   };
 
