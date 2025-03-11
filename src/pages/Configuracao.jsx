@@ -4,6 +4,25 @@ import GenreSelector from '../components/GenreSelector';
 import useAuth from "../context/AuthContext";
 import backendApi from "../services/backendApi";
 
+// display dos nomes de gêneros
+const formatGenreName = (genre) => {
+  if (!genre) return '';
+  
+  return genre
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ')
+    .replace(/Cientifica/g, 'Científica')
+    .replace(/Ficcao/g, 'Ficção')
+    .replace(/Nao/g, 'Não')
+    .replace(/Classica/g, 'Clássica')
+    .replace(/Romantica/g, 'Romântica')
+    .replace(/Academica/g, 'Acadêmica')
+    .replace(/Filosofia/g, 'Filosofia')
+    .replace(/Historica/g, 'Histórica')
+    .replace(/Biografias/g, 'Biografias');
+};
+
 function Configuracao() {
   const { token, user } = useContext(useAuth);
   const [username, setUsername] = useState('');
@@ -28,7 +47,6 @@ function Configuracao() {
     const fetchUserData = async () => {
       if (user && user.perfil && user.perfil.id) {
         try {
-
           const response = await backendApi.get(`/perfil/${user.perfil.id}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
@@ -61,7 +79,7 @@ function Configuracao() {
     }
   }, []);
 
-  // Callback para receber os gêneros do GenreSelector
+  
   const handleGenreSelection = async (selectedGenres) => {
     setGenres(selectedGenres);
     setShowGenres(false); // Fechar o modal após salvar
@@ -72,7 +90,7 @@ function Configuracao() {
         const payload = {
           urlPerfil: perfilData.urlPerfil,
           resumoBio: perfilData.resumoBio,
-          generosFavoritos: selectedGenres,
+          generosFavoritos: selectedGenres, 
           urlBackPerfil: perfilData.urlBackPerfil,
           usuarioEmail: perfilData.usuario.email,
         };
@@ -82,10 +100,10 @@ function Configuracao() {
         });
         
         if (response.data && response.data.success) {
-          console.log("atualizados com suceso");
+          console.log("Gêneros atualizados com sucesso");
         }
       } catch (error) {
-        console.error("erro:", error.response?.data || error);
+        console.error("Erro ao atualizar gêneros:", error.response?.data || error);
       }
     }
   };
@@ -124,6 +142,9 @@ function Configuracao() {
   const closeDeleteModal = () => setIsDeleteModalOpen(false);
   const confirmDelete = () => setIsConfirmingDelete(true);
   const cancelConfirmDelete = () => setIsConfirmingDelete(false);
+
+  // display generos de forma certa
+  const displayGenres = genres.map(genre => formatGenreName(genre)).join(', ');
 
   // tentar trocar a senha
   const handleModifyPassword = async () => {
@@ -230,7 +251,11 @@ function Configuracao() {
               placeholder='Senha'
               disabled
             />
-            <button type="button" onClick={toggleShowPassword} className={styles.togglePassword}>
+            <button 
+              type="button" 
+              onClick={openModal} 
+              className={styles.togglePassword}
+            >
               {showPassword ? (<ion-icon name="eye-off-outline"></ion-icon>) : (<ion-icon name="eye-outline"></ion-icon>)}
             </button>
           </div>
@@ -240,13 +265,12 @@ function Configuracao() {
       <div className={styles.genresLabel}>
         <div className={styles.genresHeader} onClick={toggleGenres}>
           <span>Gêneros Favoritos</span>
-          <span className={styles.selectedGenres}>{genres.join(', ')}</span>
+          <span className={styles.selectedGenres}>{displayGenres}</span>
           <span className={styles.editIcon}>✎</span>
         </div>
         {showGenres && (
           <div className={styles.genresOptions}>
             <GenreSelector onSave={handleGenreSelection} initialGenres={genres} />
-            
           </div>
         )}
       </div>
