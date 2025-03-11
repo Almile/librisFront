@@ -27,7 +27,7 @@ function LandingPage() {
                 <div id="desenvolvedores" className="authors">
                     <div className="info">
                         <div className="picture">
-                            <img src="../landing/perfil_milene.jpeg" alt="" />
+                            <img src="../landing/perfil_milene.jpg" alt="" />
                         </div>
                         <div className="name">
                             <p><strong>Milene Almeida</strong></p>
@@ -87,10 +87,10 @@ function LandingPage() {
 
                     <div className="info">
                         <div className="picture">
-                            <img src="../landing/perfil_jeferson.jpeg" alt="" />
+                            <img src="../landing/jefferson.jpg" alt="" />
                         </div>
                         <div className="name">
-                            <p><strong>Jeferson Garreto</strong></p>
+                            <p><strong>Jefferson Garreto</strong></p>
                         </div>
                         <div className="function">
                             Dev Back-end
@@ -201,7 +201,7 @@ function LandingPage() {
                 <div className="gridSup">
                     <div className="aplication">
                         <div className="image">
-                            <img src="" alt="" />
+                            <img src="../landing/feat.svg" alt="" />
                         </div>
                         <div className="title">
                             <h2>Recomendações personalizadas</h2>
@@ -212,7 +212,7 @@ function LandingPage() {
                     </div>
                     <div className="aplication">
                         <div className="image">
-                            <img src="src/assets/chat-icon.png" alt="" />
+                            <img src="../landing/feat1.svg" alt="" />
                         </div>
                         <div className="title">
                             <h2>Interação</h2>
@@ -223,7 +223,7 @@ function LandingPage() {
                     </div>
                     <div className="aplication">
                         <div className="image">
-                            <img src="" alt="" />
+                            <img src="../landing/feat2.svg" alt="" />
                         </div>
                         <div className="title">
                             <h2>Avaliações</h2>
@@ -234,7 +234,7 @@ function LandingPage() {
                     </div>
                     <div className="aplication">
                         <div className="image">
-                            <img src="" alt="" />
+                            <img src="../landing/feat3.svg" alt="" />
                         </div>
                         <div className="title">
                             <h2>Resenhas</h2>
@@ -245,7 +245,7 @@ function LandingPage() {
                     </div>
                     <div className="aplication">
                         <div className="image">
-                            <img src="" alt="" />
+                            <img src="../landing/feat4.svg" alt="" />
                         </div>
                         <div className="title">
                             <h2>Estante</h2>
@@ -256,7 +256,7 @@ function LandingPage() {
                     </div>
                     <div className="aplication">
                         <div className="image">
-                            <img src="" alt="" />
+                            <img src="../landing/feat.svg" alt="" />
                         </div>
                         <div className="title">
                             <h2>Perfil único</h2>
@@ -267,7 +267,7 @@ function LandingPage() {
                     </div>
                     <div className="aplication">
                         <div className="image">
-                            <img src="" alt="" />
+                            <img src="../landing/feat6.svg" alt="" />
                         </div>
                         <div className="title">
                             <h2>Acompanhe sua leitura</h2>
@@ -278,7 +278,7 @@ function LandingPage() {
                     </div>
                     <div className="aplication">
                         <div className="image">
-                            <img src="" alt="" />
+                            <img src="../landing/feat2.svg" alt="" />
                         </div>
                         <div className="title">
                             <h2>Google Books</h2>
@@ -289,7 +289,7 @@ function LandingPage() {
                     </div>
                     <div className="aplication">
                         <div className="image">
-                            <img src="" alt="" />
+                            <img src="../landing/feat3.svg" alt="" />
                         </div>
                         <div className="title">
                             <h2>Heat map</h2>

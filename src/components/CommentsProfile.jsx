@@ -11,11 +11,11 @@ const CommentsProfile = ({ currentUser }) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (!currentUser.usuario?.username) return;
+        if (!currentUser.data?.data?.usuario?.username) return;
 
         const fetchComments = async () => {
             try {
-                const response = await backendApi.get(`comentarios/listar/usuario/${currentUser.usuario?.username}`,{
+                const response = await backendApi.get(`comentarios/listar/usuario/${currentUser.data?.data?.usuario?.username}`,{
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 if (response.data.success) {
@@ -64,7 +64,7 @@ const CommentsProfile = ({ currentUser }) => {
                                 <span className="rating-value">{comment.nota}</span>
                             </div>
 
-                            <h2>{comment.googleId || "Título Desconhecido"}</h2>
+                            <h2>{comment.livro || ""}</h2>
 
                             <p
                                 className="paragrafo-limitado"
