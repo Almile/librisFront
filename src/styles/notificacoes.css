@@ -13,6 +13,14 @@
   right: 100px;
 }
 
+.limparNotificacoes{
+  border: none;
+  text-align: right;
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+}
+
 ::-webkit-scrollbar {
   width: 3px;
   height: 3px;

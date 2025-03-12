@@ -13,12 +13,12 @@
     background-color: var(--bg-secundario);
     padding: 20px;
     border-radius: 5px;
-    width: 70%;
+    width: 65%;
     min-height: 80vh;
 }
 
 .forumSidebar {
-    width: 30%;
+    width: 35%;
 }
  
 .filter{
@@ -73,21 +73,6 @@
     background-color: var(--borda-suave);
   }
 
-.followItem{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.followImage{
-    width: 20px;
-    height: 20px;
-    background-color: var(--bg-secundario);
-    background-size: cover;
-    background-position: center;
-    border-radius: 8px;
-}
-
 .backButton{
     border: none;
     background-color: transparent;
@@ -108,6 +93,7 @@
 .commentForm{
     border: 1px solid var(--borda-suave);
     border-radius: 5px;
+    margin: 20px;
 }
 
 .optionalCamp{

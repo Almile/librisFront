@@ -2,8 +2,9 @@
     max-height: 400px;
     margin-bottom: 16px;
     overflow: hidden;
-    width: 100%;
+    width: calc(100%-40px);
     cursor: pointer;
+    margin: 20px;
   }
 
   .cardPrincipal{
@@ -97,3 +98,55 @@
     display: flex;
     align-items: center;
   }
+
+  /*  ---------------    Spoiler    ----------------  */
+ .spoilerButton{
+  border: none;
+  background-color: transparent;
+ }
+ 
+  .spoilerButton span{
+  gap: 5px;
+  font-size: 14px;
+  border: none;
+  color: #ff5e5e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+ .spoilerButton ion-icon{
+  color: #ff0000;
+}
+
+ .spoilerButton span:hover {
+  color: #702d2d;
+}
+
+.commentText {
+  max-height: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.commentText.expanded {
+  max-height: none;
+}
+
+.showMoreButton,
+.showLessButton {
+  background: none;
+  border: none;
+  color: var(--destaque);
+  cursor: pointer;
+  font-size: 14px;
+  margin: auto;
+  padding: 10px;
+}
+
+.showMoreButton:hover,
+.showLessButton:hover {
+  text-decoration: underline;
+}

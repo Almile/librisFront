@@ -90,6 +90,7 @@ img.float-right {
     border-radius: 50%;
     border: 1px solid var(--borda-suave);
     position: absolute;
+    object-fit: cover;
     left: 15px;
     bottom:20px
 }
@@ -153,6 +154,7 @@ button.envyButton {
 .commentHeader img{
     width: 50px;
     height: 50px;
+    object-fit: cover;
     border-radius: 50%;
     border: 1px solid var(--borda-suave);
 }
@@ -194,7 +196,6 @@ button.envyButton {
 .spoilerContent.visible {
     transition: filter .5s ease;
     filter: blur(0);
-
 }
 
 .protectionWrapper {
@@ -296,12 +297,14 @@ button.envyButton {
     width: 40px;
     text-align: center;
 }
+
 .starIcon ion-icon, .rating ion-icon{
     font-size: 24px;
     color: var(--destaque);
     cursor: pointer;
     transition: transform 0.2s ease, color 0.2s ease;
 }
+
 .rating ion-icon{
     font-size: 18px;
     color: var(--destaque);

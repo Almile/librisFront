@@ -5,10 +5,10 @@ import Feed from "../components/Feed";
 import CommentDetail from "../components/CommentDetail";
 import User from "../components/User";
 import backendApi from "../services/backendApi"; 
-import useAuth from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 function Forum() {    
-  const { token, user } = useContext(useAuth);
+  const { token, user } = useAuth();
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [tags, setTags] = useState([]);
@@ -23,31 +23,63 @@ function Forum() {
   const [isSpoiler, setIsSpoiler] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [seguirRecomendados, setSeguirRecomendados] = useState([]);
+  const [userProfiles, setUserProfiles] = useState({}); // Estado para armazenar perfis dos autores
+
+  const fetchPosts = async () => {
+    try {
+      const response = await backendApi.get("/posts/listar", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log("Resposta dos posts:", response.data.data.content);
+  
+      const postsData = Array.isArray(response.data.data.content) ? response.data.data.content : [];
+      // Atualiza diretamente os posts sem delay
+      setPosts(postsData);
+    } catch (error) {
+      console.error("Erro ao carregar posts:", error);
+    }
+  };
+  
+  const fetchUserProfile = async (username) => {
+    if (!username || userProfiles[username]) return; // Evita requisições duplicadas
+  
+    try {
+      const response = await backendApi.get(`/perfil/buscar/${username}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log("pesquisa de perfil>>> ",response.data.data )
+      if (response.data.success) {
+        setUserProfiles((prev) => ({
+          ...prev,
+          [username]: response.data.data,
+        }));
+      }
+    } catch (error) {
+      console.error(`Erro ao buscar perfil de ${username}:`, error);
+    }
+  };
+  
+  // Quando os posts forem carregados, buscar os perfis dos autores
+  useEffect(() => {
+    if (posts.length > 0) {
+      posts.forEach((post) => {
+        if (post.nomePerfil) {
+          fetchUserProfile(post.nomePerfil);
+        }
+      });
+    }
+  }, [posts]); // Mudança aqui para garantir que roda sempre que os posts mudam
+  
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await backendApi.get("/posts/listar", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (Array.isArray(response.data.content)) {
-          setPosts(response.data.content);
-        } else {
-          console.error("Expected an array but got:", response.data);
-          setPosts([]); // Handle accordingly
-        }
-        console.log("Resposta completa da API:", response.data);
-
-      } catch (error) {
-        console.error("Erro ao carregar posts:", error);
-        setPosts([]); 
-      }
-    };
-  
     fetchPosts();
-  }, []); // Apenas executa uma vez ao montar o componente
+  }, [user, token]);
 
+  useEffect(() => {
+    console.log("Perfis carregados:", userProfiles);
+  }, [userProfiles]); 
   
+
   useEffect(() => {
     const storedBooks = [];
     for (let i = 0; i < localStorage.length; i++) {
@@ -79,18 +111,11 @@ function Forum() {
       setShowDropdown(false);
     }
   };
-  useEffect(() => {
-    console.log("posts atualizados: ", posts);
-  }, [posts]);
-  
-  const handleBookSelect = (book) => {  // ✅ Agora 'book' representa o objeto do livro selecionado
-    setSelectedBook(book);  // ✅ Salva o objeto inteiro, não apenas o título
-    setShowDropdown(false);
-    setSearchQuery("");  
-  };
 
-  const handleTextChange = (e) => {
-    setPostText(e.target.value);
+  const handleBookSelect = (book) => {
+    setSelectedBook(book);
+    setShowDropdown(false);
+    setSearchQuery("");
   };
 
   const handleTagsChange = (e) => {
@@ -99,10 +124,6 @@ function Forum() {
     setTags(newTags);
   };
 
-  useEffect(() => {
-    console.log("Estado postText atualizado:", postText);
-  }, [postText]);
-  
   const publish = async (content) => {
     if (!content.trim()) {
       console.error("O campo de texto não pode estar vazio.");
@@ -110,17 +131,19 @@ function Forum() {
     }
     try {
       const responsePosts = await backendApi.post("/posts", {
-        texto: content, // Usa o texto passado
+        texto: content,
         tags: tags.join(", "),
         possuiSpoiler: isSpoiler,
         perfilId: user?.perfil?.id,
-        googleId: selectedBook?.id || null,
+        googleId: selectedBook?.id,
       }, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
-      console.log("Post publicado.", responsePosts);
-      setPosts(prevPosts => [responsePosts.data, ...prevPosts]);
+      console.log("Post publicado.", responsePosts.data.data);
+  
+      // Recarregar os posts
+      await fetchPosts();
     } catch (error) {
       console.error("Erro ao publicar post:", error);
     }
@@ -132,7 +155,7 @@ function Forum() {
     if (selectedFilter === "seguindo") {
       return seguindo.includes(post.perfil?.name);
     }
-    
+  
     if (selectedFilter === "seguidores") {
       return seguidores.includes(post.perfil?.name);
     }
@@ -140,15 +163,20 @@ function Forum() {
     if (searchQuery) {
       return post.perfil?.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
              post.texto.toLowerCase().includes(searchQuery.toLowerCase()) || 
-             post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())) || 
+             post.tags.split(',').map(tag => tag.trim().toLowerCase()).includes(searchQuery.toLowerCase()) || 
              post.livro?.toLowerCase().includes(searchQuery.toLowerCase());
     }
   
-    return post.livro === selectedFilter || post.tags.includes(selectedFilter);
+    return post.livro === selectedFilter || post.tags.split(',').map(tag => tag.trim().toLowerCase()).includes(selectedFilter.toLowerCase());
   }) : [];
+  
 
   const booksHype = ["One-Punch Man, Vol. 21", "O Senhor dos Anéis: As Duas Torres"];
   const tagsHype = ["end", "e"];
+
+  const handleTextChange = (e) => {
+    setPostText(e.target.value);
+  };
 
   useEffect(() => {
     const fetchPerfis = async () => {
@@ -174,68 +202,67 @@ function Forum() {
       fetchPerfis();
     }
   }, [user]);
-  
+
+ 
   
 
   return (
     <main className={styles.forum}>
-      <section className={styles.forumContent}>
-        {selectedPost ? (
-          <div className={styles.postDetail}>
-            <button className={styles.backButton} onClick={() => setSelectedPost(null)}>
-              <ion-icon name="arrow-back-outline"></ion-icon>
-              <span>Voltar para Feed</span>
-            </button>
-            <CommentDetail {...selectedPost} />
+     <section className={styles.forumContent}>
+     {selectedPost ? (
+  <div className={styles.postDetail}>
+    <button className={styles.backButton} onClick={() => setSelectedPost(null)}>
+      <ion-icon name="arrow-back-outline"></ion-icon>
+      <span>Voltar para Feed</span>
+    </button>
+    <CommentDetail post={selectedPost.post} authorProfile={selectedPost.authorProfile} />
+  </div>
+) : (
+
+    <>
+      <div className={styles.commentForm}>
+        <CommentForm 
+          onSubmit={publish} 
+          initialText={postText} 
+          isSpoiler={isSpoiler}
+          setIsSpoiler={setIsSpoiler}    
+          onTextChange={setPostText}
+        />
+        <div className={styles.optionalCamp}>
+          <input 
+            type="text"
+            onChange={handleTagsChange} 
+            placeholder="Adicione palavras-chave (separe por vírgula)" 
+            className={styles.tagsInput} 
+          />
+          <div className={styles.bookSelector}>
+            <input
+              type="text"
+              value={selectedBook?.title}
+              onChange={handleBookSearch}
+              placeholder="Marcar Livro"
+              className={styles.tagsInput}
+              onFocus={() => setShowDropdown(true)}
+            />
+            {showDropdown && (
+              <ul className={styles.dropdownList}>
+                {filteredBooks.map((book, index) => (
+                  <li key={index} onClick={() => handleBookSelect(book)}>
+                    {book.title}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-        ) : (
-          <>
-            <div className={styles.commentForm}>
-            <CommentForm 
-              onSubmit={publish} 
-              initialText={postText} 
-              isSpoiler={isSpoiler}
-              setIsSpoiler={setIsSpoiler}    
-              onTextChange={setPostText} // Mantém o estado sincronizado
-              />
+        </div>
+      </div>
+      <Feed posts={filteredPosts} userProfiles={userProfiles} onPostClick = {(post, authorProfile) => {
+              setSelectedPost({ post, authorProfile }); // Certifique-se de que ambos os dados estão sendo passados
+            }} />
+    </>
+  )}
+</section>
 
-              <div className={styles.optionalCamp}>
-                <input 
-                  type="text"
-                  onChange={handleTagsChange} 
-                  placeholder="Adicione palavras-chave (separe por vírgula)" 
-                  className={styles.tagsInput} 
-                />
-                <div className={styles.bookSelector}>
-                <input
-                    type="text"
-                    value={selectedBook?.title}
-                    onChange={handleBookSearch}
-                    placeholder="Marcar Livro"
-                    className={styles.tagsInput}
-                    onFocus={() => setShowDropdown(true)}
-                  />
-                     {showDropdown && (
-                    <ul className={styles.dropdownList}>
-                      {filteredBooks.map((book, index) => (
-                        <li 
-                        key={index} 
-                        onClick={() => handleBookSelect(book)} // ✅ Agora passamos o objeto inteiro
-                      >
-                        {book.title}
-                      </li>
-                      
-                      ))}
-                    </ul>
-                  )}
-
-                </div>
-              </div>
-            </div>
-            <Feed posts={filteredPosts} onPostClick={setSelectedPost} />
-          </>
-        )}
-      </section>
 
       <aside className={styles.forumSidebar}>
       <div className={styles.search}>

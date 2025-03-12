@@ -24,9 +24,8 @@ export const AuthProvider = ({ children }) => {
             console.log("Dados do usuário:", response.data);
             setUser(response.data);
 
-            const username = response.data?.data?.username;
-            const emailUser = response.data?.data?.email;
-
+            const username = response?.data?.data?.username;
+            const emailUser = response?.data?.data?.email;
 
             if (!username) {
                 console.error("Erro: username não encontrado na resposta do servidor.");
@@ -83,13 +82,11 @@ export const AuthProvider = ({ children }) => {
         }
 
         const novoPerfil = {
-            usuario: { email, username },
             urlPerfil: "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg",
             resumoBio: '<p>💕 Gosto de _</p><p>📚 Livro Favorito _</p><p><br></p>',
-            seguindo: 0,
-            seguidores: 0,
             generosFavoritos: genres, // Corrigido para manter um array plano
             urlBackPerfil: "https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737480828/libris_images/hyxilej7wwvmhyiqmlog.jpg",
+            usuarioEmail: email
         };
 
         try {
@@ -136,6 +133,7 @@ export const AuthProvider = ({ children }) => {
 
         sessionStorage.setItem("token", newToken);
         setToken(newToken);
+        
     };
 
     const logout = () => {

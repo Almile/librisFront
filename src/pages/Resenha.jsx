@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Star } from 'lucide-react';
 import { ReviewQuill } from "../components/ReviewQuill"
 import styles from "../styles/resenha.module.css";
-const userPhoto =
-"https://res.cloudinary.com/dkmbs6lyk/image/upload/v1737478455/libris_images/uab0wwjncncnvb4ul6nl.jpg";
+import backendApi from "../services/backendApi";
+import useAuth from "../context/AuthContext";
+import { useLocation, useParams } from 'react-router-dom';
 
 
 const Resenha = () => {
   const [editable, setEditable] = useState(false);
   const [title, setTitle] = useState('');
-  const [review, setReview] = useState(
-    'Escreva suas impressões sobre o livro aqui...'
-  );
+  const [review, setReview] = useState('');
+  const [spoiler, setSpoiler] = useState(false);
+  const params = useParams();
 
   const toggleEditable = () => {
     setEditable(!editable);
@@ -20,7 +21,37 @@ const Resenha = () => {
   const saveReview = (text) => {
     setEditable(false);
     setReview(text);
+    reviewPost(text);
     alert('Alterações salvas com sucesso!');
+  };
+
+  const { token, user, setUser } = useContext(useAuth);
+
+  const rating = useLocation();
+
+  const reviewPost = async(text) => {
+    const resenhaCriar = {
+      perfilId: user.perfil.id,
+      googleId: params.id,
+      titulo: title,
+      autor: user.data.username,
+      texto: text,
+      nota: rating?.state?.rating,
+      spoiler: spoiler
+    }
+    console.log('Teste resenha criar: ', resenhaCriar)
+    try {
+      const response = await backendApi.post(`/resenhas`, resenhaCriar, {headers: { Authorization: `Bearer ${token}`}, })
+      console.log('AEEEEEEE')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const [active, setActive] = useState(false);
+
+  const handleClick = () => {
+    setActive(current => !current);
   };
 
   return (
@@ -61,17 +92,17 @@ const Resenha = () => {
         <div className={styles.reviewDetails}>
           <div className={styles.autor}>
             <img
-              src={userPhoto}
+              src={user.perfil.urlPerfil}
               alt="Foto de perfil"
               className={styles.autorImage}
             />
             <div>
-              <p>Autor: Nome do Usuário</p>
+              <p>Autor: {user.data.username}</p>
               <span className={styles.dateReview}>Data de publicação: DD/MM/AAAA</span>
             </div>
           </div>
           <div className={styles.meta}>
-            <span>1000 reviews</span>
+            <span>reviews</span>
             <div className={styles.rating}>
                 <span>
                     {Array.from({ length: Math.ceil(4 || 0) }).map((_, index) => (
@@ -82,11 +113,12 @@ const Resenha = () => {
                     ))}
                 </span>
             </div>
-            {4.5}
+            {rating?.state?.rating}
           </div>
         </div>
 
-        <button className={styles.alertSpoilerReview}>Possui Spoiler</button>
+        <button className={`${styles.alertSpoilerReview} ${active ? styles.alertSpoilerReviewOn : styles.alertSpoilerReview}`} 
+          onClick={() => {setSpoiler(true); handleClick()} }>Possui Spoiler</button>
 
         <div className={styles.review}>
           {editable ? (

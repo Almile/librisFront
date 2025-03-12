@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getBook } from "../services/googleBooksService";
+import {addLivro, getLivro} from "../services/librisApiService"
 
 export default function useBook(id) {
     const [data, setData] = useState({});
@@ -8,25 +9,34 @@ export default function useBook(id) {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const response = await getBook(id);
-                const info = {...response.data.volumeInfo, ...response.data.saleInfo};
-                setData(info);
-                localStorage.setItem(id, JSON.stringify(info));
-            } catch (error) {
-                setError(error);
-            } finally {
+            let book = JSON.parse(localStorage.getItem(id));
+            if (book) {
                 setLoading(false);
+            } else {
+                try {
+                    const response = await getBook(id);
+                    book = {...response.data.volumeInfo, ...response.data.saleInfo, id};
+                    localStorage.setItem(id, JSON.stringify(book));
+                } catch (error) {
+                    setError(error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+            setData(book);
+            try {
+                await getLivro(id);
+            } catch {
+                try {
+                    const response = await addLivro(book);
+                    console.log(response);
+                } catch (error) {
+                    console.error(error);
+                }
             }
         }
 
-        const book = JSON.parse(localStorage.getItem(id));
-        if (book) {
-            setData(book);
-            setLoading(false);
-        } else {
-            fetchData();
-        }
+        fetchData();
     }, [id]);
 
     return {data, error, loading};

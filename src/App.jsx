@@ -6,6 +6,8 @@ import PublicRoute from './Routes/public.routes';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
+import ResetPassword from './pages/ResetPassword';
+
 import Home from './pages/Home';
 import Login from './components/Login';
 import LandingPage from './pages/LandingPage';
@@ -30,6 +32,8 @@ function App() {
             <Route path='/' element={<LandingPage />} />
             <Route path='/login' element={<Login />} />
 
+            <Route path='/reset-password' element={<ResetPassword />} />
+
           {/* Rotas privadas */}
           <Route element={<PrivateRoute />}>
             <Route path='/home' element={<Home />} />
@@ -38,7 +42,7 @@ function App() {
             <Route path='/livro/:id' element={<Livro />} />
             <Route path='/forum' element={<Forum />} />
             <Route path='/configuracao' element={<Configuracao />} />
-            <Route path='/resenha' element={<Resenha />} />
+            <Route path='/resenha/:id' element={<Resenha />} />
           </Route>
         </Routes>
 

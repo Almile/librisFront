@@ -4,10 +4,8 @@ import style from "../styles/estanteLivros.module.css";
 import { Reorder } from "framer-motion";
 
 
-function EstanteLivros({ filtro = [] }) {
-  const [items, setItems] = useState(filtro);
+function EstanteLivros({ items = [], setItems }) {
   const listRef = useRef();
-
   const handleReorder = (newOrder) => {
     setItems(newOrder);
   };

@@ -5,7 +5,7 @@ import backendApi from "../services/backendApi";
 import "react-quill/dist/quill.snow.css";
 import User from "./User";
 
-const UserProfile = ({ id }) => {
+const UserProfile = ({ id, isOwner, setIsOwner}) => {
   const { token, user, setUser } = useContext(useAuth);
   const [perfilUser, setPerfilUser] = useState(null);
   const [seguidores, setSeguidores] = useState([]);
@@ -14,7 +14,9 @@ const UserProfile = ({ id }) => {
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
   const [description, setDescription] = useState(null);
-  const [isOwner, setIsOwner] = useState(false);
+
+  const [isFollowing, setIsFollowing] = useState(false);
+  const userId = user?.perfil?.id;
 
   useEffect(() => {
     const fetchUserPerfil = async () => {
@@ -50,7 +52,7 @@ const UserProfile = ({ id }) => {
       }
     };
     fetchUserPerfil();
-  }, [id, user, token]);
+  }, [id,isFollowing, user, token]);
   
 
   const handleDescriptionChange = (description) => {
@@ -91,17 +93,14 @@ const UserProfile = ({ id }) => {
       return;
     }
   
-    let email = perfilUser?.usuario?.email;
-    let username = perfilUser?.usuario?.username;
+    let email = perfilUser?.data?.usuario?.email;
   
     const payload = {
-      usuario: { email, username },
       urlPerfil: profileImage,
       resumoBio: description,
-      seguindo: seguindo.length,
-      seguidores: seguidores.length,
       generosFavoritos: perfilUser?.data?.generosFavoritos,
       urlBackPerfil: backgroundImage,
+      usuarioEmail: email,
     };
   
     try {
@@ -246,6 +245,49 @@ const UserProfile = ({ id }) => {
   };  
   
 
+  useEffect(() => {
+    const checkIfFollowing = async () => {
+      try {
+        const response = await backendApi.get(`/relacionamentos/esta-seguindo/${userId}/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setIsFollowing(response.data.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Erro ao verificar o seguimento:", error.response ? error.response.data : error.message);
+      }
+    };
+    checkIfFollowing();
+  }, [userId, id, token]);
+
+  const handleFollow = async () => {
+    console.log(isFollowing);
+
+    if (isFollowing) {
+      try {
+        const deleteResponse = await backendApi.delete(`/relacionamentos/deixar-de-seguir/${userId}/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setIsFollowing(false);
+        console.log(deleteResponse);
+      } catch (error) {
+        console.error("Erro ao deixar de seguir:", error.response ? error.response.data : error.message);
+      }      
+    } else {
+      // Seguir
+      try {
+        const seguirResp = await backendApi.post(`/relacionamentos/seguir/${userId}/${id}`, {}, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log(seguirResp);
+        setIsFollowing(true);
+      } catch (error) {
+        console.error("Erro ao seguir o perfil:", error.response ? error.response.data : error.message);
+      }
+    }
+  };
+  if (userId === id) return null;
+
   return (
     <section
       className="perfil"
@@ -303,6 +345,11 @@ const UserProfile = ({ id }) => {
               <ion-icon name="camera-outline" className="cam-icon"></ion-icon>
             </button>
           )}
+          {!isOwner && (
+               <button className="buttonFollow" onClick={handleFollow}>
+               {isFollowing ? "Deixar de Seguir" : "Seguir"}
+             </button>
+            )}
       </div>
 
         <div className="info-perfil">

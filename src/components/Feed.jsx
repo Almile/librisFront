@@ -1,105 +1,127 @@
-import React, {useState} from "react";
+import React, { useState, useContext , useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 import { SpoilerProtection } from "./SpoilerProtection";
 import styles from "../styles/feed.module.css";
+import backendApi from "../services/backendApi";
+import { useAuth } from "../context/AuthContext";
 
-const PostCard = ({key, user, date, text, tags, book,isSpoiler, stats, onPostClick }) => {
-    const [spoilerVisibility, setSpoilerVisibility] = useState({});
-  
-    const toggleSpoiler = (commentId) => {
-      setSpoilerVisibility((prev) => ({
-          ...prev,
-          [commentId]: !prev[commentId],
-      }));
-  };
-  const handleClick = (e) => {
-    if (e.target.tagName !== "BUTTON") {
-      onPostClick();
+const PostCard = ({ id, userId, foto, nome, date, text, tags, book, isSpoiler, respostas, stats, onPostClick, onLikeClick, isLikedInitial }) => {
+  const [likes, setLikes] = useState(stats.likes);
+  const [isLiked, setIsLiked] = useState(isLikedInitial);
+  const [commentCount, setCommentCount] = useState(respostas.length);
+  const navigate = useNavigate()
+  useEffect(() => {
+    const fetchUpdatedPost = async () => {
+      try {
+        const response = await backendApi.get(`/posts/${id}`);
+        setLikes(response.data.curtidas);
+        setCommentCount(response.data.comentarios.length);
+      } catch (error) {
+        console.error("Erro ao atualizar post:", error);
+      }
+    };
+
+    fetchUpdatedPost();
+  }, [isLiked, respostas.length]); // Atualiza quando curtidas ou respostas mudam
+
+  const handleLike = async () => {
+    setIsLiked(!isLiked);
+    setLikes(isLiked ? likes - 1 : likes + 1);
+
+    try {
+      await onLikeClick();
+    } catch (error) {
+      console.error("Erro ao curtir/descurtir post:", error);
+      setIsLiked(isLiked);
+      setLikes(likes);
     }
   };
 
   return (
-    <div className={styles.card} onClick={handleClick}>
+    <div className={styles.card} onClick={(e) => e.target.tagName !== "BUTTON" && onPostClick()}>
       <div className={styles.cardContent}>
         <div className={styles.header}>
-          <img className={styles.avatar} src={user.userImage} alt={user.name} />
+          <img className={styles.avatar} src={foto} alt={nome} />
           <div className={styles.headerContent}>
             <p className={styles.topic}>
-              {user.name} · <sub className={styles.tag}> {date} </sub>
+              <p onClick={() => navigate(`/perfil/${userId}`)}>{nome}</p> · <sub className={styles.tag}>{date}</sub>
             </p>
             <div className={styles.tags}>
-            <span className={styles.bookSelected}> {book} </span>
-
-
-              {tags && tags.length > 0 ? (
-                tags.map((tag, index) => (
-                  <span key={index} className={styles.tag}>
-                    #{tag}
-                  </span>
-                ))
-              ) : (
-                <span className={styles.noTags}></span>
-              )}
-
+              <span className={styles.bookSelected}>{book}</span>
+              {tags?.split(",").map((tag, index) => (
+                <span key={index} className={styles.tag}>#{tag.trim()}</span>
+              ))}
             </div>
-            {isSpoiler ? (
-                <SpoilerProtection
-                    isSpoilerVisible={spoilerVisibility[key]}
-                    text={text}
-                />
-            ) : (
-              <p className={styles.text} dangerouslySetInnerHTML={{ __html: text }}></p>
-            )}
-             
+            <div className={styles.inner}>
+              {isSpoiler ? <SpoilerProtection text={text} /> : <div className={styles.commentText} dangerouslySetInnerHTML={{ __html: text }} />}
+            </div>
           </div>
         </div>
         <div className={styles.actions}>
-          <button className={styles.actionButton}>
-            👍 {stats?.likes || 0} Likes
+          <button className={styles.actionButton} onClick={handleLike}>
+            👍 {likes} Likes
           </button>
-          <span className={styles.actionButton}>
-            💬 {stats?.comments || 0} Respostas
-          </span>
-           {isSpoiler && (
-            <button
-                className={styles.spoilerButton}
-                onClick={() => toggleSpoiler(key)}
-            >
-                {spoilerVisibility[key] ? (
-                    <span>
-                        <ion-icon name="eye-off-outline"></ion-icon> Esconder Spoiler
-                    </span>
-                ) : (
-                    <span>
-                        <ion-icon name="eye-outline"></ion-icon> Visualizar Spoiler
-                    </span>
-                )}
-            </button>
-        )}
+          <span className={styles.actionButton}>💬 {commentCount} Respostas</span>
         </div>
       </div>
     </div>
   );
 };
 
+const Feed = ({ posts, userProfiles, onPostClick }) => {
+  const { token, user } = useAuth();
+  const perfilId = user?.perfil?.id;
+  const [likedPosts, setLikedPosts] = useState({});
+5
+  const toggleLike = async (postId) => {
+    if (!perfilId) return;
+    const isLiked = likedPosts[postId];
 
-const Feed = ({ posts, onPostClick }) => {
+    try {
+      const url = `/curtidas/post/${postId}/perfil/${perfilId}`;
+      if (isLiked) {
+        await backendApi.delete(url, { headers: { Authorization: `Bearer ${token}` } });
+      } else {
+        await backendApi.post(url, {}, { headers: { Authorization: `Bearer ${token}` } });
+      }
+
+      setLikedPosts((prev) => ({
+        ...prev,
+        [postId]: !isLiked,
+      }));
+
+    } catch (error) {
+      console.error("Erro ao curtir/descurtir post:", error);
+    }
+  };
+
   return (
     <div className={styles.feed}>
-      {posts.map((post) => (
-        <PostCard 
-          key={post.id} 
-          user={post.user} 
-          date={post.date} 
-          text={post.text} 
-          book={post.selectedBook}
-          isSpoiler={post.isSpoiler}
-          tags={post.tags} 
-          stats={{ likes: 0, comments: post.comments.length }}
-          onPostClick={() => onPostClick(post)} 
-        />
-      ))}
+      {posts.map((post) => {
+        const authorProfile = userProfiles?.[post.nomePerfil] || {};
+        return (
+          <PostCard
+            key={post.id}
+            id={post.id}
+            userId={authorProfile.id}
+            foto={authorProfile.urlPerfil}
+            nome={authorProfile.username || "Usuário desconhecido"}
+            date={post.dataCriacao}
+            text={post.texto}
+            book={post.tituloLivro}
+            isSpoiler={post.possuiSpoiler}
+            tags={post.tags}
+            respostas={post.comentarios || []}
+            stats={{ likes: post.curtidas }}
+            isLikedInitial={!!likedPosts[post.id]} // Passa o estado inicial da curtida
+            onLikeClick={() => toggleLike(post.id)}
+            onPostClick={() => onPostClick(post, authorProfile)}
+          />
+        );
+      })}
     </div>
   );
 };
+
 
 export default Feed;

@@ -13,7 +13,7 @@ export default function Home() {
             <Slides />
             <BookSwiper
                 title={"Títulos Novos"} 
-                books={["m3lvDwAAQBAJ","C3wTEAAAQBAJ","gIr-DwAAQBAJ","GaZMDwAAQBAJ","PM2uCgAAQBAJ","5BclEAAAQBAJ","W_tcDwAAQBAJ"]}
+                books={["C9oZEQAAQBAJ", "ud06EAAAQBAJ", "HNWsEAAAQBAJ","IF0QEAAAQBAJ","I-fUDAAAQBAJ","-bF2CwAAQBAJ"]}
                 className={style.bookSwiper}
             />
         </div>
@@ -23,31 +23,35 @@ export default function Home() {
 function Slides() {
     const navigate = useNavigate();
     return (
-                <Swiper
-                    className={style.slides}
-                    modules={[Pagination, Keyboard]}
-                    pagination={{clickable: true,}}
-                    keyboard={{enabled: true,}}
-                >
-                    <SwiperSlide>
-                        <div className={style.one}>
-                            <div className={style.card}>
-                                <h2>Sua jornada literária começa aqui</h2>
-                                <p>Uma rede social feita para leitores apaixonados. Aqui você pode compartilhar resenhas, descobrir novos livros e fazer amizades com quem ama ler tanto quanto você.</p>
-                                <p>Organize sua lista de leitura, explore novas histórias e veja o impacto dos seus livros favoritos no mundo.</p>
-                                <p>É simples, divertido e totalmente sobre livros.</p>
-                                <Button onClick={() => navigate("/login")}>
-                                    <span className={style.action}>Cadastre-se</span>
-                                </Button>
-                            </div>
-                            <img src="./frame216.png"/>
-                        </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <div>
-
-                        </div>
-                    </SwiperSlide>
-                </Swiper>
+        <Swiper
+            className={style.slides}
+            modules={[Pagination, Keyboard]}
+            pagination={{clickable: true,}}
+            keyboard={{enabled: true,}}
+        >
+            <SwiperSlide>
+                <div className={style.start}>
+                    <div className={style.card}>
+                        <h2>Sua jornada literária começa aqui</h2>
+                        <p>Uma rede social feita para leitores apaixonados. Aqui você pode compartilhar resenhas, descobrir novos livros e fazer amizades com quem ama ler tanto quanto você.</p>
+                        <p>Organize sua lista de leitura, explore novas histórias e veja o impacto dos seus livros favoritos no mundo.</p>
+                        <p>É simples, divertido e totalmente sobre livros.</p>
+                        <Button onClick={() => navigate("/catalogo")}>
+                            <span className={style.action}>Comece Agora!</span>
+                        </Button>
+                    </div>
+                    <img src="./frame216.png"/>
+                </div>
+            </SwiperSlide>
+            <SwiperSlide>
+                <div className={style.slide2}>
+                    <div className={style.slide2Info}>
+                        <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h2>
+                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium amet delectus vitae velit dignissimos molestias dicta cumque dolorem vero maiores? Deserunt quia saepe et. Hic cumque dolor magnam voluptates suscipit?</p>
+                    </div>
+                    <img src="./Unsplash.png" />
+                </div>
+            </SwiperSlide>
+        </Swiper>
     );
 }

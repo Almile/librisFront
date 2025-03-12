@@ -22,10 +22,10 @@ export const getBook = (id) => {
     return googleBooksApi.get(`/${id}?fields=${fields}`);
 }
 
-export const searchBooks = (q, startIndex) => {
+export const searchBooks = (q, startIndex, maxResults=12) => {
     const fields = "items(id)";
 
     return googleBooksApi.get(
-        `?q=${q}&fields=${fields}&maxResults=12&startIndex=${startIndex}`
+        `?q=${q}&fields=${fields}&maxResults=${maxResults}&startIndex=${startIndex}`
     );
 }

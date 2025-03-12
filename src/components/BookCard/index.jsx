@@ -1,25 +1,56 @@
 import PropTypes from 'prop-types'
 import style from './BookCard.module.css'
 import useBook from '../../hooks/useBook'
-import { useState } from 'react'
-import OutlinedButton from '../OutlinedButton';
-import BookLecture from "../BookLecture";
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react'
+import OutlinedButton from '../OutlinedButton'
+import BookLecture from "../BookLecture"
+import { useNavigate } from 'react-router-dom'
+import { updateLeitura, getLeituraByUserAndGoogleId } from '../../services/librisApiService'
+import UpdateReading from '../UpdateReading'
 
-export default function BookCard({id}) {
+export default function BookCard({id, username, showUpdate, setLidos, setLendo, perfilId}) {
     const [currentPage, setCurrentPage] = useState(0);
     const { data, loading, error } = useBook(id);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
+    const [showModalUpdate, setShowModalUpdate] = useState(false);
+    const leituraId = useRef();
 
-    const handleClick = () => {
-        const page = window.prompt("Página atual");
-        if (page >= 0 && page <= data.pageCount) {
+    useEffect(() => {
+        const fetchLeitura = async () => {
+            try {
+                const response = await getLeituraByUserAndGoogleId(username, id)
+                leituraId.current = response.data.data.id;
+                setCurrentPage(response.data.data.pagina)
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchLeitura();
+    }, [id, username])
+
+    const handleClickUpdate = () => {
+        setShowModalUpdate(true);
+    }
+
+    const handleUpdate = async (page) => {
+        const body = {
+            "perfilId": perfilId,
+            "googleId": id,
+            "pagina": page,
+            "status": "LENDO"
+        }
+        if (page > 0 && page <= data.pageCount) {
             setCurrentPage(+page);
+            if(page == data.pageCount) {
+                body.status = "LIDO";
+                setShowModal(true);
+                setLidos(prev => [...prev, id]);
+            }
+            const response = await updateLeitura(leituraId.current, body);
+            console.log(response)
         }
-        if(page == data.pageCount){
-            setShowModal(true);
-        }
+        setShowModalUpdate(false);
     }
 
     const handleClickAuthors = async () => {
@@ -30,8 +61,8 @@ export default function BookCard({id}) {
         }
     };
 
-    if (loading) return <p>Carregando...</p>;
-    if (error) return <p>A network error was encountered</p>;
+    if (loading) return <div className="loader"></div>;
+    if (error) return <p>Ocorreu um erro de rede</p>;
 
     return (
         <div className={style.bookCard}>
@@ -53,14 +84,17 @@ export default function BookCard({id}) {
                 currentPage != null &&
                 <>
                     <ProgressBar currentPage={currentPage} pageCount={+data.pageCount}/>
-                    <OutlinedButton onClick={handleClick}> 
+                    { showUpdate &&
+                        <OutlinedButton onClick={handleClickUpdate}> 
                         Atualizar
-                    </ OutlinedButton>
+                        </ OutlinedButton>
+                    }
+
                 </>
                 }
             </div>
-            {showModal && <BookLecture bookId={data.id} onClose={() => setShowModal(false)} />}
-
+            {showModal && <BookLecture bookId={data.id} onClose={() => {setShowModal(false); setLendo(prev => prev.filter(e => e != id));}} />}
+            {showModalUpdate && <UpdateReading data={data} currentPage={currentPage} handleUpdate={handleUpdate} setShowModalUpdate={setShowModalUpdate} />}
         </div>
     );
 }
@@ -82,6 +116,11 @@ function ProgressBar({currentPage, pageCount}) {
 
 BookCard.propTypes = {
     id: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    showUpdate: PropTypes.bool.isRequired,
+    setLidos: PropTypes.func.isRequired,
+    setLendo: PropTypes.func.isRequired,
+    perfilId: PropTypes.number.isRequired
 };
 
 ProgressBar.propTypes = {

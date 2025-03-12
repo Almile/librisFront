@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react"; // Importa hooks do React para gerenciar estados e efeitos colaterais
+import { useState, useEffect } from "react"; // Importa hooks do React para gerenciar estados e efeitos colaterais
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom"; // Hook para navegação entre páginas
 import styles from "../styles/login.module.css"; // Importa estilos CSS do módulo de login
@@ -8,7 +8,28 @@ import backendApi from "../services/backendApi"; // Importe a instância do Axio
 function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    console.log("URL Params:", window.location.search);  // Adicione esse log para depurar
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get("token");
+    const refreshToken = urlParams.get("refreshToken");
   
+    console.log("Access Token:", accessToken);  // Verifique se os tokens estão sendo capturados
+    console.log("Refresh Token:", refreshToken);
+
+    if (accessToken && refreshToken) {
+      sessionStorage.setItem("token", accessToken);
+      sessionStorage.setItem("refreshToken", refreshToken);
+      login(accessToken)
+      navigate("/home")
+    } else {
+     console.log("erro")
+    }
+  }, [navigate]);
+  
+
   // Estado para os dados do formulário de cadastro
   const [loginData, setLoginData] = useState({
     emailLogin: "",
@@ -20,9 +41,7 @@ function Login() {
     password: "",
     confirmPassword: "",
   });
-  const [email, setEmail] = useState('');
-
-  
+  const [email, setEmail] = useState("");
   // Estado para mensagens de erro/sucesso
   const [cadastroError, setCadastroError] = useState("");
   const [cadastroSuccess, setCadastroSuccess] = useState("");
@@ -49,6 +68,7 @@ function Login() {
 
   const handleCadastroSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Inicia o loading
 
     if (cadastroData.password !== cadastroData.confirmPassword) {
         setCadastroError("As senhas não coincidem.");
@@ -66,6 +86,8 @@ function Login() {
         setCadastroError("");
 
         setTimeout(() => {
+          setLoading(false); // Inicia o loading
+
             navigate("/login");
         }, 2000);
     } catch (err) {
@@ -76,6 +98,8 @@ function Login() {
   // Função para login do usuário e redirecionamento para a página inicial caso o login seja bem-sucedido
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true); 
+
     try {
         const response = await backendApi.post("auth/login", {
           login: loginData.emailLogin,
@@ -91,12 +115,23 @@ function Login() {
     }
 };
 
-const loginGoogle = () => {
+const loginGoogle = (e) => {
+  e.preventDefault();
+  setLoading(true); // Inicia o loading
+
   window.location.href = "http://localhost:8080/oauth2/authorization/google";
+
+    login(accessToken);
+    setLoading(false); // Inicia o loading
+
+    navigate("/home");
+
 };
+
 
 const handleResetPassword = async (e) => {
   e.preventDefault();
+  setLoading(true); // Inicia o loading
 
   if (!email) {
     setLoginError("Por favor, forneça um email.");
@@ -104,16 +139,14 @@ const handleResetPassword = async (e) => {
   }
 
   try {
-    const response = await backendApi.post("/usuario/reset-password", { email }, { 
+    const response = await backendApi.post("usuario/reset-password", { email }, { 
       headers: { 'Content-Type': 'application/json' } 
-    });
-
-    console.log("sucesso", response.data.message);
-    // Sucesso na recuperação
+    });    
+    setLoading(false); // Inicia o loading
     setResetSuccess(response.data.message);
-    setResetError("");  // Limpar qualquer erro anterior
+    setResetError(""); 
   } catch (err) {
-    // Checar se há resposta de erro
+
     if (err.response && err.response.data && err.response.data.message) {
       setResetError(err.response.data.message);
     } else {

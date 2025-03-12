@@ -8,8 +8,8 @@ export default function BookSlide({id}) {
 	const {data, loading, error} = useBook(id);
 	const navigate = useNavigate();
 
-	if (loading) return <p>Carregando...</p>
-	if (error) return <p>A network error was encountered</p>;
+	if (loading) return <div className="loader"></div>;
+	if (error) return <p>Ocorreu um erro de rede</p>;
 	if (!data.averageRating) data.averageRating = 0;
 
 	return (
